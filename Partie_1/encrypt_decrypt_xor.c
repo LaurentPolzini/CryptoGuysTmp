@@ -4,13 +4,39 @@
 #include "xor.h"
 #include "mask.h"
 
+char* gen_key(int n, char* key);
+
 // Chiffrer ou déchiffrer un message avec une clé
-char* encrypt_decrypt_xor(char* file_in, char* key, char* file_out) {
+char *encrypt_decrypt_xor(char* file_in, char* key, char* file_out) {
     size_t taille_msg = strlen(file_in);
     size_t taille_cle = strlen(key);
 
     for (size_t i = 0; i < taille_msg; i++) {
-        file_out[i] = file_in[i] ^ key[i % taille_cle];
+        /*
+            n'arrive que dans le cas du chiffrage
+            un probleme surgit si dans le message
+            chiffré se trouve le caractere \0
+            (n'arrive pas lors du dechiffrage
+            puisque personne n'écrit un message avec
+            le caractere \0)
+            donc dans ce cas le caractere de codage
+            devient un nouveau caractere aleatoire
+            et la clef est de nouveau codé
+        */
+        
+        char tmp;
+        char clefTmp[2];
+        clefTmp[1] = '\0';
+
+        do {
+            tmp = file_in[i] ^ key[i % taille_cle];
+            if (tmp == '\0') {
+                gen_key(1, clefTmp);
+                key[i % taille_cle] = clefTmp[0];
+            }
+        } while (tmp == '\0');
+        
+        file_out[i] = tmp;
     }
     file_out[taille_msg] = '\0';
     
@@ -88,7 +114,7 @@ char* decrypt_mask(char* file_in, char* key, char* file_out) {
 }
 
 // Test pour encrypt_decrypt_xor
-void test_encrypt_decrypt() {
+void test_encrypt_decrypt(void) {
     printf("-------Début des tests de la fonction encrypt_decrypt_xor-------\n");
 
     // Test 1 : Vérifier que le chiffrement et déchiffrement fonctionnent correctement
@@ -138,7 +164,7 @@ void test_encrypt_decrypt() {
 }
 
 
-void test_encrypt_decrypt_mask() {
+void test_encrypt_decrypt_mask(void) {
     printf("-------Début des tests de encrypt_mask et decrypt_mask-------\n");
 
     // Fichiers d'entrée et de sortie
@@ -205,9 +231,10 @@ void test_encrypt_decrypt_mask() {
     // Libérer la mémoire allouée pour la clé
     free(cle);
 }
-
+/*
 int main(void) {
-    //test_encrypt_decrypt();
-    test_encrypt_decrypt_mask();
+    test_encrypt_decrypt();
+    //test_encrypt_decrypt_mask();
     return 0;
 }
+*/

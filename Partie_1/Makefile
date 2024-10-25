@@ -1,24 +1,47 @@
 # Makefile
 
 # Variables
-CC = gcc
-CFLAGS = -Wall -Wextra -std=c99
-TARGET = encrypt_decrypt
-OBJS = encrypt_decrypt_xor.o
-GENERATED_FILES = message.txt message_encrypted.txt message_decrypted.txt
+CC=gcc
+CFLAGS=-std=c99 -Wextra -Wall -Werror -pedantic
+GENERATED_FILES=message.txt message_encrypted.txt message_decrypted.txt
+LDFLAGS=-lm
+
+ifeq ($(DEBUG),yes)
+	CFLAGS += -g
+	LDFLAGS +=
+else
+	CFLAGS += -O3 -DNDEBUG
+	LDFLAGS +=
+endif
+
+SRC=encrypt_decrypt_xor.c
+OBJ= $(SRC:.c=.o)
+EXEC=crypt
 
 # Règle par défaut
-all: $(TARGET)
+all:
+ifeq ($(DEBUG),yes)
+	@echo "Generating in debug mode"
+else
+	@echo "Generating in release mode"
+endif
+	@$(MAKE) $(EXEC)
 
-# Règle pour créer l'exécutable
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
+$(EXEC): $(OBJ)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
-# Règle pour compiler le fichier C en fichier objet
-encrypt_decrypt_xor.o: encrypt_decrypt_xor.c mask.h xor.h
-	$(CC) $(CFLAGS) -c encrypt_decrypt_xor.c
+%.o: %.c
+	@$(CC) -o $@ -c $< $(CFLAGS)
 
 # Nettoyage des fichiers générés
 clean:
-	rm -f $(OBJS) $(TARGET)
+	rm -f $(OBJS) $(EXEC)
 	rm -f $(GENERATED_FILES)
+
+.PHONY: clean mrproper
+
+mrproper: clean
+	@rm -rf $(EXEC)
+
+
+encrypt_decrypt_xor.o: encrypt_decrypt_xor.c mask.h xor.h
