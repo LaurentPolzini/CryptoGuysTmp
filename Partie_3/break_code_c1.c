@@ -167,7 +167,7 @@ unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, int len_key
     
     for (int i = 0 ; i < len_key ; ++i) {
         tmp = caracteresCandidatIndKey(msgCode, i, len_key);
-        clefCandidates[i] = malloc((strlen((char *) tmp) + 1) * sizeof(unsigned char));
+        clefCandidates[i] = malloc((strlen((char *) tmp)) * sizeof(unsigned char));
         if (!clefCandidates[i]) {
             perror("Erreur allocation memoire caracteres possibles par indice");
             exit(1);
@@ -202,16 +202,14 @@ unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, int len_key
 unsigned char **clefsCandidatesFinales(char *msgCode, int len_key, int *nbClefs) {
     unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, len_key);
 
-    TreeNaire *tree = NTreeCreate();
+    Arbre *tree = NTreeCreate();
 
     int tailleCaraCand;
 
     for (int i = 0 ; i < len_key ; ++i) {
-        printf("clefsCandidatesFinales l.194: cara retenus : %s\n", carCandParIndice[i]);
         tailleCaraCand = nbCara(carCandParIndice[i]);
-        NTreeAdd(tree, carCandParIndice[i], tailleCaraCand);
+        tree = NTreeAdd(tree, carCandParIndice[i], tailleCaraCand);
     }
-
     int nbClefsFinales = nombreClefsCandidates(tree);
     *nbClefs = nbClefsFinales;
 
@@ -225,7 +223,8 @@ unsigned char **clefsCandidatesFinales(char *msgCode, int len_key, int *nbClefs)
 
     freeDoubleArray(&carCandParIndice, len_key);
 
-    NTreeDelete(tree);
+    arbreDelete(&tree);
+    
     
     return clefsCandidates;
 }

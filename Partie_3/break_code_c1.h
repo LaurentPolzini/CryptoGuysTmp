@@ -8,8 +8,6 @@
 // et les caractères spéciaux de ponctuation
 bool estCaractereValideASCII(unsigned char* charDechiffre);
 
-unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, int len_key);
-
 /*
     recoit un message codé du style "s!/ik" dans msgCode
     et une longueur de clef maximale (donc length(clef) <= len_ken)

@@ -11,7 +11,7 @@ else
 endif
 
 EXEC=break_code
-SRC= ../utilitaire/utiL.c $(wildcard *.c)
+SRC= ../utilitaire/utiL.c ../Partie_1/encrypt_decrypt_xor.c $(wildcard *.c)
 OBJ= $(SRC:.c=.o)
 
 all:
@@ -35,12 +35,12 @@ asan: CC=clang
 asan: $(EXEC)
 
 clean:
-	@rm -rf *.o ../utilitaire/utiL.o
+	@rm -rf *.o ../utilitaire/utiL.o ../Partie_1/encrypt_decrypt_xor.o $(EXEC)
 
 .PHONY: clean mrproper
 
 mrproper: clean
-	@rm -rf $(EXEC) documentation/html *.dot *.pdf
+	@rm -rf $(EXEC)
 
 Queue.o : Queue.h
 NTree.o : NTree.h Queue.h
@@ -49,4 +49,5 @@ break_code_c2.o : crackage.h
 break_code_c3.o : crackage.h
 crack_mask.o : ../Partie_1/xor.h ../Partie_1/mask.h
 ../utilitaire/utiL.o : ../utilitaire/utiL.h
-break_code_main.o : break_code_c1.h ../utilitaire/utiL.h
+../Partie_1/encrypt_decrypt_xor.o : ../Partie_1/xor.h ../Partie_1/mask.h
+break_code_main.o : break_code_c1.h ../utilitaire/utiL.h ../Partie_1/xor.h
