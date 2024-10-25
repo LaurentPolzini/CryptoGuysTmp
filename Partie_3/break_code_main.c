@@ -8,6 +8,7 @@
 #include "./Queue.h"
 #include <stdbool.h>
 #include "./break_code_c1.h"
+#include "../Partie_1/xor.h"
 
 void afficheManBreakCode(void);
 
@@ -73,11 +74,42 @@ int main(int argc, char *argv[]) {
     (void) fileToCrack, (void) method, (void) keyLength, (void) dict, (void) logFile;
     */
     (void) argc, (void) argv;
+
+    char original_msg[] = "Les carottes sont cuites";
+    char msg[1024];
+    strcpy(msg, original_msg);
+
+    // Générer une clé pour le test
+    char cle[] = "rutab";
+    char sortie[1024];
+    
+    
+    // Chiffrer le message
+    encrypt_decrypt_xor(msg, cle, sortie);
+    
+    
+    // Déchiffrer le message (en utilisant la même clé)
+    encrypt_decrypt_xor(sortie, cle, msg);
+
+    printf("La clé est %s\n", cle);
+    printf("Message original : %s\n", original_msg);
+    printf("Message après chiffrement : %s\n", sortie);
+    printf("Message après déchiffrement : %s\n", msg);
+
+    printf("taille sortie : %lu\n", strlen(sortie));
+
     
     int nbClefs = 0;
-    unsigned char **test = clefsCandidatesFinales("512", 3, &nbClefs);
-    
+    unsigned char **test = clefsCandidatesFinales(sortie, strlen(cle), &nbClefs);
+    for (int i = 0 ; i < nbClefs ; ++i) {
+        if (strstr((const char *) test[i], cle) != NULL) {
+            printf("Trouvé ! : %s\n", test[i]);
+
+            break;
+        }
+    }
     freeDoubleArray(&test, nbClefs);
+    printf("Il y a %d clefs\n", nbClefs);
 
     return 0;
 }
