@@ -4,8 +4,7 @@
 #include "../utilitaire/utiL.h"
 #include <string.h>
 #include <stdlib.h>
-#include "./NTree.h"
-#include "./Queue.h"
+#include "./Pile.h"
 #include <stdbool.h>
 #include "./break_code_c1.h"
 #include "../Partie_1/xor.h"
@@ -80,7 +79,7 @@ int main(int argc, char *argv[]) {
     strcpy(msg, original_msg);
 
     // Générer une clé pour le test
-    char cle[] = "rutab";
+    char cle[] = "ruta";
     char sortie[1024];
     
     
@@ -99,17 +98,19 @@ int main(int argc, char *argv[]) {
     printf("taille sortie : %lu\n", strlen(sortie));
 
     
-    int nbClefs = 0;
-    unsigned char **test = clefsCandidatesFinales(sortie, strlen(cle), &nbClefs);
-    for (int i = 0 ; i < nbClefs ; ++i) {
+    unsigned long nbClefs = 0;
+    unsigned char **test = clefsFinales(sortie, strlen(cle), &nbClefs);
+    
+    for (unsigned long i = 0 ; i < nbClefs ; ++i) {
         if (strstr((const char *) test[i], cle) != NULL) {
             printf("Trouvé ! : %s\n", test[i]);
 
             break;
         }
     }
+    
+    printf("Il y a %lu clefs\n", nbClefs);
     freeDoubleArray(&test, nbClefs);
-    printf("Il y a %d clefs\n", nbClefs);
 
     return 0;
 }

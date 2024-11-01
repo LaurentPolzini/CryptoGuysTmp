@@ -42,9 +42,9 @@ clean:
 mrproper: clean
 	@rm -rf $(EXEC)
 
-Queue.o : Queue.h
-NTree.o : NTree.h Queue.h
-break_code_c1.o : NTree.h Queue.h crackage.h break_code_c1.h
+Pile.o : Pile.h ../utilitaire/utiL.h
+Tree.o : Tree.h Pile.h ../utilitaire/utiL.h
+break_code_c1.o : Tree.h Pile.h crackage.h break_code_c1.h ../utilitaire/utiL.h
 break_code_c2.o : crackage.h
 break_code_c3.o : crackage.h
 crack_mask.o : ../Partie_1/xor.h ../Partie_1/mask.h

@@ -2,13 +2,18 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>
+#include <time.h>
+#include <pthread.h>
+#include <math.h>
 #include "./crackage.h"
-#include "./NTree.h"
-#include "./Queue.h"
+#include "./Pile.h"
 #include "./break_code_c1.h"
+#include "Tree.h"
+#include "../utilitaire/utiL.h"
 
 int nbCara(unsigned char tabCar[]);
 void cpyChaine(unsigned char *dest, unsigned char *from);
+int nbClefsTotal(unsigned char **carCandParIndice, int len_key);
 
 /*
 int main(int argc, char *argv[]) {
@@ -81,8 +86,7 @@ unsigned char *caracteresPossibles(unsigned char *charSet, unsigned char carChif
         perror("Erreur allocation memoire caracteres possibles");
         exit(1);
     }
-    strcpy((char *) charClefPossibles, (const char *) charSet);
-    //cpyChaine(charClefPossibles, charSet);
+    cpyChaine(charClefPossibles, charSet);
 
     int indCharPossible = 0;
 
@@ -131,13 +135,12 @@ unsigned char *caracteresCandidatIndKey(unsigned char *msgCode, int indice, int 
     }
     strcpy((char *) caraCandidat, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789");
 
-    unsigned long indCur = indice;
 
+    unsigned long indCur = indice;
     unsigned char *carTemp;
 
     while (indCur < strlen((const char *) msgCode)) {
         carTemp = caracteresPossibles(caraCandidat, msgCode[indCur]);
-        //strcpy((char *) caraCandidat, (const char *) carTemp);
         cpyChaine(caraCandidat, carTemp);
         free(carTemp);
         indCur += len_key;
@@ -162,19 +165,13 @@ unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, int len_key
         perror("Erreur allocation memoire tableau de caractères candidats");
         exit(1);
     }
-
-    unsigned char *tmp;
     
     for (int i = 0 ; i < len_key ; ++i) {
-        tmp = caracteresCandidatIndKey(msgCode, i, len_key);
-        clefCandidates[i] = malloc((strlen((char *) tmp)) * sizeof(unsigned char));
-        if (!clefCandidates[i]) {
-            perror("Erreur allocation memoire caracteres possibles par indice");
-            exit(1);
-        }
-        cpyChaine(clefCandidates[i], tmp);
-        //strcpy((char *) clefCandidates[i], (const char *) tmp);
-        free(tmp);
+        // TODO THREADS ICI
+        clefCandidates[i] = caracteresCandidatIndKey(msgCode, i, len_key);
+    }
+    for (int i = 0 ; i < len_key ; ++i) {
+        printf("Possibilité par indice : %s\n", clefCandidates[i]);
     }
 
     return clefCandidates;
@@ -199,34 +196,34 @@ unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, int len_key
 
         Utilise les arbres N-aire
 */
-unsigned char **clefsCandidatesFinales(char *msgCode, int len_key, int *nbClefs) {
+unsigned char **clefsFinales(char *msgCode, int len_key, unsigned long *nbClefs) {
     unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, len_key);
-
-    Arbre *tree = NTreeCreate();
-
-    int tailleCaraCand;
-
+    Tree *t = createTree();
     for (int i = 0 ; i < len_key ; ++i) {
-        tailleCaraCand = nbCara(carCandParIndice[i]);
-        tree = NTreeAdd(tree, carCandParIndice[i], tailleCaraCand);
-    }
-    int nbClefsFinales = nombreClefsCandidates(tree);
-    *nbClefs = nbClefsFinales;
-
-    unsigned char **clefsCandidates = malloc(nbClefsFinales * sizeof(unsigned char *));
-    if (!clefsCandidates) {
-        perror("Erreur alloc mem tab clefs candidates");
-        exit(1);
+        t = addTree(t, carCandParIndice[i], ((int) strlen((const char *) carCandParIndice[i])) );
     }
 
-    getClefsCandidates(tree, clefsCandidates);
+    *nbClefs = getNbClef(t);
+    printf("323 break code c1 Il y a %lu clefs\n", *nbClefs);
+
+    unsigned char **clefs = malloc((*nbClefs) * sizeof(unsigned char *));
+    pError((void *) clefs, "Erreur création lot de clefs", 1);
+
+    getClefsCandidates(t, clefs);
 
     freeDoubleArray(&carCandParIndice, len_key);
+    deleteTree(t);
 
-    arbreDelete(&tree);
-    
-    
-    return clefsCandidates;
+    return clefs;
+}
+
+
+int nbClefsTotal(unsigned char **carCandParIndice, int len_key) {
+    int nbClefs = 1;
+    for (int i = 0 ; i < len_key ; ++i) {
+        nbClefs *= nbCara(carCandParIndice[i]);
+    }
+    return nbClefs;
 }
 
 // equivalent d'un strlen mais pour un tableau : {'a', 'b', '\0'}
@@ -243,15 +240,7 @@ int nbCara(unsigned char tabCar[]) {
 }
 
 void cpyChaine(unsigned char *dest, unsigned char *from) {
-    //strcpy((char *) dest, (const char *) from);
-    
-    int ind = 0;
-
-    while (from[ind] != '\0') {
-        dest[ind] = from[ind];
-        ++ind;
-    }
-    dest[ind] = '\0';
+    strcpy((char *) dest, (const char *) from);
 }
 
 void freeDoubleArray(unsigned char ***clefs, int len_key) {
@@ -259,9 +248,12 @@ void freeDoubleArray(unsigned char ***clefs, int len_key) {
         return;
     }
     for (int i = 0 ; i < len_key ; ++i) {
-        free((*clefs)[i]);
+        free((void *) (*clefs)[i]);
+        (*clefs)[i] = NULL;
     }
-    free(*clefs);
+    free((void *) *clefs);
     *clefs = NULL;
 }
+
+
 
