@@ -14,8 +14,9 @@ bool estCaractereValideASCII(unsigned char* charDechiffre);
     retourne quelque chose du type 
     [[512], [612], [312]]
 */
-unsigned char **clefsCandidatesFinales(char *msgCode, int ley_key, int *nbClefs);
+unsigned char **clefsFinales(char *msgCode, int len_key, unsigned long *nbClefs);
 
 void freeDoubleArray(unsigned char ***clefs, int len_key);
+
 
 #endif
