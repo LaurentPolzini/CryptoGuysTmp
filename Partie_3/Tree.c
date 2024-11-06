@@ -125,7 +125,7 @@ Noeud *createNoeud(Noeud *pere, unsigned char *carCand, unsigned long nbCar) {
     return n;
 }
 
-threadInfo createThreadInfo(unsigned char **clefs, unsigned long *indice, Noeud *node, Pile *pile, int debut, int fin) {
+threadInfo createThreadInfoTree(unsigned char **clefs, unsigned long *indice, Noeud *node, Pile *pile, int debut, int fin) {
     threadInfo inf;
     inf.clefs = clefs;
     inf.debut = debut;
@@ -152,7 +152,8 @@ void clefsCandidates(Noeud *n, Pile *p, unsigned char **clefs, unsigned long *in
             pError(NULL, "Erreur don jeton mutex", 2);
         }
     } else {
-        int tailleSegment = (int) sqrt(n->nbCar);
+        int tailleSegment = (int) (n->nbCar / 8);
+        //int tailleSegment = (int) sqrt(n->nbCar);
         int nbSegment = (int) (n->nbCar / tailleSegment);
         threadInfo info[nbSegment];
         pthread_t thid[nbSegment];
@@ -164,7 +165,7 @@ void clefsCandidates(Noeud *n, Pile *p, unsigned char **clefs, unsigned long *in
                 fin = n->nbCar;
             }
             
-            info[i] = createThreadInfo(clefs, indice, n, p, (i * tailleSegment), fin);
+            info[i] = createThreadInfoTree(clefs, indice, n, p, (i * tailleSegment), fin);
 
             pthread_create(&(thid[i]), NULL, threadClefsCandidates, (void *) &(info[i]));
         }
