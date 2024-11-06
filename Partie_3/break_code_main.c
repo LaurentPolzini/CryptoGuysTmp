@@ -1,15 +1,17 @@
 #include <stdio.h>
-#include "./crackage.h"
 #include <getopt.h>
-#include "../utilitaire/utiL.h"
 #include <string.h>
 #include <stdlib.h>
-#include "./Pile.h"
 #include <stdbool.h>
+#include <time.h>
+#include "../utilitaire/utiL.h"
+#include "./crackage.h"
+#include "./Pile.h"
 #include "./break_code_c1.h"
 #include "../Partie_1/xor.h"
 
 void afficheManBreakCode(void);
+char* readFileToBuffer(const char *fileName, long *fileSize);
 
 /*
     Programme principal pour le crackage d'une clef menant au déchiffrage d'un texte crypté
@@ -74,45 +76,95 @@ int main(int argc, char *argv[]) {
     */
     (void) argc, (void) argv;
 
-    char original_msg[] = "Les carottes sont cuites";
-    char msg[1024];
-    strcpy(msg, original_msg);
+    //char original_msg[] = "Les carottes sont cuites";
+    char nameFileIn[] = "msgClair.txt";
 
     // Générer une clé pour le test
-    char cle[] = "ruta";
-    char sortie[1024];
-    
-    
+    char cle[] = "rutabaga";
+    char nameFileOut[] = "msgCrypte.txt";
+
+    char nameFileUncrypted[] = "msgDecrypte.txt";
+
     // Chiffrer le message
-    encrypt_decrypt_xor(msg, cle, sortie);
+    char *msg = encrypt_decrypt_xor(nameFileIn, cle, nameFileOut);
+    free(msg);
     
     
     // Déchiffrer le message (en utilisant la même clé)
-    encrypt_decrypt_xor(sortie, cle, msg);
+    msg = encrypt_decrypt_xor(nameFileOut, cle, nameFileUncrypted);
+    free(msg);
+
+    long sizeMsgCode = 0;
+
+    char *buffFileIn = readFileToBuffer(nameFileIn, NULL);
+    char *buffFileOut = readFileToBuffer(nameFileOut, &sizeMsgCode);;
+    char *buffFileUncrypt = readFileToBuffer(nameFileUncrypted, NULL);
 
     printf("La clé est %s\n", cle);
-    printf("Message original : %s\n", original_msg);
-    printf("Message après chiffrement : %s\n", sortie);
-    printf("Message après déchiffrement : %s\n", msg);
+    printf("Message original : %s\n", buffFileIn);
+    printf("Message après chiffrement : %s\n", buffFileOut);
+    printf("Message après déchiffrement : %s\n\n", buffFileUncrypt);
 
-    printf("taille sortie : %lu\n", strlen(sortie));
 
-    
     unsigned long nbClefs = 0;
-    unsigned char **test = clefsFinales(sortie, strlen(cle), &nbClefs);
+    time_t tpsDepart = time(NULL);
+
+    unsigned char **clefs = clefsFinales(buffFileOut, strlen(cle), &nbClefs);
     
+    time_t tpsFin = time(NULL);
+
+    printf("Temps ecriture toutes les clefs : %f\n", difftime(tpsFin, tpsDepart));
+
     for (unsigned long i = 0 ; i < nbClefs ; ++i) {
-        if (strstr((const char *) test[i], cle) != NULL) {
-            printf("Trouvé ! : %s\n", test[i]);
+        if (strstr((const char *) clefs[i], cle) != NULL) {
+            printf("Trouvé ! : %s\n", clefs[i]);
 
             break;
         }
     }
     
     printf("Il y a %lu clefs\n", nbClefs);
-    freeDoubleArray(&test, nbClefs);
+    printf("Libere le tableau de clefs...\n");
 
+    tpsDepart = time(NULL);
+
+    freeDoubleArray(&clefs, nbClefs);
+
+    tpsFin = time(NULL);
+    printf("Temps effacement toutes les clefs : %f\n", difftime(tpsFin, tpsDepart));
+    
     return 0;
+}
+
+char* readFileToBuffer(const char *fileName, long *fileSize) {
+    FILE *file = fopen(fileName, "r");
+    if (!file) {
+        fprintf(stderr, "Erreur : impossible d'ouvrir le fichier %s\n", fileName);
+        return NULL;
+    }
+
+    // Déplacement du pointeur de fichier à la fin pour obtenir la taille du fichier
+    fseek(file, 0, SEEK_END);
+    long internFileSize = ftell(file);
+    if (fileSize) {
+        *fileSize = internFileSize;
+    }
+    rewind(file);  // Retour au début du fichier
+
+    // Allocation de mémoire pour le tampon
+    char *buffer = (char*)malloc((internFileSize + 1) * sizeof(char));
+    if (!buffer) {
+        fprintf(stderr, "Erreur : impossible d'allouer de la mémoire\n");
+        fclose(file);
+        return NULL;
+    }
+
+    // Lecture du fichier dans le tampon
+    size_t bytesRead = fread(buffer, sizeof(char), internFileSize, file);
+    buffer[bytesRead] = '\0'; // Ajout du caractère de fin de chaîne
+
+    fclose(file);
+    return buffer;
 }
 
 

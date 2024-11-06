@@ -16,7 +16,7 @@ bool estCaractereValideASCII(unsigned char* charDechiffre);
 */
 unsigned char **clefsFinales(char *msgCode, int len_key, unsigned long *nbClefs);
 
-void freeDoubleArray(unsigned char ***clefs, int len_key);
+void freeDoubleArray(unsigned char ***arr, unsigned long len);
 
 
 #endif

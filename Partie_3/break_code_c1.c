@@ -11,9 +11,30 @@
 #include "Tree.h"
 #include "../utilitaire/utiL.h"
 
-int nbCara(unsigned char tabCar[]);
+//int nbCara(unsigned char tabCar[]);
 void cpyChaine(unsigned char *dest, unsigned char *from);
-int nbClefsTotal(unsigned char **carCandParIndice, int len_key);
+//int nbClefsTotal(unsigned char **carCandParIndice, int len_key);
+
+void ajouteCandidats(unsigned char ***clefs, unsigned long *nbClefs, int *tailleClefs, unsigned char *carCandidats, int nbCarCand);
+void *ajouteCandidatsThreads(void *threadIntel);
+
+// pour free plus vite les clefs
+void *threadFreeSegment(void *info);
+   
+typedef struct {
+    unsigned char *carCandidats;
+    int nbCarCand;
+    unsigned char **clef;
+    unsigned long debutSegment;
+    unsigned long finSegment;
+    unsigned char **newKeys;
+    unsigned long tailleclef;
+} threadInfoKey;
+
+typedef struct {
+    unsigned char ***arr;
+    unsigned long debut, fin;
+} threadFreeInfo;
 
 /*
 int main(int argc, char *argv[]) {
@@ -126,7 +147,7 @@ unsigned char *caracteresPossibles(unsigned char *charSet, unsigned char carChif
     puis apres avec s disons qu'on obtient "acdef"
     puis avec 1 "ac"
 */
-unsigned char *caracteresCandidatIndKey(unsigned char *msgCode, int indice, int len_key) {
+unsigned char *caracteresCandidatIndKey(unsigned char *msgCode, int tailleMsgCode, int indice, int len_key) {
     // cara possible d'une clef (gen_key ne genere que des caracteres alphanumérique)
     unsigned char *caraCandidat = malloc(63 * sizeof(unsigned char));
     if (!caraCandidat) {
@@ -139,7 +160,7 @@ unsigned char *caracteresCandidatIndKey(unsigned char *msgCode, int indice, int 
     unsigned long indCur = indice;
     unsigned char *carTemp;
 
-    while (indCur < strlen((const char *) msgCode)) {
+    while (indCur < (unsigned long) tailleMsgCode) {
         carTemp = caracteresPossibles(caraCandidat, msgCode[indCur]);
         cpyChaine(caraCandidat, carTemp);
         free(carTemp);
@@ -165,10 +186,11 @@ unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, int len_key
         perror("Erreur allocation memoire tableau de caractères candidats");
         exit(1);
     }
+    int tailleMsgCod = sizeof(msgCode); // / sizeof(unsigned char) qui vaut 1
     
     for (int i = 0 ; i < len_key ; ++i) {
-        // TODO THREADS ICI
-        clefCandidates[i] = caracteresCandidatIndKey(msgCode, i, len_key);
+        // TODO THREADS ICI; pas sur, c'est assez rapide
+        clefCandidates[i] = caracteresCandidatIndKey(msgCode, tailleMsgCod, i, len_key);
     }
     for (int i = 0 ; i < len_key ; ++i) {
         printf("Possibilité par indice : %s\n", clefCandidates[i]);
@@ -198,6 +220,19 @@ unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, int len_key
 */
 unsigned char **clefsFinales(char *msgCode, int len_key, unsigned long *nbClefs) {
     unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, len_key);
+
+    unsigned char **clefs = malloc(sizeof(unsigned char *));
+    pError(clefs, "Erreur creation tableau de clefs de base", 1);
+    clefs[0] = malloc(1);
+    pError(clefs[0], "Erreur allocation chaine de caractere vide", 1);
+    strcpy((char *) clefs[0], "\0");
+    
+    unsigned long nbClefsTMP = 1;
+    int tailleClefs = 0;
+    for (int i = 0 ; i < len_key ; ++i) {
+        ajouteCandidats(&clefs, &nbClefsTMP, &tailleClefs, carCandParIndice[i], (int) strlen((const char *) carCandParIndice[i]));
+    }
+    /*
     Tree *t = createTree();
     for (int i = 0 ; i < len_key ; ++i) {
         t = addTree(t, carCandParIndice[i], ((int) strlen((const char *) carCandParIndice[i])) );
@@ -213,11 +248,13 @@ unsigned char **clefsFinales(char *msgCode, int len_key, unsigned long *nbClefs)
 
     freeDoubleArray(&carCandParIndice, len_key);
     deleteTree(t);
+    */
 
+    *nbClefs = nbClefsTMP;
     return clefs;
 }
 
-
+/*
 int nbClefsTotal(unsigned char **carCandParIndice, int len_key) {
     int nbClefs = 1;
     for (int i = 0 ; i < len_key ; ++i) {
@@ -238,22 +275,192 @@ int nbCara(unsigned char tabCar[]) {
     }
     return nbCara;
 }
+*/
 
 void cpyChaine(unsigned char *dest, unsigned char *from) {
     strcpy((char *) dest, (const char *) from);
 }
 
-void freeDoubleArray(unsigned char ***clefs, int len_key) {
-    if (!(clefs && *clefs)) {
+void freeDoubleArray(unsigned char ***arr, unsigned long len) {
+    if (!(arr && *arr)) {
         return;
     }
-    for (int i = 0 ; i < len_key ; ++i) {
-        free((void *) (*clefs)[i]);
-        (*clefs)[i] = NULL;
+    /*
+    for (unsigned long i = 0 ; i < len ; ++i) {
+        free((void *) (*arr)[i]);
+        (*arr)[i] = NULL;
     }
-    free((void *) *clefs);
-    *clefs = NULL;
+    */
+    unsigned long nbSeg = (unsigned long) sqrt(len);
+    unsigned long tailleSeg = len / nbSeg + (len % nbSeg != 0 ? 1 : 0);
+
+    pthread_t *thid = malloc(nbSeg * sizeof(pthread_t));
+    pError(thid, "Erreur creation tableau thread free", 1);
+    threadFreeInfo *ti = malloc(nbSeg * sizeof(threadFreeInfo));
+    pError(ti, "Erreur creation tableau informations pour threads free", 1);
+    
+    for (unsigned long i = 0 ; i < nbSeg ; ++i) {
+        ti[i].arr = arr;
+        ti[i].debut = i * tailleSeg;
+        ti[i].fin = (i + 1) * tailleSeg > len ? len : (i + 1) * tailleSeg;
+        pthread_create(&thid[i], NULL, threadFreeSegment, &ti[i]);
+    }
+    for (unsigned long i = 0 ; i < nbSeg ; ++i) {
+        pthread_join(thid[i], NULL);
+    }
+    
+    free((void *) *arr);
+    *arr = NULL;
+
+    free(thid);
+    free(ti);
 }
 
+void *threadFreeSegment(void *info) {
+    threadFreeInfo ti = *((threadFreeInfo *) info);
 
+    for (unsigned long i = ti.debut ; i < ti.fin ; ++i) {
+        if ((*(ti.arr))[i]) {
+            free((void *) (*(ti.arr))[i]);
+            (*(ti.arr))[i] = NULL;
+        }
+    }
+
+    pthread_exit(NULL);
+}
+
+/*
+
+// pour tester les différences de temps
+// faut juste le remettre a jour, je crois qu'il croit que le nb de caracteres candidats
+// par indice de clef sont de meme taille, d'ou le n
+
+void produit_cartesienChatGPT(char *tableau[][10], int taille[], int n) {
+    int indices[n]; // Indices actuels pour chaque position dans la chaîne
+    memset(indices, 0, sizeof(indices)); // Initialiser tous les indices à 0
+    
+    while (1) {
+        // Afficher une combinaison
+        for (int i = 0; i < n; i++) {
+            printf("%c", tableau[i][indices[i]][0]); // Afficher le symbole actuel
+        }
+        printf("\n");
+        
+        // Incrémenter les indices
+        int pos = n - 1;
+        while (pos >= 0) {
+            indices[pos]++; // Incrémenter l'indice de la position actuelle
+            if (indices[pos] < taille[pos]) { // Si l'indice est dans la limite
+                break;
+            }
+            indices[pos] = 0; // Remettre à zéro et passer à la position précédente
+            pos--;
+        }
+        
+        // Si tous les indices sont remis à zéro, toutes les combinaisons sont générées
+        if (pos < 0) {
+            break;
+        }
+    }
+}
+*/
+
+threadInfoKey createThreadInfo(unsigned char *carCandidats, int nbCarCand, unsigned char **clef, unsigned long debutSegment,
+    unsigned long finSegment, unsigned char **newKeys, unsigned long tailleclef) {
+        threadInfoKey ti;
+        ti.carCandidats = carCandidats;
+        ti.nbCarCand = nbCarCand;
+        ti.clef = clef;
+        ti.debutSegment = debutSegment;
+        ti.finSegment = finSegment;
+        ti.newKeys = newKeys;
+        ti.tailleclef = tailleclef;
+
+        return ti;
+    }
+
+/*
+    Dans clefs les clefs pour l'instant 
+    soit les caracteres candidats 
+    [123]
+    [45]
+
+    on ajoute [123] ce qui fait les clefs ["1", "2", "3"]
+    puis on ajoute [45] ce qui donne ["14", "15", "24", "25", "34", "35"]
+    
+    on ajoute a chaque clefs actuels les nouveaux caracteres candidats
+        -> double boucle 
+*/
+void ajouteCandidats(unsigned char ***clefs, unsigned long *nbClefs, int *tailleClefs, unsigned char *carCandidats, int nbCarCand) {
+    // initialise les nouvelles infos : 
+    // nouveaux nb de clefs et nouveau tableau de clefs en consequence
+    unsigned long newNbClefs = (*nbClefs) * nbCarCand;;
+    unsigned char **newKeys = malloc(newNbClefs * sizeof(unsigned char *));
+    pError(newKeys, "Erreur creation nouveau tableau clefs", 0);
+
+    unsigned long nbSegment = (unsigned long) sqrt(*nbClefs);
+    unsigned long tailleSegment = *nbClefs / nbSegment + (*nbClefs % nbSegment != 0 ? 1 : 0);
+    
+    pthread_t *thid = malloc(nbSegment * sizeof(pthread_t));
+    pError(thid, "Erreur creation tableau thread clefs", 1);
+    threadInfoKey *ti = malloc(nbSegment * sizeof(threadInfoKey));
+    pError(ti, "Erreur creation tableau informations pour threads clefs", 1);
+
+    unsigned long fin;
+    
+    for (unsigned long i = 0 ; i < nbSegment ; ++i) {
+        fin = (i + 1) * tailleSegment > *nbClefs ? *nbClefs : (i + 1) * tailleSegment;
+
+        ti[i] = createThreadInfo(carCandidats, nbCarCand, *clefs, i * tailleSegment, fin, newKeys, *tailleClefs);
+        pthread_create(&thid[i], NULL, ajouteCandidatsThreads, (void *) &(ti[i]));
+    }
+    for (unsigned long i = 0 ; i < nbSegment ; ++i) {
+        pthread_join(thid[i], NULL);
+    }
+    
+    freeDoubleArray(clefs, *nbClefs);
+    *clefs = newKeys;
+    *nbClefs = newNbClefs;
+    *tailleClefs += 1;
+
+    free(thid);
+    free(ti);
+
+    return;
+}
+
+/*
+    un thread est crée par segment de clefs
+        son role est d'ajouter tous les nouveaux caracteres candidats
+        a chaque clef du segment
+
+        => threadInfo doit etre constitué de
+        unsigned char *carCandidats; // les caracteres candidats
+        int nbCarCand;
+        unsigned char **clef; // le tableau de clefs
+        int debutSegment; // debut des clefs qu'on traitera
+        int finSegment; // fin des clefs qu'on traitera
+        unsigned char **newKeys; // ou ecrire les nouvelles clefs
+        int tailleclef; // le nombre de clefs actuelles
+*/
+void *ajouteCandidatsThreads(void *threadIntel) {
+    threadInfoKey ti = *((threadInfoKey *) threadIntel);
+    unsigned long indTmp;
+
+    for (unsigned long i = ti.debutSegment ; i < ti.finSegment ; ++i) {
+        for (int j = 0 ; j < ti.nbCarCand ; ++j) {
+            indTmp = (i * ti.nbCarCand) + j;
+            ti.newKeys[indTmp] = malloc(ti.tailleclef + 2); // 2 : nouveau caractere et \0
+            pError(ti.newKeys[indTmp], "Erreur creation nouvelle clef", 1);
+
+            // copie le 1 dans les 2 premieres cases
+            strcpy((char *) ti.newKeys[indTmp], (const char *) (ti.clef)[i]);
+            // met le 4 et le 5 dans les cases 1 et 2 (fin 0 et 1 quoi)
+            ti.newKeys[indTmp][ti.tailleclef] = ti.carCandidats[j];
+            ti.newKeys[indTmp][ti.tailleclef + 1] = '\0';
+        }
+    }
+
+    pthread_exit(NULL);
+}
 
