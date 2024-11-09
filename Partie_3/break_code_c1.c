@@ -5,11 +5,15 @@
 #include <time.h>
 #include <pthread.h>
 #include <math.h>
+#include <unistd.h>
 #include "./crackage.h"
 #include "./Pile.h"
 #include "./break_code_c1.h"
 #include "Tree.h"
 #include "../utilitaire/utiL.h"
+
+pthread_mutex_t *mutexEcritureClefsFichier;
+pthread_mutex_t *mutexLectureClefsFichier;
 
 //int nbCara(unsigned char tabCar[]);
 void cpyChaine(unsigned char *dest, unsigned char *from);
@@ -18,17 +22,55 @@ void cpyChaine(unsigned char *dest, unsigned char *from);
 void ajouteCandidats(unsigned char ***clefs, unsigned long *nbClefs, int *tailleClefs, unsigned char *carCandidats, int nbCarCand);
 void *ajouteCandidatsThreads(void *threadIntel);
 
+void ajouteCandidats2(char *nameFileIn, unsigned long *nbClefs, int *tailleClefs, unsigned char *carCandidats, int nbCarCand);
+
 // pour free plus vite les clefs
 void *threadFreeSegment(void *info);
+
+unsigned long nbClefsTotal(unsigned char **carCandParIndice, int len_key);
+
+typedef void(*Functor)(unsigned char *, void *);
+
+typedef struct {
+    int *tableauIndCour;
+    int *tableauIndMax;
+} sTableauIndCourantEtMax;
+
+typedef struct {
+    sTableauIndCourantEtMax tabs;
+    unsigned char **carCandParIndice;
+    int len_key;
+    void *userData;
+    Functor f;
+} threadInfoClefVolee;
+
+threadInfoClefVolee creeInfoThread(sTableauIndCourantEtMax tabs, 
+    unsigned char **carCandParIndice, Functor f, int len_key, void *userData);
+void *clefsThread(void *arg);
+
+sTableauIndCourantEtMax initialiseTableauxIndiceThread(int tailleClef, unsigned char **carCand, 
+    int indThread, int nbThreads, int tailleSegment);
+
+sTableauIndCourantEtMax initialiseTableauxIndice(int tailleClef, unsigned char **carCand);
+sTableauIndCourantEtMax prochaineClefSelonTableau(sTableauIndCourantEtMax tabs, int tailleClef);
+
+void functorOnKey(unsigned char *key, Functor f, void *userData);
+
+void afficheClef(unsigned char *key, void *userData);
+void clefTrouve(unsigned char *curKey, void *actualKey);
+
+unsigned char *getKeyFromTab(int *tableauInd, unsigned char **carCandidats, int len_key);
+
+void afficheTab(int *tab, int len_key);
    
 typedef struct {
     unsigned char *carCandidats;
     int nbCarCand;
-    unsigned char **clef;
     unsigned long debutSegment;
     unsigned long finSegment;
-    unsigned char **newKeys;
     unsigned long tailleclef;
+    int fileInDescriptor;
+    int fileOutDescriptor;
 } threadInfoKey;
 
 typedef struct {
@@ -86,9 +128,11 @@ int break_code_c1(char *file_in, int keyLength, char *file_out) {
 */
 bool estCaractereValideASCII(unsigned char *charDechiffre) {
     // caracteres valides 
-    char charValides[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,?;.:()[]\"-/{} ";
+    char charValides[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,.;:?! ";
+    //char charValides[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789,?;.:()[]\"-/{} ";
 
-    return charDechiffre[0] != '\0' && (strstr(charValides, (const char *) charDechiffre) != NULL);
+    // attention j'ai viré charDechiffre[0] != '\0' && 
+    return strstr(charValides, (const char *) charDechiffre) != NULL;
 }
 
 /*
@@ -149,7 +193,7 @@ unsigned char *caracteresPossibles(unsigned char *charSet, unsigned char carChif
 */
 unsigned char *caracteresCandidatIndKey(unsigned char *msgCode, int tailleMsgCode, int indice, int len_key) {
     // cara possible d'une clef (gen_key ne genere que des caracteres alphanumérique)
-    unsigned char *caraCandidat = malloc(63 * sizeof(unsigned char));
+    unsigned char *caraCandidat = malloc(64 * sizeof(unsigned char));
     if (!caraCandidat) {
         perror("Erreur allocation memoire tableau par indice");
         exit(1);
@@ -179,18 +223,17 @@ unsigned char *caracteresCandidatIndKey(unsigned char *msgCode, int tailleMsgCod
         — clef [1] ∈ [′1′]
         — clef [2] ∈ [′0′,′ 2′]
 */
-unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, int len_key) {
+unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, unsigned long tailleMsgCode, int len_key) {
     // les clefs candidates finales
     unsigned char **clefCandidates = malloc(len_key * sizeof(unsigned char *));
     if (!clefCandidates) {
         perror("Erreur allocation memoire tableau de caractères candidats");
         exit(1);
     }
-    int tailleMsgCod = sizeof(msgCode); // / sizeof(unsigned char) qui vaut 1
     
     for (int i = 0 ; i < len_key ; ++i) {
         // TODO THREADS ICI; pas sur, c'est assez rapide
-        clefCandidates[i] = caracteresCandidatIndKey(msgCode, tailleMsgCod, i, len_key);
+        clefCandidates[i] = caracteresCandidatIndKey(msgCode, tailleMsgCode, i, len_key);
     }
     for (int i = 0 ; i < len_key ; ++i) {
         printf("Possibilité par indice : %s\n", clefCandidates[i]);
@@ -218,9 +261,52 @@ unsigned char **caracteresCandidatsParIndice(unsigned char *msgCode, int len_key
 
         Utilise les arbres N-aire
 */
-unsigned char **clefsFinales(char *msgCode, int len_key, unsigned long *nbClefs) {
-    unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, len_key);
+void clefsFinales(char *msgCode, unsigned long tailleMsgCode, int len_key, unsigned long *nbClefs, char *nameFileOut) {
+    mutexEcritureClefsFichier = malloc(sizeof(pthread_mutex_t));
+    pthread_mutex_init(mutexEcritureClefsFichier, NULL);
 
+    unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, tailleMsgCode, len_key);
+    *nbClefs = nbClefsTotal(carCandParIndice, len_key);
+    printf("nb clefs : %lu\n", *nbClefs);
+
+    int tailleSegment = 1;
+    //int tailleSegment = ceil((double) strlen((const char *) carCandParIndice[0]) / 8);
+    //int tailleSegment = ceil((double) sqrt(strlen((const char *) carCandParIndice[0])));
+    int nbSegment = strlen((const char *) carCandParIndice[0]) / tailleSegment;
+
+    Functor f = clefTrouve;
+    void *userData = (void *) nameFileOut;
+    sTableauIndCourantEtMax tabs[nbSegment];
+    pthread_t thid[nbSegment];
+    threadInfoClefVolee infoThreads[nbSegment];
+    for (int i = 0 ; i < nbSegment ; ++i) {
+        tabs[i] = initialiseTableauxIndiceThread(len_key, carCandParIndice, i, nbSegment, tailleSegment);
+        infoThreads[i] = creeInfoThread(tabs[i], carCandParIndice, f, len_key, userData);
+        pthread_create(&thid[i], NULL, clefsThread, &(infoThreads[i]));
+    }
+    for (int i = 0 ; i < nbSegment ; ++i) {
+        pthread_join(thid[i], NULL);
+    }
+    (void) nameFileOut;
+
+    pthread_mutex_destroy(mutexEcritureClefsFichier);
+    /*
+    unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, len_key);
+    sTableauIndCourantEtMax tabs = initialiseTableauxIndice(len_key, carCandParIndice);
+
+    unsigned char *curKey;
+
+    while (tabs.tableauIndCour != NULL) {
+        curKey = getKeyFromTab(tabs.tableauIndCour, carCandParIndice, len_key);
+        functorOnKey(curKey, clefTrouve, (void *)nameFileOut);
+        free(curKey);
+
+        tabs = prochaineClefSelonTableau(tabs, len_key);
+    }
+    
+    *nbClefs = nbClefsTotal(carCandParIndice, len_key);
+    */
+    /*
     unsigned char **clefs = malloc(sizeof(unsigned char *));
     pError(clefs, "Erreur creation tableau de clefs de base", 1);
     clefs[0] = malloc(1);
@@ -230,8 +316,9 @@ unsigned char **clefsFinales(char *msgCode, int len_key, unsigned long *nbClefs)
     unsigned long nbClefsTMP = 1;
     int tailleClefs = 0;
     for (int i = 0 ; i < len_key ; ++i) {
-        ajouteCandidats(&clefs, &nbClefsTMP, &tailleClefs, carCandParIndice[i], (int) strlen((const char *) carCandParIndice[i]));
+        ajouteCandidats(&clefs, &nbClefsTMP, &tailleClefs, carCandParIndice[i], (int) strlen((const char *) carCandParIndice[i]), nameFileOut);
     }
+    */
     /*
     Tree *t = createTree();
     for (int i = 0 ; i < len_key ; ++i) {
@@ -250,32 +337,33 @@ unsigned char **clefsFinales(char *msgCode, int len_key, unsigned long *nbClefs)
     deleteTree(t);
     */
 
-    *nbClefs = nbClefsTMP;
-    return clefs;
+    //*nbClefs = nbClefsTMP;
 }
-
 /*
-int nbClefsTotal(unsigned char **carCandParIndice, int len_key) {
-    int nbClefs = 1;
+void clefsFinales2(char *msgCode, int len_key, unsigned long *nbClefs, char *nameFileOut) {
+    unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, len_key);
+
+    // ecriture clefs par fichier
+    mutexEcritureClefsFichier = malloc(sizeof(pthread_mutex_t));
+    pError(mutexEcritureClefsFichier, "Erreur création mutex ecriture clefs", 1);
+    mutexLectureClefsFichier = malloc(sizeof(pthread_mutex_t));
+    pError(mutexLectureClefsFichier, "Erreur création mutex lecture clefs", 1);
+
+    int tailleClefTMP = 0;
     for (int i = 0 ; i < len_key ; ++i) {
-        nbClefs *= nbCara(carCandParIndice[i]);
+        ajouteCandidats2(nameFileOut, &nbClefs, &tailleClefTMP, carCandParIndice[i], (int) strlen((const char *) carCandParIndice[i]));
+    }
+}
+*/
+
+
+unsigned long nbClefsTotal(unsigned char **carCandParIndice, int len_key) {
+    unsigned long nbClefs = 1;
+    for (int i = 0 ; i < len_key ; ++i) {
+        nbClefs *= strlen((const char *) carCandParIndice[i]);
     }
     return nbClefs;
 }
-
-// equivalent d'un strlen mais pour un tableau : {'a', 'b', '\0'}
-// sizeof(tableau) ne compile pas faut que je me penche dessus
-int nbCara(unsigned char tabCar[]) {
-    unsigned char curCar = tabCar[0];
-    int nbCara = 0;
-
-    while (curCar != '\0') {
-        curCar = tabCar[nbCara + 1];
-        ++nbCara;
-    }
-    return nbCara;
-}
-*/
 
 void cpyChaine(unsigned char *dest, unsigned char *from) {
     strcpy((char *) dest, (const char *) from);
@@ -285,12 +373,6 @@ void freeDoubleArray(unsigned char ***arr, unsigned long len) {
     if (!(arr && *arr)) {
         return;
     }
-    /*
-    for (unsigned long i = 0 ; i < len ; ++i) {
-        free((void *) (*arr)[i]);
-        (*arr)[i] = NULL;
-    }
-    */
     unsigned long nbSeg = (unsigned long) sqrt(len);
     unsigned long tailleSeg = len / nbSeg + (len % nbSeg != 0 ? 1 : 0);
 
@@ -364,21 +446,21 @@ void produit_cartesienChatGPT(char *tableau[][10], int taille[], int n) {
     }
 }
 */
-
-threadInfoKey createThreadInfo(unsigned char *carCandidats, int nbCarCand, unsigned char **clef, unsigned long debutSegment,
-    unsigned long finSegment, unsigned char **newKeys, unsigned long tailleclef) {
+/*
+threadInfoKey createThreadInfo(unsigned char *carCandidats, int nbCarCand, unsigned long debutSegment,
+    unsigned long finSegment, unsigned long tailleclef, int fileInDescriptor, int fileOutDescriptor) {
         threadInfoKey ti;
         ti.carCandidats = carCandidats;
         ti.nbCarCand = nbCarCand;
-        ti.clef = clef;
         ti.debutSegment = debutSegment;
         ti.finSegment = finSegment;
-        ti.newKeys = newKeys;
         ti.tailleclef = tailleclef;
+        ti.fileInDescriptor = fileInDescriptor;
+        ti.fileOutDescriptor = fileOutDescriptor;
 
         return ti;
-    }
-
+}
+*/
 /*
     Dans clefs les clefs pour l'instant 
     soit les caracteres candidats 
@@ -391,10 +473,11 @@ threadInfoKey createThreadInfo(unsigned char *carCandidats, int nbCarCand, unsig
     on ajoute a chaque clefs actuels les nouveaux caracteres candidats
         -> double boucle 
 */
+/*
 void ajouteCandidats(unsigned char ***clefs, unsigned long *nbClefs, int *tailleClefs, unsigned char *carCandidats, int nbCarCand) {
     // initialise les nouvelles infos : 
     // nouveaux nb de clefs et nouveau tableau de clefs en consequence
-    unsigned long newNbClefs = (*nbClefs) * nbCarCand;;
+    unsigned long newNbClefs = (*nbClefs) * nbCarCand;
     unsigned char **newKeys = malloc(newNbClefs * sizeof(unsigned char *));
     pError(newKeys, "Erreur creation nouveau tableau clefs", 0);
 
@@ -429,6 +512,69 @@ void ajouteCandidats(unsigned char ***clefs, unsigned long *nbClefs, int *taille
     return;
 }
 
+// par file
+void ajouteCandidats2(char *nameFileIn, unsigned long *nbClefs, int *tailleClefs, unsigned char *carCandidats, int nbCarCand) {
+    int fileInFileDescriptor = open(nameFileIn, O_RDONLY);
+    pError(fileInFileDescriptor, "Erreur ouverture fichier d'écriture des clefs candidates", 1);
+
+    int fileOutFileDescriptor = open("tmp.txt", O_WRONLY);
+    pError(fileOutFileDescriptor, "Erreur création fichier temporaire d'écriture des clefs", 1);
+
+    // nb de threads a creer
+    unsigned long nbSegment = (unsigned long) sqrt(*nbClefs);
+    // la portion dont le thread va s'occuper
+    unsigned long tailleSegment = *nbClefs / nbSegment + (*nbClefs % nbSegment != 0 ? 1 : 0);
+    
+    // initialise des tableaux pour les threads
+    pthread_t *thid = malloc(nbSegment * sizeof(pthread_t));
+    pError(thid, "Erreur creation tableau thread clefs", 1);
+    threadInfoKey *ti = malloc(nbSegment * sizeof(threadInfoKey));
+    pError(ti, "Erreur creation tableau informations pour threads clefs", 1);
+
+    unsigned long fin;
+    
+    for (unsigned long i = 0 ; i < nbSegment ; ++i) {
+        // attrape bien les dernieres informations
+        // si la division n'est pas entiere
+        fin = (i + 1) * tailleSegment > *nbClefs ? *nbClefs : (i + 1) * tailleSegment;
+
+        ti[i] = createThreadInfo(carCandidats, nbCarCand, i * tailleSegment, fin,
+             *tailleClefs, fileInFileDescriptor, fileOutFileDescriptor);
+        pthread_create(&thid[i], NULL, ajouteCandidatsThreads2, (void *) &(ti[i]));
+    }
+    for (unsigned long i = 0 ; i < nbSegment ; ++i) {
+        pthread_join(thid[i], NULL);
+    }
+    
+    *nbClefs = (*nbClefs) * nbCarCand;
+    *tailleClefs += 1;
+
+    free(thid);
+    free(ti);
+
+    // DELETE fileIn
+    // et renommer fileOut en fileIn
+    // plus rapide que copier tout fileOut
+    fclose(fileOut);
+    fclose(fileTMP);
+
+    return;
+}
+*/
+
+// mutex sur l'écriture
+void ecritClef(int fileOutDescriptor, unsigned char **clef, int nbClefs) {
+    if (pthread_mutex_lock(mutexEcritureClefsFichier) != 0) {
+        pError(NULL, "Erreur prendre jeton pour ecriture clef fichier", 1);
+    }
+    if (write(fileOutDescriptor, clef, nbClefs) < 0) {
+        pError(NULL, "Erreur écriture nouvelles clefs fichier", 1);
+    }
+    if (pthread_mutex_unlock(mutexEcritureClefsFichier) != 0) {
+        pError(NULL, "Erreur don jeton pour ecriture clef fichier", 1);
+    }
+}
+
 /*
     un thread est crée par segment de clefs
         son role est d'ajouter tous les nouveaux caracteres candidats
@@ -443,8 +589,10 @@ void ajouteCandidats(unsigned char ***clefs, unsigned long *nbClefs, int *taille
         unsigned char **newKeys; // ou ecrire les nouvelles clefs
         int tailleclef; // le nombre de clefs actuelles
 */
+/*
 void *ajouteCandidatsThreads(void *threadIntel) {
     threadInfoKey ti = *((threadInfoKey *) threadIntel);
+
     unsigned long indTmp;
 
     for (unsigned long i = ti.debutSegment ; i < ti.finSegment ; ++i) {
@@ -462,5 +610,265 @@ void *ajouteCandidatsThreads(void *threadIntel) {
     }
 
     pthread_exit(NULL);
+}
+
+void *ajouteCandidatsThreads2(void *threadIntel) {
+    threadInfoKey ti = *((threadInfoKey *) threadIntel);
+
+    unsigned long indTmp;
+
+    int tailleBuffFile = 1024;
+    unsigned char keys[tailleBuffFile * (ti.tailleclef + 1)];
+    // lit tout d'un coup, boucle sur le buffer lu
+    // toutes les (tailleClefs + 1) j'ajoute le nouveau caractere
+    // ecrit tout le buffer dans le nouveau fichier
+    // ajoute le caractere " " a la fin de chaque clef
+
+    if (lseek(ti.fileInDescriptor, (off_t) ti.debutSegment, SEEK_SET) == -1) {
+        pError(NULL, "Erreur deplacement curseur dans fichier", 1);
+    }
+    ssize_t bytesRead;
+    // nombre d'octet à lire par thread
+    ssize_t nbBytesMAXToRead = (ti.finSegment - ti.debutSegment) * ti.tailleclef;
+    ssize_t nbBytesReadTotal = 0;
+    while (nbBytesReadTotal < nbBytesMAXToRead) {
+        if ((bytesRead = read(ti.fileInDescriptor, keys, tailleBuffFile)) < 0) {
+            pError(NULL, "Erreur lecture fichier", 1);
+        }
+        nbBytesReadTotal += bytesRead;
+        // lseek sur ti.debut + bytesRead (a cause des autres threads)
+    }
+
+    for (unsigned long i = ti.debutSegment ; i < ti.finSegment ; ++i) {
+        for (int j = 0 ; j < ti.nbCarCand ; ++j) {
+            indTmp = ((i * ti.nbCarCand) + j) % tailleBuffFile;
+
+            // copie le 1 dans les 2 premieres cases
+            strcpy((char *) newKeys[indTmp], (const char *) (ti.clef)[i]);
+            // met le 4 et le 5 dans les cases 1 et 2 (fin 0 et 1 quoi)
+            newKeys[indTmp][ti.tailleclef] = ti.carCandidats[j];
+            newKeys[indTmp][ti.tailleclef + 1] = '\0';
+
+            if (indTmp == tailleBuffFile - 1) {
+                ecritClef(ti.fileOut, newKeys, tailleBuffFile);
+            }
+        }
+    }
+    
+    pthread_exit(NULL);
+}
+
+// clefs le buffer de lecture du fichier de clef fileIn
+// il ne faut pas que nbClefs (la taille du buffer) soit trop grand
+// sinon explosion de la RAM
+void traitementClefsLues(unsigned char *clefs, int nbClefs, int tailleClef, unsigned char **carCandidats, int nbCarCand, int fileOutFD) {
+    unsigned char *newKeys = malloc(nbClefs * nbCarCand * (tailleClef + 2));
+    int indTMP;
+
+    for (int i = 0 ; i < nbClefs ; ++i) {
+        for (int j = 0 ; j < nbCarCand ; ++j) {
+            indTMP = ((i * nbCarCand) + j) * (tailleClef + 2);
+            strncpy(&(newKeys[indTMP]), &(clefs[i * tailleClef]), tailleClef);
+            newKeys[indTMP]
+        }
+    }
+    ecritClef(fileOutFD, newKeys, sizeof(newKeys));
+    free(newKeys);
+}
+*/
+
+/*
+    au depart faut calculer le nb de clefs
+
+    une fonction principale qui appelle f1 tant que 
+    le retour de f2 est différent de NULL
+    (if break (sinon augmente la premiere clef sans l'utiliser))
+    
+    elle incrémente la clef grace a f2
+
+    c'est une fonction f1 qui applique une fonction f sur la clef courante 
+    selon un tableau de int
+
+    y'a une autre fonction f2 qui retourne le tableau suivant selon un tableau
+
+    c'est un tableau de int representant l'indice de la derniere clef lu
+    quand l'indice d'un tableau arrive a la taille du nb de car candidats
+    ca augmente celui du dessus de 1, et on repart de 0 sur la ligne courante
+    si c'est le premier qui est augmenté
+
+
+    quant aux threads, il faut les faire sur une portion de chaque tableau
+
+*/
+
+/*
+    [1,2]
+    [3]
+    [4,5]
+
+    [ 
+      0
+      0
+      0
+    ]
+    renvoit 
+    [ 
+      0
+      0
+      1
+    ]
+    renvoit
+    [ 
+      1
+      0 (pas 1 puisque length([3]) == 1)
+      0
+    ]
+    renvoit
+    [ 
+      1
+      0
+      1
+    ]
+    renvoit NULL
+*/
+sTableauIndCourantEtMax prochaineClefSelonTableau(sTableauIndCourantEtMax tabs, int tailleClef) {
+    int ind = tailleClef - 1;
+    int *tableau = tabs.tableauIndCour;
+    int *nbCaractereCandidatParIndice = tabs.tableauIndMax;
+
+    if (tableau[ind] < nbCaractereCandidatParIndice[ind]) {
+        tableau[ind] += 1;
+    }
+    while ((tableau[ind] == nbCaractereCandidatParIndice[ind]) && (ind > 0)) {
+        tableau[ind - 1] += 1;
+        tableau[ind] = 0;
+        --ind;
+    }
+    
+    if (ind == 0 && tableau[0] == nbCaractereCandidatParIndice[0]) {
+        tabs.tableauIndCour = NULL;
+    }
+    
+    return tabs;
+}
+
+/*
+    initialise le tableau d'indice courant et le tableau d'indice a ne pas depasser
+
+    pour faire avec des threads il faudrait implanter une taille de segment
+*/
+sTableauIndCourantEtMax initialiseTableauxIndice(int tailleClef, unsigned char **carCand) {
+    sTableauIndCourantEtMax tabs;
+
+    tabs.tableauIndCour = malloc(tailleClef * sizeof(int));
+    pError(tabs.tableauIndCour, "Erreur creation tableau d'indice", 1);
+    tabs.tableauIndMax = malloc(tailleClef * sizeof(int));
+    pError(tabs.tableauIndMax, "Erreur creation tableau d'indice max", 1);
+
+    for (int i = 0 ; i < tailleClef ; ++i) {
+        tabs.tableauIndCour[i] = 0;
+        tabs.tableauIndMax[i] = strlen((const char *) carCand[i]);
+    }
+
+    return tabs;
+}
+
+/*
+    chaque thread s'occupera d'un segment de chaque ligne de carCandidat
+    exemple:
+    soit le tableau de caracteres candidats
+    [1234,
+    56,
+    908]
+    et la taille d'un segment sqrt()
+    thread 1 s'occupe de 12 de la premiere ligne et du reste
+    thread 2 s'occupe de 34 et du reste
+
+    la division des taches se fait selon la premiere ligne
+    probleme : premiere ligne petite mais reste hyper grand bah y'aura pas beaucoup
+    de threads donc ca prendra une eternité
+*/
+sTableauIndCourantEtMax initialiseTableauxIndiceThread(int tailleClef, unsigned char **carCand, int indThread, int nbThreads, int tailleSegment) {
+    sTableauIndCourantEtMax tabs;
+
+    tabs.tableauIndCour = malloc(tailleClef * sizeof(int));
+    pError(tabs.tableauIndCour, "Erreur creation tableau d'indice", 1);
+    tabs.tableauIndMax = malloc(tailleClef * sizeof(int));
+    pError(tabs.tableauIndMax, "Erreur creation tableau d'indice max", 1);
+
+    for (int i = 1 ; i < tailleClef ; ++i) {
+        tabs.tableauIndCour[i] = 0;
+        tabs.tableauIndMax[i] = strlen((const char *) carCand[i]);
+    }
+    tabs.tableauIndCour[0] = indThread * tailleSegment;
+    if (indThread == nbThreads - 1) {
+        tabs.tableauIndMax[0] = strlen((const char *) carCand[0]);
+    } else {
+        tabs.tableauIndMax[0] = (indThread + 1) * tailleSegment;
+    }
+    
+    return tabs;
+}
+
+threadInfoClefVolee creeInfoThread(sTableauIndCourantEtMax tabs, 
+    unsigned char **carCandParIndice, Functor f, int len_key, void *userData) {
+    threadInfoClefVolee ti;
+    ti.tabs = tabs;
+    ti.carCandParIndice = carCandParIndice;
+    ti.f = f;
+    ti.len_key = len_key;
+    ti.userData = userData;
+    
+    return ti;
+}
+
+void *clefsThread(void *arg) {
+    threadInfoClefVolee ti = *((threadInfoClefVolee *) arg);
+    unsigned char *curKey;
+
+    while ((ti.tabs).tableauIndCour != NULL) {
+        curKey = getKeyFromTab((ti.tabs).tableauIndCour, ti.carCandParIndice, ti.len_key);
+        functorOnKey(curKey, ti.f, ti.userData);
+        free(curKey);
+
+        ti.tabs = prochaineClefSelonTableau(ti.tabs, ti.len_key);
+    }
+
+    pthread_exit(NULL);
+}
+
+void functorOnKey(unsigned char *key, Functor f, void *userData) {
+    f(key, userData);
+}
+
+unsigned char *getKeyFromTab(int *tableauInd, unsigned char **carCandidats, int len_key) {
+    unsigned char *key = malloc(len_key + 1);
+    for (int i = 0 ; i < len_key ; ++i) {
+        key[i] = carCandidats[i][tableauInd[i]];
+    }
+    key[len_key] = '\0';
+
+    return key;
+}
+
+void afficheClef(unsigned char *key, void *userData) {
+    (void) userData;
+    printf("%s\n", key);
+}
+
+void clefTrouve(unsigned char *curKey, void *actualKey) {
+    const char *keyChar = (const char *) actualKey;
+    if (strcmp((const char *) curKey, keyChar) == 0) {
+        printf("Trouvé ! %s\n", curKey);
+    }
+}
+
+void afficheTab(int *tab, int len_key) {
+    pthread_mutex_lock(mutexEcritureClefsFichier);
+    for (int i = 0 ; i < len_key ; ++i) {
+        printf("%d ", tab[i]);
+    }
+    printf("\n");
+    pthread_mutex_unlock(mutexEcritureClefsFichier);
 }
 

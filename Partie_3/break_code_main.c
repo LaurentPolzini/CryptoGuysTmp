@@ -80,7 +80,7 @@ int main(int argc, char *argv[]) {
     char nameFileIn[] = "msgClair.txt";
 
     // Générer une clé pour le test
-    char cle[] = "rutabaga";
+    char cle[] = "rutabag";
     char nameFileOut[] = "msgCrypte.txt";
 
     char nameFileUncrypted[] = "msgDecrypte.txt";
@@ -109,12 +109,12 @@ int main(int argc, char *argv[]) {
     unsigned long nbClefs = 0;
     time_t tpsDepart = time(NULL);
 
-    unsigned char **clefs = clefsFinales(buffFileOut, strlen(cle), &nbClefs);
+    clefsFinales(buffFileOut, sizeMsgCode, strlen(cle), &nbClefs, cle);
     
     time_t tpsFin = time(NULL);
 
-    printf("Temps ecriture toutes les clefs : %f\n", difftime(tpsFin, tpsDepart));
-
+    printf("Temps creation des %lu clefs : %f\n", nbClefs, difftime(tpsFin, tpsDepart));
+    /*
     for (unsigned long i = 0 ; i < nbClefs ; ++i) {
         if (strstr((const char *) clefs[i], cle) != NULL) {
             printf("Trouvé ! : %s\n", clefs[i]);
@@ -123,7 +123,7 @@ int main(int argc, char *argv[]) {
         }
     }
     
-    printf("Il y a %lu clefs\n", nbClefs);
+    
     printf("Libere le tableau de clefs...\n");
 
     tpsDepart = time(NULL);
@@ -132,7 +132,7 @@ int main(int argc, char *argv[]) {
 
     tpsFin = time(NULL);
     printf("Temps effacement toutes les clefs : %f\n", difftime(tpsFin, tpsDepart));
-    
+    */
     return 0;
 }
 
