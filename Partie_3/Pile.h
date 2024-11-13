@@ -6,18 +6,19 @@
 typedef struct _Pile Pile;
 typedef Pile *ptrPile;
 
+// elem and userData
+typedef void(*FunctorPile)(void *, void *);
+
 // crée une Pile de taille tailleMax
-//  -> la taille reelle est tailleMax + 1
-// pour le \0 final
 Pile *pileCreate(int tailleMax);
 
 // retourne le nombre d'element dans la file p
-// [512\0] est de taille 3
+// [512] est de taille 3
 int pileTaille(Pile *p);
 
 // ajoute un element a la Pile
-// [51\0] -> [512\0]
-Pile *pilePush(Pile *p, unsigned char c);
+// [51] -> [512]
+Pile *pilePush(Pile *p, void *e);
 
 // retire le dernier element ajouté
 // [512\0] -> [51\0]
@@ -31,15 +32,18 @@ bool pileEmpty(Pile *p);
 
 // si la Pile vaut [510] et valueAt 1
 // renvoie 5
-unsigned char pileValueAt(Pile *p, unsigned int valueAt);
-
-// retourne les valeurs de la Pile
-// retourne par exemple [510\0]
-unsigned char *pileValue(Pile *p);
+void *pileValueAt(Pile *p, unsigned int valueAt);
 
 // copy la chaine contenue dans p a destination de dest
-void pileCopyValue(Pile *p, unsigned char **dest);
+void pileCopyValueCHAR(Pile *p, unsigned char **dest);
 
-Pile *pileCopy(Pile *from);
+Pile *pileCopyCHAR(Pile *from);
+Pile *pileCopyINT(Pile *from);
+
+Pile *modifyStackValueINT(Pile *p, unsigned int atIndex, int newValue);
+
+void fonctorDelete(void *elem, void *userData);
+
+void fOnStack(Pile *p, FunctorPile f, void *userData);
 
 #endif
