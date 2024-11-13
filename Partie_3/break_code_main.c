@@ -76,23 +76,23 @@ int main(int argc, char *argv[]) {
     */
     (void) argc, (void) argv;
     
-    char nameFileIn[] = "msgClair.txt";
+    //char nameFileIn[] = "msgClair.txt";
     // Générer une clé pour le test
-    char cle[] = "rutabaga";
-    //char nameFileOut[] = "../script/CRACK/tests/crypted_crack/Clef1_miseAuPointCrypt.txt";
-    char nameFileOut[] = "msgCrypte.txt";
+    char cle[] = "1234";
+    char nameFileOut[] = "../script/CRACK/tests/crypted_crack/1234_msg2.txt";
+    //char nameFileOut[] = "msgCrypte.txt";
     char nameFileUncrypted[] = "msgDecrypte.txt";
 
     // Chiffrer le message
     //char *msg = encrypt_decrypt_xor(nameFileOut, cle, nameFileUncrypted);
-    char *msgChiffre = encrypt_decrypt_xor(nameFileIn, cle, nameFileOut);
+    //char *msgChiffre = encrypt_decrypt_xor(nameFileIn, cle, nameFileOut);
     
     // Déchiffrer le message (en utilisant la même clé)
     char *msgDechiffre = encrypt_decrypt_xor(nameFileOut, cle, nameFileUncrypted);
 
 
     printf("La clé est %s\n", cle);
-    printf("Message après chiffrement : %s\n\n", msgChiffre);
+    //printf("Message après chiffrement : %s\n\n", msgChiffre);
     printf("Message après déchiffrement : %s\n\n", msgDechiffre);
 
     break_code_c1(nameFileOut, strlen(cle), cle);

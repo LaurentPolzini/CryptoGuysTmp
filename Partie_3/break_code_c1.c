@@ -192,17 +192,19 @@ char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage) {
     return msgLu;
 }
 
-void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, void *uD);
+void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, void *uD);
 
 int break_code_c1(char *file_in, int keyLength, char *file_out) {
     (void) file_out;
+    /*
     off_t tailleMsg;
     char *msg = ouvreEtLitFichier(file_in, &tailleMsg);
+    */
 
     //testThreadSeg(msg, tailleMsg, keyLength, (void *) file_out);
-    //appelCaracteresCandidats(file_in, keyLength);
-    appelClefsFinales(file_in, keyLength, file_out);
-
+    appelCaracteresCandidats(file_in, keyLength);
+    //appelClefsFinales(file_in, keyLength, file_out);
+    
     return 1;
 }
 
@@ -214,13 +216,12 @@ void appelClefsFinales(char *file_in, int keyLength, char *file_out) {
     off_t tailleMsg;
 
     char *msg = ouvreEtLitFichier(file_in, &tailleMsg);
-    printf("Msg lu : %s\n", msg);
 
     unsigned long nbClefs = 0;
 
     time_t tpsDepart = time(NULL);
     //clefsFinales(msg, tailleMsg, keyLength, &nbClefs, file_out);
-    clefsByThreads(msg, tailleMsg, keyLength, (void *) file_out);
+    clefsByThreads(msg, tailleMsg, keyLength, &nbClefs, (void *) file_out);
     time_t tpsFin = time(NULL);
 
     printf("Temps creation des %lu clefs : %f\n", nbClefs, difftime(tpsFin, tpsDepart));
@@ -239,23 +240,26 @@ void appelCaracteresCandidats(char *file_in, int keyLength) {
 
     unsigned char **carCandParIndice = caracteresCandidatsParIndice(msgLu, sizeMsg, keyLength);
 
+    printf("Il y a %lu clefs; combinées à partir de :\n", nbClefsTotal(carCandParIndice, keyLength));
     for (int i = 0 ; i < keyLength ; ++i) {
         printf("Caracteres possibles clef[%d] : \"%s\"\n", i, carCandParIndice[i]);
     }
+
     free((void *) msgLu);
     return;
 }
 
-void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, void *uD) {
+void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, void *uD) {
     unsigned char **carCandParIndice = caracteresCandidatsParIndice(msgCode, tailleMsgCode, len_key);
     for (int i = 0 ; i < len_key ; ++i) {
         printf("Caracteres possibles clef[%d] : \"%s\"\n", i, carCandParIndice[i]);
     }
     (void) uD;
-    int nbThreadsMax = 16;
+    int nbThreadsMax = 8;
     int nbThreadReel = 1;
     sPileIndCourFin **pilesTests = initialisePilesIndiceThreads(len_key, carCandParIndice, &nbThreadsMax, &nbThreadReel);
-    printf("On a %d threads pour %lu clefs\n", nbThreadReel, nbClefsTotal(carCandParIndice, len_key));
+    *nbClefs = nbClefsTotal(carCandParIndice, len_key);
+    printf("On a %d threads pour %lu clefs\n", nbThreadReel, *nbClefs);
 
     FunctorC1 f = clefTrouve;
     

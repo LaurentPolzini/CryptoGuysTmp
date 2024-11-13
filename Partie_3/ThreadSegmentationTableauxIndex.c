@@ -33,19 +33,7 @@ nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand,
     infoSeg.tailleSegment = malloc(sizeof(int) * tailleClef);
     pError(infoSeg.tailleSegment, "Erreur création tableau de la taille des segments des caractères candidats", 1);
     int indSeg = 0;
-    /*
-    while (indSeg < tailleClef && totalThreads > 1) {
-        int length = strlen((const char *) carCand[indSeg]);
-        
-        // Segmentation en fonction de threads disponibles
-        infoSeg.nbSegment[indSeg] = totalThreads;  // Un segment par thread
-        infoSeg.tailleSegment[indSeg] = ceil((double) length / totalThreads);
 
-        ++indSeg;
-        totalThreads /= 2;  // Diminue les threads disponibles
-    }
-    */
-    
     while (*nbThreadsReel < *nbThreadsMax && indSeg < tailleClef) {
         /*
         int segments = *nbThreadsMax / (1 << indSeg);  // Ajuste le nombre de segments selon les threads disponibles

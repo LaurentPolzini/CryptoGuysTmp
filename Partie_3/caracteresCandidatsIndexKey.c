@@ -2,10 +2,11 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <string.h>
+#include <ctype.h>
 #include "caracteresCandidatsIndexKey.h"
 
 
-char ASCII_CHAR_VALIDES[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',?!;.:()\n ";
+char ASCII_CHAR_VALIDES[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'\",?!;.:()\n ";
 
 char ACCENTED_CHAR_VALIDE[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',?!;.:()\n "
  "éèêàâôîûù";
@@ -14,15 +15,13 @@ char UTF8_CHAR_VALIDES[] =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"
     "0123456789";
 
+
 /*
     recoit un char xoré entre un char du message et un char de clef possible
     retourne si ce char est bien un caractere valide en ASCII
-
-    attention : je vérifie les guillements américain et non francais
-        pas << >> mais " "
 */
 bool estCaractereValideASCII(unsigned char charDechiffre) {
-    return strchr(ASCII_CHAR_VALIDES, charDechiffre) != NULL;
+    return isalnum(charDechiffre) || ispunct(charDechiffre) || isspace(charDechiffre);
 }
 
 bool estCaractereValideUTF8(unsigned char charDechiffre) {
@@ -119,15 +118,14 @@ unsigned char *caracteresPossibles(unsigned char *charSet, unsigned char carChif
 
     // le caractere xoré avec un caractere de la clef 
     // et tous les caracteres possibles pour cet indice de clef
-    unsigned char strCarDechiffre;
+    unsigned char carDechiffre;
 
     // tous les caracteres de charset possible
     // autrement dit, tous les caracteres alphanumerique et ponctuations
     for (unsigned long i = 0 ; i < strlen((char *) charSet) ; ++i) {
-        strCarDechiffre = carChiffre ^ charSet[i];
-        //printf("Caractere dichiffré : %c\n", strCarDechiffre);
+        carDechiffre = carChiffre ^ charSet[i];
 
-        if (estCaractereValideASCII(strCarDechiffre)) {
+        if (estCaractereValideASCII(carDechiffre)) {
             charClefPossibles[indCharPossible++] = charSet[i];
         }
     }

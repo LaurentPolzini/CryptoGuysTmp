@@ -14,3 +14,9 @@ key : rutabaga ; number of keys : 0 ; time : 0.000000
 key : rutabaga ; number of keys : 0 ; time : 0.000000
 key : toto ; number of keys : 0 ; time : 0.000000
 key : ruta ; number of keys : 0 ; time : 0.000000
+key : rutabaga ; number of keys : 0 ; time : 0.000000
+key : rutabaga ; number of keys : 0 ; time : 8.000000
+key : rutabaga ; number of keys : 345266064 ; time : 7.000000
+key : rutabaga ; number of keys : 5954588640 ; time : 116.000000 (16 threads)
+key : rutabaga ; number of keys : 5954588640 ; time : 97.000000 (threads only on l.0)
+key : rutabaga ; number of keys : 5954588640 ; time : 131.000000 (8 threads)
