@@ -1,0 +1,16 @@
+key : rut ; number of keys : 384 ; time : 0.000000
+key : ruta ; number of keys : 3240 ; time : 0.000000
+key : rutab ; number of keys : 758160 ; time : 2.000000
+key : rutaba ; number of keys : 26357760 ; time : 81.000000
+key : 1234 ; number of keys : 1 ; time : 0.000000
+key : 1234 ; number of keys : 1 ; time : 0.000000
+key : 1234 ; number of keys : 0 ; time : 0.000000
+key : 1234 ; number of keys : 1 ; time : 0.000000
+key : Clef1 ; number of keys : 2 ; time : 0.000000
+key : rutaba ; number of keys : 4 ; time : 0.000000
+key : rutabaga ; number of keys : 2 ; time : 0.000000
+key : rutabaga ; number of keys : 122472 ; time : 0.000000
+key : rutabaga ; number of keys : 0 ; time : 0.000000
+key : rutabaga ; number of keys : 0 ; time : 0.000000
+key : toto ; number of keys : 0 ; time : 0.000000
+key : ruta ; number of keys : 0 ; time : 0.000000

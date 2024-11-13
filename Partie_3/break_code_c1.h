@@ -6,7 +6,7 @@
 // retourne si le caractere charDechiffre est valide ou non en ASCII
 // Les caractères valides sont alphanumérique minuscule/majuscule
 // et les caractères spéciaux de ponctuation
-bool estCaractereValideASCII(unsigned char* charDechiffre);
+bool estCaractereValideASCII(unsigned char charDechiffre);
 
 /*
     recoit un message codé du style "s!/ik" dans msgCode
@@ -14,7 +14,7 @@ bool estCaractereValideASCII(unsigned char* charDechiffre);
     retourne quelque chose du type 
     [[512], [612], [312]]
 */
-void clefsFinales(char *msgCode, unsigned long tailleMsgCode, int len_key, unsigned long *nbClefs, char *nameFileOut);
+void clefsFinales(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, char *nameFileOut);
 
 void freeDoubleArray(unsigned char ***arr, unsigned long len);
 

@@ -145,7 +145,7 @@ void clefsCandidates(Noeud *n, Pile *p, unsigned char **clefs, unsigned long *in
             pError(NULL, "Erreur prise jeton mutex", 2);
         }
         
-        pileCopyValue(p, &(clefs[*indice]));
+        pileCopyValueCHAR(p, &(clefs[*indice]));
         ++(*indice);
 
         if (pthread_mutex_unlock(&mutexEcritureClefs) != 0) {
@@ -178,10 +178,10 @@ void clefsCandidates(Noeud *n, Pile *p, unsigned char **clefs, unsigned long *in
 
 void *threadClefsCandidates(void *inf) {
     threadInfo info = *((threadInfo *) inf);
-    Pile *newPile = pileCopy(info.p);
+    Pile *newPile = pileCopyCHAR(info.p);
 
     for (int i = info.debut ; i < info.fin ; ++i) {
-        pilePush(newPile, info.node->carCandidats[i]);
+        pilePush(newPile, (void *) &(info.node->carCandidats[i]));
         clefsCandidates(info.node -> fils, newPile, info.clefs, info.indice);
         pilePop(newPile);
     }

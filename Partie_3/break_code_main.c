@@ -75,45 +75,28 @@ int main(int argc, char *argv[]) {
     (void) fileToCrack, (void) method, (void) keyLength, (void) dict, (void) logFile;
     */
     (void) argc, (void) argv;
-
-    //char original_msg[] = "Les carottes sont cuites";
+    
     char nameFileIn[] = "msgClair.txt";
-
     // Générer une clé pour le test
-    char cle[] = "rutabag";
+    char cle[] = "rutabaga";
+    //char nameFileOut[] = "../script/CRACK/tests/crypted_crack/Clef1_miseAuPointCrypt.txt";
     char nameFileOut[] = "msgCrypte.txt";
-
     char nameFileUncrypted[] = "msgDecrypte.txt";
 
     // Chiffrer le message
-    char *msg = encrypt_decrypt_xor(nameFileIn, cle, nameFileOut);
-    free(msg);
-    
+    //char *msg = encrypt_decrypt_xor(nameFileOut, cle, nameFileUncrypted);
+    char *msgChiffre = encrypt_decrypt_xor(nameFileIn, cle, nameFileOut);
     
     // Déchiffrer le message (en utilisant la même clé)
-    msg = encrypt_decrypt_xor(nameFileOut, cle, nameFileUncrypted);
-    free(msg);
+    char *msgDechiffre = encrypt_decrypt_xor(nameFileOut, cle, nameFileUncrypted);
 
-    long sizeMsgCode = 0;
-
-    char *buffFileIn = readFileToBuffer(nameFileIn, NULL);
-    char *buffFileOut = readFileToBuffer(nameFileOut, &sizeMsgCode);;
-    char *buffFileUncrypt = readFileToBuffer(nameFileUncrypted, NULL);
 
     printf("La clé est %s\n", cle);
-    printf("Message original : %s\n", buffFileIn);
-    printf("Message après chiffrement : %s\n", buffFileOut);
-    printf("Message après déchiffrement : %s\n\n", buffFileUncrypt);
+    printf("Message après chiffrement : %s\n\n", msgChiffre);
+    printf("Message après déchiffrement : %s\n\n", msgDechiffre);
 
+    break_code_c1(nameFileOut, strlen(cle), cle);
 
-    unsigned long nbClefs = 0;
-    time_t tpsDepart = time(NULL);
-
-    clefsFinales(buffFileOut, sizeMsgCode, strlen(cle), &nbClefs, cle);
-    
-    time_t tpsFin = time(NULL);
-
-    printf("Temps creation des %lu clefs : %f\n", nbClefs, difftime(tpsFin, tpsDepart));
     /*
     for (unsigned long i = 0 ; i < nbClefs ; ++i) {
         if (strstr((const char *) clefs[i], cle) != NULL) {
