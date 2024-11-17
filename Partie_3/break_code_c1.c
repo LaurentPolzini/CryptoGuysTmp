@@ -14,8 +14,8 @@
 #include "../utilitaire/utiL.h"
 #include "caracteresCandidatsIndexKey.h"
 #include "ThreadSegmentationTableauxIndex.h"
+#include "../Partie_1/xor.h"
 
-void appelClefsFinales(char *file_in, int keyLength, char *file_out);
 void appelCaracteresCandidats(char *file_in, int keyLength);
 
 pthread_mutex_t *mutexEcritureClefsFichier;
@@ -33,8 +33,6 @@ void ajouteCandidats2(char *nameFileIn, unsigned long *nbClefs, int *tailleClefs
 void *threadFreeSegment(void *info);
 
 unsigned long nbClefsTotal(unsigned char **carCandParIndice, int len_key);
-
-typedef void(*FunctorC1)(unsigned char *, void *);
 
 typedef struct {
     int *tableauIndCour;
@@ -61,14 +59,14 @@ sTableauIndCourantEtMax initialiseTableauxIndiceThreadLIGNE0(int tailleClef, uns
 sTableauIndCourantEtMax initialiseTableauxIndice(int tailleClef, unsigned char **carCand);
 sTableauIndCourantEtMax prochaineClefSelonTableau(sTableauIndCourantEtMax tabs, int tailleClef);
 
-// Threads sur plusieurs lignes (jusque threadUntilI)
-sPileIndCourFin *initialiseTableauxIndiceThreads(int tailleClef, unsigned char **carCand, int *nbThreads, int threadUntilI);
+void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, void *uD, FunctorC1 functor);
 
 void functorOnKey(unsigned char *key, FunctorC1 f, void *userData);
 
 void afficheClef(unsigned char *key, void *userData);
 void clefTrouve(unsigned char *curKey, void *actualKey);
 void ecritClef(unsigned char *clef, void *fileOutDescriptor);
+void doNothing(unsigned char *none, void *userData);
 
 unsigned char *getKeyFromTab(int *tableauInd, unsigned char **carCandidats, int len_key);
 
@@ -124,6 +122,10 @@ void *clefsThreadPiles(void *arg) {
     unsigned char *curKey;
     sPileIndCourFin *tmp = ti.piles;
 
+    unsigned long *nbClefTraitee = malloc(sizeof(unsigned long));
+    pError(nbClefTraitee, "Erreur allocation nbClefTraitee", 1);
+    *nbClefTraitee = 0;
+
     while (tmp != NULL) {
         ti.piles = tmp;
         curKey = clefActuelle(ti.piles, ti.carCandParIndice, ti.len_key);
@@ -131,88 +133,26 @@ void *clefsThreadPiles(void *arg) {
         free(curKey);
 
         tmp = prochaineClefSelonPile(ti.piles, ti.len_key);
+        *nbClefTraitee += 1;
     }
     freeSPiles(&(ti.piles), 1);
 
-    pthread_exit(NULL);
+    pthread_exit((void *) nbClefTraitee);
 }
 
-/*
-int main(int argc, char *argv[]) {
-    (void) argc;
-    (void) argv;
-    
-    if (argc != 4) {
-        perror("Il faut 4 args : exec file_in key_len file_out");
-        exit(1);
-    }
-    
-    //char *file_in = argv[1];
-    int key_len = atoi(argv[1]);
-    //char *file_out = argv[3];
 
-    char **clefCand = clefsCandidatesFinales("", key_len);
+int break_code_c1(char *file_in, int keyLength, char *logFile) {
 
-    for (unsigned long i = 0 ; i < (sizeof(clefCand) / key_len) ; ++i) {
-        printf("%s\n", clefCand[i]);
-    }
-
-    free(clefCand);
+    appelClefsFinales(file_in, keyLength, NULL, doNothing, logFile);
     
     return 0;
-}
-*/
-char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage) {
-    int fdFile_In = open(file_in, O_RDONLY, 0644);
-    if (fdFile_In == -1) {
-        pError(NULL, "Erreur ouverture fichier d'entrée", 1);
-    }
-    long sizeBuffer = 512;
-    char *msgLu = malloc(sizeBuffer);
-    long curSizeBuff = sizeBuffer;
-
-    ssize_t bytesRead = 0;
-    ssize_t totalBytesRead = 0;
-    while ((bytesRead = read(fdFile_In, msgLu + totalBytesRead, sizeBuffer)) > 0) {
-        totalBytesRead += bytesRead;
-        if (totalBytesRead + sizeBuffer > curSizeBuff) {
-            curSizeBuff *= 2;
-            char *temp = realloc(msgLu, curSizeBuff);
-            if (!temp) {
-                close(fdFile_In);
-                pError(NULL, "Erreur allocation tableau temporaire de lecture du fichier", 1);
-            }
-            msgLu = temp;
-        }        
-    }
-    msgLu[totalBytesRead] = '\0';
-    *sizeMessage = (off_t) totalBytesRead;
-    close(fdFile_In);
-
-    return msgLu;
-}
-
-void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, void *uD);
-
-int break_code_c1(char *file_in, int keyLength, char *file_out) {
-    (void) file_out;
-    /*
-    off_t tailleMsg;
-    char *msg = ouvreEtLitFichier(file_in, &tailleMsg);
-    */
-
-    //testThreadSeg(msg, tailleMsg, keyLength, (void *) file_out);
-    appelCaracteresCandidats(file_in, keyLength);
-    //appelClefsFinales(file_in, keyLength, file_out);
-    
-    return 1;
 }
 
 /*
     File out peut etre la clef qu'on cherche aussi
     c'est userData quoi
 */
-void appelClefsFinales(char *file_in, int keyLength, char *file_out) {
+void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 functor, char *logFile) {
     off_t tailleMsg;
 
     char *msg = ouvreEtLitFichier(file_in, &tailleMsg);
@@ -220,14 +160,15 @@ void appelClefsFinales(char *file_in, int keyLength, char *file_out) {
     unsigned long nbClefs = 0;
 
     time_t tpsDepart = time(NULL);
-    //clefsFinales(msg, tailleMsg, keyLength, &nbClefs, file_out);
-    clefsByThreads(msg, tailleMsg, keyLength, &nbClefs, (void *) file_out);
+    //clefsFinales(msg, tailleMsg, keyLength, &nbClefs, userData);
+    clefsByThreads(msg, tailleMsg, keyLength, &nbClefs, userData, functor);
     time_t tpsFin = time(NULL);
 
-    printf("Temps creation des %lu clefs : %f\n", nbClefs, difftime(tpsFin, tpsDepart));
+    printf("Temps génération des %lu clefs : %f\n", nbClefs, difftime(tpsFin, tpsDepart));
 
-    FILE *log = fopen("logKeys.txt", "a+");
-    fprintf(log, "key : %s ; number of keys : %lu ; time : %f\n", file_out, nbClefs, difftime(tpsFin, tpsDepart));
+    FILE *log = fopen(logFile, "a+");
+    pError(log, "Erreur ouverture fichier log", 1);
+    fprintf(log, "text : %s ; number of keys : %lu ; time : %f\n", file_in, nbClefs, difftime(tpsFin, tpsDepart));
     fclose(log);
 
     free((void *) msg);
@@ -249,31 +190,43 @@ void appelCaracteresCandidats(char *file_in, int keyLength) {
     return;
 }
 
-void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, void *uD) {
+void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, void *uD, FunctorC1 functor) {
     unsigned char **carCandParIndice = caracteresCandidatsParIndice(msgCode, tailleMsgCode, len_key);
     for (int i = 0 ; i < len_key ; ++i) {
         printf("Caracteres possibles clef[%d] : \"%s\"\n", i, carCandParIndice[i]);
     }
-    (void) uD;
-    int nbThreadsMax = 8;
+    int nbThreadsMax = 16;
     int nbThreadReel = 1;
     sPileIndCourFin **pilesTests = initialisePilesIndiceThreads(len_key, carCandParIndice, &nbThreadsMax, &nbThreadReel);
     *nbClefs = nbClefsTotal(carCandParIndice, len_key);
-    printf("On a %d threads pour %lu clefs\n", nbThreadReel, *nbClefs);
-
-    FunctorC1 f = clefTrouve;
+    unsigned long *nbClefTraiteeByThreads[nbThreadReel];
+    unsigned long nbTotalClefsTraitees = 0;
+    float pourcentage = 0;
     
     threadsInfosVolees tinfos[nbThreadReel];
     pthread_t thid[nbThreadReel];
 
     for (int i = 0 ; i < nbThreadReel ; ++i) {
-        tinfos[i] = creeInfoThreadPILES(pilesTests[i], carCandParIndice, f, len_key, uD);
+        tinfos[i] = creeInfoThreadPILES(pilesTests[i], carCandParIndice, functor, len_key, uD);
         pthread_create(&(thid[i]), NULL, clefsThreadPiles, &(tinfos[i]));
     }
     for (int i = 0 ; i < nbThreadReel ; ++i) {
-        pthread_join(thid[i], NULL);
+        pthread_join(thid[i], (void *) &(nbClefTraiteeByThreads[i]));
+
+        nbTotalClefsTraitees += *(nbClefTraiteeByThreads[i]);
+        pourcentage = ((float )nbTotalClefsTraitees / (float) *nbClefs) * 100;
+        if (pourcentage != 100) {
+            printf("\r%.2f%% des %lu clefs traitées...", pourcentage, *nbClefs);
+        } else {
+            printf("\r%.2f%% des %lu clefs traitées !", pourcentage, *nbClefs);
+        }
+        
+        fflush(stdout);
+
+        free(nbClefTraiteeByThreads[i]);
     }
-    
+    printf("\n");
+
     free(pilesTests); // dedans tout est déjà free
     // des que ce n'est plus utile (a la fin du traitement)
     // ca free le tableau
@@ -314,7 +267,7 @@ void clefsFinales(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long
     }
     */
 
-    FunctorC1 f = clefTrouve;
+    FunctorC1 f = doNothing;
     void *userData = (void *) &nameFileOut;
     sTableauIndCourantEtMax tabs[nbSegment];
     pthread_t thid[nbSegment];
@@ -331,22 +284,7 @@ void clefsFinales(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long
     pthread_mutex_destroy(mutexEcritureClefsFichier);
     return;
 }
-/*
-void clefsFinales2(char *msgCode, int len_key, unsigned long *nbClefs, char *nameFileOut) {
-    unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, len_key);
 
-    // ecriture clefs par fichier
-    mutexEcritureClefsFichier = malloc(sizeof(pthread_mutex_t));
-    pError(mutexEcritureClefsFichier, "Erreur création mutex ecriture clefs", 1);
-    mutexLectureClefsFichier = malloc(sizeof(pthread_mutex_t));
-    pError(mutexLectureClefsFichier, "Erreur création mutex lecture clefs", 1);
-
-    int tailleClefTMP = 0;
-    for (int i = 0 ; i < len_key ; ++i) {
-        ajouteCandidats2(nameFileOut, &nbClefs, &tailleClefTMP, carCandParIndice[i], (int) strlen((const char *) carCandParIndice[i]));
-    }
-}
-*/
 /*
 unsigned char **clefFinalesTree(char *msgCode, unsigned long tailleMsgCode, int len_key, unsigned long *nbClefs) {
     unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, tailleMsgCode, len_key);
@@ -920,6 +858,17 @@ void clefTrouve(unsigned char *curKey, void *actualKey) {
     if (strcmp((const char *) curKey, keyChar) == 0) {
         printf("Trouvé ! %s\n", curKey);
     }
+}
+
+void doNothing(unsigned char *none, void *userData) {
+    (void) none;
+    (void) userData;
+}
+
+// met dans msgUncrypted le message traduit
+void translateMsg(unsigned char *key, void *msgAndTaille) {
+    sMsgAndTaille *smt = (sMsgAndTaille *) msgAndTaille;
+    smt -> msgUncrypted = encrypt_decrypt_xorMSG(smt -> msg, (char *) key, smt -> lenMsg);
 }
 
 void afficheTab(int *tab, int len_key) {

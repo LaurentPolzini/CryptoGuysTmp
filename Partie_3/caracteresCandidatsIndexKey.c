@@ -8,8 +8,7 @@
 
 char ASCII_CHAR_VALIDES[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'\",?!;.:()\n ";
 
-char ACCENTED_CHAR_VALIDE[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789',?!;.:()\n "
- "éèêàâôîûù";
+char ACCENTED_CHAR_VALIDE[] = "éèêëàâîïùûœçô";
 
 char UTF8_CHAR_VALIDES[] = 
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz"

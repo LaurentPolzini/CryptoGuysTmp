@@ -1,8 +1,9 @@
 #include <stdio.h>
-#include <getopt.h>
+#include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <fcntl.h>
 #include <time.h>
 #include "../utilitaire/utiL.h"
 #include "./crackage.h"
@@ -27,18 +28,16 @@ char* readFileToBuffer(const char *fileName, long *fileSize);
 
 
 int main(int argc, char *argv[]) {
-    /*
-    char *fileToCrack;
-    char *method; // all or c1
-    int keyLength;
-    char *dict;
-    char *logFile;
+    char *fileToCrack = NULL;
+    char *method = NULL; // all or c1
+    int keyLength = 0;
+    char *dict = NULL;
+    char *logFile = NULL;
 
     int opt;
 
-
     if ( !argContainsHelp(argc, argv) ) {
-        while ( (opt = getopt(argc, argv, ":i:m:k:dlh")) != -1 ) {
+        while ( (opt = getopt(argc, argv, ":i:m:k:d:l:")) != -1 ) {
             switch (opt) {
                 case 'i':
                     fileToCrack = optarg;
@@ -71,99 +70,75 @@ int main(int argc, char *argv[]) {
         }
     } else {
         afficheManBreakCode();
+        return 0;
     }
-    (void) fileToCrack, (void) method, (void) keyLength, (void) dict, (void) logFile;
-    */
-    (void) argc, (void) argv;
-    
-    //char nameFileIn[] = "msgClair.txt";
-    // Générer une clé pour le test
-    char cle[] = "1234";
-    char nameFileOut[] = "../script/CRACK/tests/crypted_crack/1234_msg2.txt";
-    //char nameFileOut[] = "msgCrypte.txt";
-    char nameFileUncrypted[] = "msgDecrypte.txt";
 
-    // Chiffrer le message
-    //char *msg = encrypt_decrypt_xor(nameFileOut, cle, nameFileUncrypted);
-    //char *msgChiffre = encrypt_decrypt_xor(nameFileIn, cle, nameFileOut);
-    
-    // Déchiffrer le message (en utilisant la même clé)
-    char *msgDechiffre = encrypt_decrypt_xor(nameFileOut, cle, nameFileUncrypted);
-
-
-    printf("La clé est %s\n", cle);
-    //printf("Message après chiffrement : %s\n\n", msgChiffre);
-    printf("Message après déchiffrement : %s\n\n", msgDechiffre);
-
-    break_code_c1(nameFileOut, strlen(cle), cle);
-
-    /*
-    for (unsigned long i = 0 ; i < nbClefs ; ++i) {
-        if (strstr((const char *) clefs[i], cle) != NULL) {
-            printf("Trouvé ! : %s\n", clefs[i]);
-
-            break;
+    if (method == NULL || fileToCrack == NULL) {
+        fprintf(stderr, "Error: required arguments -i (file to crack) and -m (method) are missing\n");
+        exit(1);
+    }
+    if (strstr(method, "c1") != NULL) {
+        break_code_c1(fileToCrack, keyLength, logFile);
+    } else if (strcmp(method, "all") == 0) {
+        if (dict != NULL) {
+            break_code_c2(fileToCrack, dict, NULL, keyLength, logFile);
+            break_code_c3(fileToCrack, dict, logFile);
+        } else {
+            fprintf(stderr, "Error: dictionary is required for method 'all'\n");
+            exit(1);
         }
+    } else {
+        fprintf(stderr, "Error: unknown method '%s'\n", method);
+        exit(1);
     }
     
-    
-    printf("Libere le tableau de clefs...\n");
-
-    tpsDepart = time(NULL);
-
-    freeDoubleArray(&clefs, nbClefs);
-
-    tpsFin = time(NULL);
-    printf("Temps effacement toutes les clefs : %f\n", difftime(tpsFin, tpsDepart));
-    */
     return 0;
 }
 
-char* readFileToBuffer(const char *fileName, long *fileSize) {
-    FILE *file = fopen(fileName, "r");
-    if (!file) {
-        fprintf(stderr, "Erreur : impossible d'ouvrir le fichier %s\n", fileName);
-        return NULL;
+char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage) {
+    int fdFile_In = open(file_in, O_RDONLY, 0644);
+    if (fdFile_In == -1) {
+        pError(NULL, "Erreur ouverture fichier d'entrée", 1);
     }
+    long sizeBuffer = 512;
+    char *msgLu = malloc(sizeBuffer);
+    long curSizeBuff = sizeBuffer;
 
-    // Déplacement du pointeur de fichier à la fin pour obtenir la taille du fichier
-    fseek(file, 0, SEEK_END);
-    long internFileSize = ftell(file);
-    if (fileSize) {
-        *fileSize = internFileSize;
+    ssize_t bytesRead = 0;
+    ssize_t totalBytesRead = 0;
+    while ((bytesRead = read(fdFile_In, msgLu + totalBytesRead, sizeBuffer)) > 0) {
+        totalBytesRead += bytesRead;
+        if (totalBytesRead + sizeBuffer > curSizeBuff) {
+            curSizeBuff *= 2;
+            char *temp = realloc(msgLu, curSizeBuff);
+            if (!temp) {
+                close(fdFile_In);
+                pError(NULL, "Erreur allocation tableau temporaire de lecture du fichier", 1);
+            }
+            msgLu = temp;
+        }        
     }
-    rewind(file);  // Retour au début du fichier
+    msgLu[totalBytesRead] = '\0';
+    *sizeMessage = (off_t) totalBytesRead;
+    close(fdFile_In);
 
-    // Allocation de mémoire pour le tampon
-    char *buffer = (char*)malloc((internFileSize + 1) * sizeof(char));
-    if (!buffer) {
-        fprintf(stderr, "Erreur : impossible d'allouer de la mémoire\n");
-        fclose(file);
-        return NULL;
-    }
-
-    // Lecture du fichier dans le tampon
-    size_t bytesRead = fread(buffer, sizeof(char), internFileSize, file);
-    buffer[bytesRead] = '\0'; // Ajout du caractère de fin de chaîne
-
-    fclose(file);
-    return buffer;
+    return msgLu;
 }
 
 
 void afficheManBreakCode(void) {
-    printf("Usage:\n");
-    printf("./break_code [options]");
+    printf("\nUsage:\n");
+    printf("./break_code [options]\n");
 
     printf("Mandatory Options :\n");
-    printf("-i      The file containing the message to crack\n");
-    printf("-m      The crack method (c1 or all)\n");
-    printf("-k      The length of the key\n");
-    printf("-d      The dictionnary of the language used to write  (only to be used if -m all)\n");
+    printf("-i\tThe file containing the message to crack\n");
+    printf("-m\tThe crack method (c1 or all)\n");
+    printf("-k\tThe length of the key\n");
+    printf("-d\tThe dictionnary of the language used to write (only to be used if -m all)\n");
 
     printf("Optionnal Options :\n");
-    printf("-l      The log file (if not specified, stdin)\n");
-    printf("-h      This help message\n");
+    printf("-l\tThe log file (if not specified, stdin)\n");
+    printf("-h\tThis help message\n");
 
     return;
 }
