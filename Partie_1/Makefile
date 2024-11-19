@@ -1,47 +1,34 @@
-# Makefile
-
 # Variables
-CC=gcc
-CFLAGS=-std=c99 -Wextra -Wall -Werror -pedantic
-GENERATED_FILES=message.txt message_encrypted.txt message_decrypted.txt
-LDFLAGS=-lm
-
-ifeq ($(DEBUG),yes)
-	CFLAGS += -g
-	LDFLAGS +=
-else
-	CFLAGS += -O3 -DNDEBUG
-	LDFLAGS +=
-endif
-
-SRC=encrypt_decrypt_xor.c
-OBJ= $(SRC:.c=.o)
-EXEC=crypt
+CC = gcc
+CFLAGS = -Wall -Wextra -std=c99 -O2
+TARGET = encrypt_decrypt
+SYMTARGET = sym_crypt
+MAINTARGET = main_partie1
+OBJS = encrypt_decrypt_xor.o sym_crypt.o main_partie1.o  
+GENERATED_FILES = message.txt message_encrypted.txt message_decrypted.txt iv.txt message_encrypted.bin sym_crypt.o incorrect_key.txt incorrect_iv.txt
 
 # Règle par défaut
-all:
-ifeq ($(DEBUG),yes)
-	@echo "Generating in debug mode"
-else
-	@echo "Generating in release mode"
-endif
-	@$(MAKE) $(EXEC)
+all: $(TARGET)
 
-$(EXEC): $(OBJ)
-	@$(CC) -o $@ $^ $(LDFLAGS)
+# Règle pour créer l'exécutable principal encrypt_decrypt
+$(TARGET): $(OBJS)
+	$(CC) $(CFLAGS) -o $(TARGET) $(OBJS)
 
-%.o: %.c
-	@$(CC) -o $@ -c $< $(CFLAGS)
+# Règle pour créer l'exécutable sym_crypt
+sym_crypt: sym_crypt.o encrypt_decrypt_xor.o
+	$(CC) $(CFLAGS) -o $(SYMTARGET) sym_crypt.o encrypt_decrypt_xor.o
+
+main_partie1: main_partie1.o encrypt_decrypt_xor.o
+	$(CC) $(CFLAGS) -o $(MAINTARGET) main_partie1.o encrypt_decrypt_xor.o
+
+# Règle pour compiler les fichiers C en fichiers objets
+encrypt_decrypt_xor.o: encrypt_decrypt_xor.c mask.h xor.h
+	$(CC) $(CFLAGS) -c encrypt_decrypt_xor.c
+
+sym_crypt.o: sym_crypt.c mask.h xor.h
+	$(CC) $(CFLAGS) -c sym_crypt.c
 
 # Nettoyage des fichiers générés
 clean:
-	rm -f $(OBJS) $(EXEC)
+	rm -f $(OBJS) $(TARGET)
 	rm -f $(GENERATED_FILES)
-
-.PHONY: clean mrproper
-
-mrproper: clean
-	@rm -rf $(EXEC)
-
-
-encrypt_decrypt_xor.o: encrypt_decrypt_xor.c mask.h xor.h

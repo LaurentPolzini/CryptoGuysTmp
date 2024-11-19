@@ -10,6 +10,7 @@
 #include "./break_code_c2.h"
 #include "./break_code_c1.h"
 #include "../Partie_1/xor.h"
+#include "break_code_c2_c3.h"
 
 /*
     msgAndTaille : le msg crypté, décrypté, sa taille
@@ -19,36 +20,20 @@
     tabKeysScore le tableau des clefs à l'indice 
         correspondant à tabMeilleurScore
 */
-typedef struct {
-    sMsgAndTaille *msgAndTaille;
-    double *distance;
-    double *tabMeilleurScore;
-    int *nbScoreTab;
-    unsigned char **tabKeysScore;
-} structC2;
 
 void freeTabs(void **tabs, int nbElems);
-void freeStructC2(structC2 **sc2);
-
-int getIndexInsertion(structC2 *st);
-
-void ajouteScore(structC2 *st, unsigned char *key);
-void functorC2(unsigned char *key, void *s);
-void traiteMsgClefC2(char *msg, void *distance);
+int getIndexInsertionC2(stC2_C3 *st);
+void traiteMsgClefC2(char *msg, double *distance);
 
 extern float stat_thFr[26];
 extern float stat_thEn[26];
 
-// le nombre de clef qui vont être sauvegardées
-// comme étant les meilleurs clefs
-int tailleTabMeilleurScore = 50;
-
 // chaque clef accédera a la meme zone mémoire
 // le temps de calculer la distance et eventuellement
 // la mettre dans le tableau des meilleurs scores
-pthread_mutex_t mutexScore;
+//pthread_mutex_t mutexScore;
 
-
+/*
 int break_code_c2(char *file_in, char *dict_file_in, char *score_out, int keyLength, char *logFile) {
     (void) file_in, (void) dict_file_in, (void) score_out, (void) keyLength, (void) logFile;
     
@@ -65,25 +50,9 @@ int break_code_c2(char *file_in, char *dict_file_in, char *score_out, int keyLen
         pError(NULL, "Erreur creation mutex score break_code_c2", 2);
     }
 
-    structC2 *stC2 = malloc(sizeof(structC2));
-    pError(stC2, "Erreur allocation memoire", 2);
-    (stC2 -> msgAndTaille) = malloc(sizeof(sMsgAndTaille));
-    pError((stC2 -> msgAndTaille), "Erreur allocation memoire", 2);
-    (stC2 -> msgAndTaille) -> msg = msgCrypted;
-    (stC2 -> msgAndTaille) -> lenMsg = tailleMsg;
+    stC2_C3 *stC2C3 = initSTc2_c3(msgCrypted, tailleMsg, tailleTabMeilleurScore);
 
-    stC2 -> tabMeilleurScore = malloc(sizeof(double) * tailleTabMeilleurScore);
-    pError(stC2 -> tabMeilleurScore, "Erreur allocation memoire", 2);
-    stC2 -> tabKeysScore = malloc(sizeof(unsigned char *) * tailleTabMeilleurScore);
-    pError(stC2 -> tabKeysScore, "Erreur allocation memoire", 2);
-
-    stC2 -> distance = malloc(sizeof(double));
-    pError(stC2 -> distance, "Erreur allocation memoire", 2);
-    stC2 -> nbScoreTab = malloc(sizeof(int));
-    pError(stC2 -> nbScoreTab, "Erreur allocation memoire", 2);
-    *(stC2 -> nbScoreTab) = 0;
-
-    appelClefsFinales(file_in, keyLength, (void *) stC2, functorC2, logFile);
+    appelClefsFinales(file_in, keyLength, (void *) stC2C3, functorC2, logFile);
 
     if (pthread_mutex_destroy(&mutexScore) != 0) {
         pError(NULL, "Erreur destruction mutex score break_code_c2", 2);
@@ -91,86 +60,43 @@ int break_code_c2(char *file_in, char *dict_file_in, char *score_out, int keyLen
 
     printf("Voici les 10 meilleurs clefs, avec leur score (0 = bien) : \n");
     for (int i = 0 ; i < 50 ; ++i) {
-        printf("key : %s ; score : %f\n", (stC2 -> tabKeysScore)[i], (stC2 -> tabMeilleurScore)[i]);
+        printf("key : %s ; score : %f\n", (stC2C3 -> tabKeysScore)[i], (stC2C3 -> tabMeilleurScore)[i]);
     }
-    freeStructC2(&stC2);
+    destroyStructC2_C3(&stC2C3);
 
     return 0;
 }
-
-/*
-    assigne un poid a une clef
-    la conserve eventuellement dans le tableau des meilleures clefs
 */
-void functorC2(unsigned char *key, void *s) {
-    if (pthread_mutex_lock(&mutexScore) != 0) {
-        pError(NULL, "Erreur prise jeton mutex score", 2);
-    }
-
-    structC2 *ds = (structC2 *) s;
-
-    // recoit un message codé, le décrypte avec la clef
-    translateMsg(key, (void *) (ds -> msgAndTaille));
-    // lui assigne une distance
-    traiteMsgClefC2((ds -> msgAndTaille) -> msgUncrypted, ds -> distance);
-
-    // l'ajoute au tableau (si nécessaire)
-    ajouteScore(ds, key);
-
-    if (pthread_mutex_unlock(&mutexScore) != 0) {
-        pError(NULL, "Erreur don jeton mutex score", 2);
-    }
+/*
+    assigne une distance a une clef 
+    (par rapport aux fréquences de lettres d'une langue)
+*/
+void traiteMsgClefC2(char *msg, double *distance) {
+    float *freqMsg = freq(msg, (int) strlen(msg));
+    *distance = distanceFreqs(stat_thFr, freqMsg);
 }
 
-/*
-    une structure st contenant 2 tableaux :
-        un tableau 1 possédant les meilleurs scores (plus proche de 0 mieux c'est)
-        un tableau 2 de clefs à l'indice correspondant au tableau 1
-*/
-void ajouteScore(structC2 *st, unsigned char *key) {
+void ajouteScoreC2(stC2_C3 *st, unsigned char *key) {
     int lenKey = strlen((const char *) key);
     unsigned char *keyCopy = malloc(lenKey + 1);
     strcpy((char *) keyCopy, (const char *) key);
     keyCopy[lenKey] = '\0';
 
-    int ind = getIndexInsertion(st);
+    int ind = getIndexInsertionC2(st);
     
-    if (ind < tailleTabMeilleurScore) {
-        for (int i = *(st -> nbScoreTab) ; i > ind ; --i) {
+    if (ind < st -> tailleScoreTab) {
+        for (int i = *(st -> nbScoreTabs) ; i > ind ; --i) {
             // décaler tout le tableau vers la droite
             // (copier tous les elements pour en inserer un nouveau)
-            if (i != tailleTabMeilleurScore) {
-                (st -> tabMeilleurScore)[i] = (st -> tabMeilleurScore)[i - 1];
-                (st -> tabKeysScore)[i] = (st -> tabKeysScore)[i - 1];
+            if (i != st -> tailleScoreTab) { // indice inexistant
+                (st -> tabMeilleurScoreC2)[i] = (st -> tabMeilleurScoreC2)[i - 1];
+                (st -> tabKeysScoreC2)[i] = (st -> tabKeysScoreC2)[i - 1];
             }
         }
         // insertion du nouvel element
-        (st -> tabMeilleurScore)[ind] = *(st -> distance);
-        (st -> tabKeysScore)[ind] = keyCopy;
-
-        // s'il n'y a pas deja le nombre maximal d'element
-        // en ajoute 1
-        if (*(st -> nbScoreTab) != tailleTabMeilleurScore) {
-            *(st -> nbScoreTab) += 1;
-        }
+        (st -> tabMeilleurScoreC2)[ind] = *(st -> distance);
+        (st -> tabKeysScoreC2)[ind] = keyCopy;        
     }
-}
-
-int getIndexInsertion(structC2 *st) {
-    int ind = 0;
-    while ((ind < *(st -> nbScoreTab)) && ((st -> tabMeilleurScore)[ind] < *(st -> distance))) {
-        ++ind;
-    }
-    return ind;
-}
-
-/*
-    assigne une distance a une clef 
-    (par rapport aux fréquences de lettres d'une langue)
-*/
-void traiteMsgClefC2(char *msg, void *distance) {
-    float *freqMsg = freq(msg, (int) strlen(msg));
-    *((double *) distance) = distanceFreqs(stat_thFr, freqMsg);
 }
 
 /*
@@ -227,18 +153,10 @@ double distanceFreqs(float *freqLanguage, float *decryptedFreq) {
     return distance;
 }
 
-void freeStructC2(structC2 **sc2) {
-    free((*sc2) -> distance);
-    free(((*sc2) -> msgAndTaille) -> msg);
-    free(((*sc2) -> msgAndTaille) -> msgUncrypted);
-    freeTabs((void **) ((*sc2) -> tabKeysScore), *((*sc2) -> nbScoreTab));
-    free((*sc2) -> nbScoreTab);
-    free((*sc2) -> tabMeilleurScore);
-}
-
-void freeTabs(void **tabs, int nbElems) {
-    for (int i = 0 ; i < nbElems ; ++i) {
-        free(tabs[i]);
+int getIndexInsertionC2(stC2_C3 *st) {
+    int ind = 0;
+    while ((ind < *(st -> nbScoreTabs)) && ((st -> tabMeilleurScoreC2)[ind] < *(st -> distance))) {
+        ++ind;
     }
-    free(tabs);
+    return ind;
 }

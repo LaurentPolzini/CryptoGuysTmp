@@ -1,0 +1,11 @@
+text : ../script/CRACK/tests/crypted_crack/1234_msg2.txt ; number of keys : 63504 ; time : 2.000000
+text : ../script/CRACK/tests/crypted_crack/1234_msg2.txt ; number of keys : 63504 ; time : 2.000000
+text : ../script/CRACK/tests/crypted_crack/1234_msg2.txt ; number of keys : 63504 ; time : 1.000000
+text : ../script/CRACK/tests/crypted_crack/1234_msg2.txt ; number of keys : 63504 ; time : 0.000000
+text : ../msgsTests/msgCrypte.txt ; number of keys : 1414875 ; time : 3.000000
+text : ../msgsTests/msgCrypte.txt ; number of keys : 137088 ; time : 1.000000
+text : ../msgsTests/msgCrypte.txt ; number of keys : 119680 ; time : 1.000000
+text : ../msgsTests/msgCrypte.txt ; number of keys : 39600 ; time : 0.000000
+text : ../msgsTests/msgCrypte.txt ; number of keys : 55080 ; time : 0.000000
+text : ../msgsTests/msgCrypte.txt ; number of keys : 1175720 ; time : 9.000000
+text : ../msgsTests/msgCrypte.txt ; number of keys : 1175720 ; time : 8.000000

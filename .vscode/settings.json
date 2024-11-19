@@ -20,6 +20,8 @@
         "xor.h": "c",
         "crackage.h": "c",
         "queue.h": "c",
-        "break_code_c1.h": "c"
+        "break_code_c1.h": "c",
+        "pile.h": "c",
+        "util.h": "c"
     }
 }

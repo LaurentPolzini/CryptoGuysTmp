@@ -1,171 +1,160 @@
+#define _GNU_SOURCE
+#define POSIX_C_SOURCE 200112L
 #include <stdio.h>
 #include <getopt.h>
-#include <stdbool.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
 #include <string.h>
-#include "./xor.h"
-#include "./cbc.h"
-#include "./mask.h"
+#include <stdbool.h>
+#include "xor.h"
+#include "cbc.h"
+#include "mask.h"
 #include "../utilitaire/utiL.h"
 
-void afficheManSym_crypt();
-char *keyByUser(char* key);
-void linkMethod(void *f, char *method);
-
-/*
-
-    Premier programme principal sym_crypt v1.
-
-    Permet d'appeller les fonctions encrypt_decrypt_xor, 
-    gen_key, encrypt_mask, decrypt_mask, encrypt_cbc, decrypt_cbc
-
-    options possibles : 
-    (obligatoire) -i le fichier où lire le message en clair
-    (obligatoire) -o le fichier où l'on écrira le texte déchiffré
-    (obligatoire) -k sinon -f, la clé ne peut qu'être alphanumérique
-    (obligatoire) -m la méthode de chiffrement souhaitée
-    (obligatoire si m) -v le vecteur d'initialisation si m = "encrypt_cbc" / "decrypt_cbc"
-    -l le fichier de log
-    -h affiche un manuel d'utilisation, empeche toutes les autres options
-
-*/
+void afficher_aide();
+void creer_fichier_cle(const char* key);
+void appel_chiffrement(char* file_in, char* file_out, char* key, char* methode, char* v_init);
 
 int main(int argc, char* argv[]) {
-    
     int opt;
     bool v_init_needed = false;
-    bool not_k_then_f_needed = true;
+    char *file_in = NULL;
+    char *file_out = NULL;
+    char *key = NULL;
+    char *key_filename = NULL;
+    char *methode = NULL;
+    char *v_init = NULL;
+    char *log_file = NULL;
 
-    char *file_in = "";
-    char *file_out = "";
-    char *key = "";
-    void *method = NULL;
-
-    char *v_init = "";
-
-    char *log_file = "";
-
-    if ( !argContainsHelp(argc, argv) ) {
-       // check if k then not f OR if f not k
-        while ( (opt = getopt(argc, argv, ":i:okf:mvlh")) != -1 ) {
-            switch (opt) {
-                case 'i':
-                    file_in = optarg;
-                    break;
-
-                case 'o':
-                    file_out = optarg;
-                    break;
-
-                case 'k':
-                    not_k_then_f_needed = false;
-                    key = keyByUser(optarg);
-                    break;
-
-                case 'f':
-                    if ( !not_k_then_f_needed ) {
-                        perror("-f must not be used if -k !\n");
-                        return -1;
-                    }
-                    key = optarg;
-                    break;
-
-                case 'm':
-                    linkMethod(method, optarg);
-                    if (method == NULL) {
-                        perror("Enter a correct method ! (xor, cbc-crypt, cbc-uncrypt, mask)");
-                        exit(1);
-                    }
-                    char *isCBC;
-                    strncpy(isCBC, optarg, 3); // to know if v_init needed
-
-                    if ( strcmp(isCBC, "cbc") == 0 ) {
-                        v_init_needed = true;
-                    }
-                    break;
-                
-                case 'v':
-                    if (v_init_needed) {
-                        v_init = optarg;
-                    } else {
-                        perror("If the method is not of cbc, don't use -v");
-                        exit(1);
-                    }
-                    break;
-
-                case 'l':
-                    log_file = optarg;
-                    break;
-
-                case ':':
-                    perror(strcat("Option expected a value : ", opt));
-                    exit(2);
-                
-                case '?':
-                    perror(strcat("Unknown option", optopt));
-                    exit(2);
-            }
-            
+    // Gestion des options
+    while ((opt = getopt(argc, argv, "i:o:k:f:m:v:l:h")) != -1) {
+        switch (opt) {
+            case 'i':
+                file_in = optarg;
+                break;
+            case 'o':
+                file_out = optarg;
+                break;
+            case 'k':
+                key = optarg;
+                creer_fichier_cle(key);
+                key = charger_cle_depuis_fichier("key.txt");
+                break;
+            case 'f':
+                key_filename = optarg;
+                key = charger_cle_depuis_fichier(key_filename);
+                break;
+            case 'm':
+                methode = optarg;
+                if (strcmp(methode, "cbc-crypt") == 0 || strcmp(methode, "cbc-uncrypt") == 0) {
+                    v_init_needed = true;
+                }
+                break;
+            case 'v':
+                if (v_init_needed) {
+                    v_init = optarg;
+                } else {
+                    fprintf(stderr, "Erreur : l'option -v est uniquement nécessaire pour les méthodes cbc.\n");
+                    exit(EXIT_FAILURE);
+                }
+                break;
+            case 'l':
+                log_file = optarg;
+                break;
+            case 'h':
+                afficher_aide();
+                return 0;
+            default:
+                fprintf(stderr, "Option invalide.\n");
+                afficher_aide();
+                exit(EXIT_FAILURE);
         }
-    } 
-    else {
-        afficheManSym_crypt();
     }
 
+    // Vérification des arguments obligatoires
+    if (!file_in || !file_out || !key || !methode) {
+        fprintf(stderr, "Erreur : les options -i, -o, -k ou -m sont manquantes.\n");
+        afficher_aide();
+        exit(EXIT_FAILURE);
+    }
+
+    // Appel de la fonction de chiffrement/déchiffrement
+    appel_chiffrement(file_in, file_out, key, methode, v_init);
+
+    // Libération de la clé si elle a été allouée
+    if (key_filename) free(key);
     return 0;
 }
 
-void afficheManSym_crypt() {
+void afficher_aide() {
     printf("Usage:\n");
-    printf("./sym_crypt [options]");
-
-    printf("Mandatory Options :\n");
-    printf("-i      The file containing the message to encrypt\n");
-    printf("-o      The file to write the transformation\n");
-    printf("-k      The key to encrypt the file (not to be used if -f)\n");
-    printf("-f      The file containing the key to encrypt the file (not to be used if -k)\n");
-    printf("-m      The encrypt or decrypt method; can only be xor, cbc-crypt, cbc-uncrypt or mask\n");
-    printf("-v      The initialization vector (only to use if -m cbc-crypt or -m cbc-uncrypt)\n");
-
-    printf("Optionnal Options :\n");
-    printf("-l      The log file (if not specified, stdin)\n");
-    printf("-h      This help message\n");
-
-    return;
+    printf("./sym_crypt -i <fichier_entrée> -o <fichier_sortie> -k <clé> [-f <fichier_clé>] -m <methode> [-v <vecteur_initialisation>] [-l <fichier_log>] [-h]\n");
+    printf("Options:\n");
+    printf("  -i\tFichier contenant le message en clair\n");
+    printf("  -o\tFichier où sera écrit le message chiffré\n");
+    printf("  -k\tClé de chiffrement (obligatoire sauf si -f est utilisé)\n");
+    printf("  -f\tFichier contenant la clé\n");
+    printf("  -m\tMéthode de chiffrement : xor, mask, cbc-crypt, cbc-uncrypt\n");
+    printf("  -v\tFichier vecteur d'initialisation (obligatoire pour cbc-crypt et cbc-uncrypt)\n");
+    printf("  -l\tFichier de log (optionnel)\n");
+    printf("  -h\tAffiche cette aide\n");
 }
 
-char *keyByUser(char* key) {
-    char *keyFileName = strcat(key, ".key");
-    FILE *keyFile = fopen(keyFileName, "a");
-
-    size_t nbOfBlocks = sizeof(key) / sizeof(char);
-
-    if ( fwrite(key, sizeof(char), nbOfBlocks, keyFile) != nbOfBlocks ) {
-        perror(strcat("Erreur d'écriture du fichier", keyFileName));
-        exit(1);
+void creer_fichier_cle(const char* key) {
+    FILE *fichier = fopen("key.txt", "wb");
+    if (!fichier) {
+        perror("Erreur lors de l'ouverture ou de la création du fichier");
+        return;
     }
 
-    fclose(keyFile);
-    return keyFileName;
+    // Écrire la clé dans le fichier
+    fwrite(key, 1, strlen(key), fichier); // Écriture de la clé sans saut de ligne
+
+    // Fermer le fichier
+    fclose(fichier);
+    
 }
 
-void linkMethod(void *f, char *method) {
-    if (strcmp(method, "xor") == 0) {
-        f = encrypt_decrypt_xor;
-        return;
+char* charger_cle_depuis_fichier(const char* nom_fichier) {
+    FILE* fichier = fopen(nom_fichier, "r");
+    if (!fichier) {
+        perror("Erreur d'ouverture du fichier de clé");
+        exit(EXIT_FAILURE);
     }
-    if (strcmp(method, "cbc-crypt") == 0) {
-        f = encrypt_cbc;
-        return;
-    }
-    if (strcmp(method, "cbc-uncrypt") == 0) {
-        f = decrypt_cbc;
-        return;
-    }
-    if (strcmp(method, "mask") == 0) {
-        f = encrypt_decrypt_mask;
-        return;
-    }
-    f = NULL;
-    return;
+    fseek(fichier, 0, SEEK_END);
+    long taille = ftell(fichier);
+    rewind(fichier);
+    char* cle = malloc(taille + 1);
+    fread(cle, 1, taille, fichier);
+    cle[taille] = '\0';
+    fclose(fichier);
+    return cle;
 }
 
+void appel_chiffrement(char* namefile_in, char* namefile_out, char* key, char* methode, char* v_init) {
+    if (strcmp(methode, "xor") == 0) {
+        // Chiffrement XOR
+        encrypt_decrypt_xor(namefile_in, key, namefile_out);
+    } else if (strcmp(methode, "mask") == 0) {
+        // Chiffrement avec masque
+        encrypt_mask(namefile_in, key, namefile_out);
+    } else if (strcmp(methode, "cbc-crypt") == 0) {
+        // Chiffrement CBC
+        if (!v_init) {
+            fprintf(stderr, "Erreur : le vecteur d'initialisation est requis pour cbc-crypt.\n");
+            exit(EXIT_FAILURE);
+        }
+        encrypt_cbc(namefile_in, "key.txt", namefile_out, v_init, NULL);
+    } else if (strcmp(methode, "cbc-uncrypt") == 0) {
+        // Déchiffrement CBC
+        if (!v_init) {
+            fprintf(stderr, "Erreur : le vecteur d'initialisation est requis pour cbc-uncrypt.\n");
+            exit(EXIT_FAILURE);
+        }
+        decrypt_cbc(namefile_in, "key.txt", namefile_out, v_init, NULL);
+    } else {
+        fprintf(stderr, "Erreur : méthode de chiffrement invalide.\n");
+        exit(EXIT_FAILURE);
+    }
+}

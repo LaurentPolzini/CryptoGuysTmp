@@ -10,6 +10,4 @@ int break_code_c2(char *file_in, char *dict_file_in, char *score_out, int keyLen
 
 int break_code_c3(char *file_in, char *dict_file_in, char *score_out);
 
-char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage);
-
 #endif
