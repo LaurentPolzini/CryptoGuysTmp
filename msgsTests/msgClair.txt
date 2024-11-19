@@ -1,0 +1,4 @@
+J'espere que tu arriveras a decoder ce message !
+Si oui, en combien de temps ?
+Il faut un peu allonger le message, car il est bien trop court;
+On raccourci egalement la clef.

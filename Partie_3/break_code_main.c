@@ -9,10 +9,10 @@
 #include "./crackage.h"
 #include "./Pile.h"
 #include "./break_code_c1.h"
+#include "./break_code_c2_c3.h"
 #include "../Partie_1/xor.h"
 
 void afficheManBreakCode(void);
-char* readFileToBuffer(const char *fileName, long *fileSize);
 
 /*
     Programme principal pour le crackage d'une clef menant au déchiffrage d'un texte crypté
@@ -81,8 +81,7 @@ int main(int argc, char *argv[]) {
         break_code_c1(fileToCrack, keyLength, logFile);
     } else if (strcmp(method, "all") == 0) {
         if (dict != NULL) {
-            break_code_c2(fileToCrack, dict, NULL, keyLength, logFile);
-            break_code_c3(fileToCrack, dict, logFile);
+            break_code_c2_c3(fileToCrack, dict, NULL, keyLength, logFile);
         } else {
             fprintf(stderr, "Error: dictionary is required for method 'all'\n");
             exit(1);
@@ -94,37 +93,6 @@ int main(int argc, char *argv[]) {
     
     return 0;
 }
-
-char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage) {
-    int fdFile_In = open(file_in, O_RDONLY, 0644);
-    if (fdFile_In == -1) {
-        pError(NULL, "Erreur ouverture fichier d'entrée", 1);
-    }
-    long sizeBuffer = 512;
-    char *msgLu = malloc(sizeBuffer);
-    long curSizeBuff = sizeBuffer;
-
-    ssize_t bytesRead = 0;
-    ssize_t totalBytesRead = 0;
-    while ((bytesRead = read(fdFile_In, msgLu + totalBytesRead, sizeBuffer)) > 0) {
-        totalBytesRead += bytesRead;
-        if (totalBytesRead + sizeBuffer > curSizeBuff) {
-            curSizeBuff *= 2;
-            char *temp = realloc(msgLu, curSizeBuff);
-            if (!temp) {
-                close(fdFile_In);
-                pError(NULL, "Erreur allocation tableau temporaire de lecture du fichier", 1);
-            }
-            msgLu = temp;
-        }        
-    }
-    msgLu[totalBytesRead] = '\0';
-    *sizeMessage = (off_t) totalBytesRead;
-    close(fdFile_In);
-
-    return msgLu;
-}
-
 
 void afficheManBreakCode(void) {
     printf("\nUsage:\n");
