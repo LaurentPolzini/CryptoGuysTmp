@@ -12,7 +12,14 @@ typedef struct dictionnary {
     UT_hash_handle hh;
 } dictionnary;
 
-void ajouteScoreC3(stC2_C3 *st, unsigned char *key);
+/*
+    puts the key and the value associated to st at the ind
+    mostly getIndexInsertionC3(st)
+
+    it can be used with getIndexInsertionValueC3(st, custom value)
+    for an other usage
+*/
+void ajouteScoreC3(stC2_C3 *st, unsigned char *key, int ind);
 void traiteMsgClefC3(char *msg, int *nbMotsPrez, dictionnary *dico);
 
 char **wordsArrayFromText(char *text, off_t lenText, int *nbMot);
@@ -24,5 +31,8 @@ void indNextWord(char *text, off_t lenText, off_t *indText);
 void read_and_insert_words(const char *filename, dictionnary **dicoHash);
 dictionnary *find_word(dictionnary *dicoHash, const char *word);
 void clear_table(dictionnary **dicoHash);
+
+int getIndexInsertionC3(stC2_C3 *st);
+int getIndexInsertionValueC3(stC2_C3 *st, int value);
 
 #endif
