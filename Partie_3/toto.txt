@@ -9,3 +9,24 @@ text : ../msgsTests/msgCrypte.txt ; number of keys : 39600 ; time : 0.000000
 text : ../msgsTests/msgCrypte.txt ; number of keys : 55080 ; time : 0.000000
 text : ../msgsTests/msgCrypte.txt ; number of keys : 1175720 ; time : 9.000000
 text : ../msgsTests/msgCrypte.txt ; number of keys : 1175720 ; time : 8.000000
+text : F'T7R ; number of keys : 1175720 ; time : 1.000000
+text : F'T7R ; number of keys : 1175720 ; time : 1.000000
+text : F'T7R ; number of keys : 1175720 ; time : 1.000000
+text : F'T7R ; number of keys : 1175720 ; time : 0.000000
+text : F'T7R ; number of keys : 1175720 ; time : 1.000000
+text : F'T7R ; number of keys : 1175720 ; time : 1.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000
+text : {VGAWAQCFQFFP@A]GWAUBRUWP[UWARWYTA@UVW;aZ^GZW]R]^VXW]UW@T_CG9}]UUDFA_CQDRX]]]ST@XT^QBARSTWP@]]VGEQ]T\@C]CR]FFE	9{_AURQ\ACQZTURXT_VZE_UQ_QW ; number of keys : 39600 ; time : 0.000000

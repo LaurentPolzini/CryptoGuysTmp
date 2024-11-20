@@ -10,7 +10,7 @@ float *freq(char *msg, int msgLen);
 // ou -1 si c'est n'est pas une lettre
 int indice_lettre(char lettre);
 
-void ajouteScoreC2(stC2_C3 *st, unsigned char *key);
+void ajouteScoreC2(stC2_C3 *st, unsigned char *key, int ind);
 void traiteMsgClefC2(char *msg, double *distance);
 
 /*
@@ -20,5 +20,8 @@ void traiteMsgClefC2(char *msg, double *distance);
     plus c'est proche de 0 plus on est proche de la fréquence théorique
 */
 double distanceFreqs(float *freqLanguage, float *decryptedFreq);
+
+int getIndexInsertionC2(stC2_C3 *st);
+int getIndexInsertionValueC2(stC2_C3 *st, double value);
 
 #endif

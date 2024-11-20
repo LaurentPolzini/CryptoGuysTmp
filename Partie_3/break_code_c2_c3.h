@@ -6,6 +6,7 @@
 
 int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFile);
 void afficheTab3(int *tab, int nbElems, unsigned char **keys);
+void afficheTab2(double *tab, int nbElems, unsigned char **keys);
 
 struct dictionnary;
 
@@ -22,6 +23,7 @@ typedef struct {
     // tableaux pour c2 : ses meilleurs scores / clefs
     double *tabMeilleurScoreC2;
     unsigned char **tabKeysScoreC2;
+    int lenKey;
 
     // tableaux pour c3 : ses meilleurs scores / clefs
     int *tabMeilleurScoreC3;
@@ -35,12 +37,18 @@ typedef struct {
 } stC2_C3;
 
 
-stC2_C3 *initSTc2_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, char *dict_file_in);
+stC2_C3 *initSTc2_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, struct dictionnary *dico, int keyLen);
 
 void ajouteScores(stC2_C3 *st, unsigned char *key);
 
 void destroyStructC2_C3(stC2_C3 **struc2C3);
 
 void freeTabs(void **tabs, int nbElems);
+
+stC2_C3 *copySC2C3(stC2_C3 *toCopy);
+
+// puts every credible values from array[indexTabFrom]
+// to array[indexTabTo]
+void incrusteTab(stC2_C3 **array, stC2_C3 *toWhere, int indexTabFrom);
 
 #endif

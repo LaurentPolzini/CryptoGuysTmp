@@ -76,26 +76,19 @@ void traiteMsgClefC2(char *msg, double *distance) {
     *distance = distanceFreqs(stat_thFr, freqMsg);
 }
 
-void ajouteScoreC2(stC2_C3 *st, unsigned char *key) {
-    int lenKey = strlen((const char *) key);
-    unsigned char *keyCopy = malloc(lenKey + 1);
-    strcpy((char *) keyCopy, (const char *) key);
-    keyCopy[lenKey] = '\0';
-
-    int ind = getIndexInsertionC2(st);
-    
+void ajouteScoreC2(stC2_C3 *st, unsigned char *key, int ind) {
     if (ind < st -> tailleScoreTab) {
         for (int i = *(st -> nbScoreTabs) ; i > ind ; --i) {
             // décaler tout le tableau vers la droite
             // (copier tous les elements pour en inserer un nouveau)
             if (i != st -> tailleScoreTab) { // indice inexistant
                 (st -> tabMeilleurScoreC2)[i] = (st -> tabMeilleurScoreC2)[i - 1];
-                (st -> tabKeysScoreC2)[i] = (st -> tabKeysScoreC2)[i - 1];
+                strcpy((char *) (st -> tabKeysScoreC2)[i], (const char *) (st -> tabKeysScoreC2)[i - 1]);
             }
         }
         // insertion du nouvel element
         (st -> tabMeilleurScoreC2)[ind] = *(st -> distance);
-        (st -> tabKeysScoreC2)[ind] = keyCopy;        
+        strcpy((char *) (st -> tabKeysScoreC2)[ind], (const char *) key);
     }
 }
 
@@ -154,9 +147,14 @@ double distanceFreqs(float *freqLanguage, float *decryptedFreq) {
 }
 
 int getIndexInsertionC2(stC2_C3 *st) {
+    return getIndexInsertionValueC2(st, *(st -> distance));
+}
+
+int getIndexInsertionValueC2(stC2_C3 *st, double value) {
     int ind = 0;
-    while ((ind < *(st -> nbScoreTabs)) && ((st -> tabMeilleurScoreC2)[ind] < *(st -> distance))) {
+    while ((ind < *(st -> nbScoreTabs)) && ((st -> tabMeilleurScoreC2)[ind] < value)) {
         ++ind;
     }
+
     return ind;
 }

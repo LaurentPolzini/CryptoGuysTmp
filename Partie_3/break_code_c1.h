@@ -27,7 +27,7 @@ char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage);
 */
 void clefsFinales(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, char *nameFileOut);
 
-void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 functor, char *logFile);
+void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 functor, char *logFile, bool c2c3);
 
 void freeDoubleArray(unsigned char ***arr, unsigned long len);
 

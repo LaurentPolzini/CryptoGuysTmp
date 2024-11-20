@@ -84,32 +84,29 @@ int nbMotsPresents(char **mots, int nbMots, dictionnary *dico) {
         un tableau 1 possédant les meilleurs scores (plus proche de 0 mieux c'est)
         un tableau 2 de clefs à l'indice correspondant au tableau 1
 */
-void ajouteScoreC3(stC2_C3 *st, unsigned char *key) {
-    int lenKey = strlen((const char *) key);
-    unsigned char *keyCopy = malloc(lenKey + 1);
-    strcpy((char *) keyCopy, (const char *) key);
-    keyCopy[lenKey] = '\0';
-
-    int ind = getIndexInsertionC3(st);
-    
+void ajouteScoreC3(stC2_C3 *st, unsigned char *key, int ind) {
     if (ind < st -> tailleScoreTab) {
         for (int i = *(st -> nbScoreTabs) ; i > ind ; --i) {
             // décaler tout le tableau vers la droite
             // (copier tous les elements pour en inserer un nouveau)
             if (i != st -> tailleScoreTab) {
                 (st -> tabMeilleurScoreC3)[i] = (st -> tabMeilleurScoreC3)[i - 1];
-                (st -> tabKeysScoreC3)[i] = (st -> tabKeysScoreC3)[i - 1];
+                strcpy((char *) (st -> tabKeysScoreC3)[i], (const char *) (st -> tabKeysScoreC3)[i - 1]);
             }
         }
         // insertion du nouvel element
         (st -> tabMeilleurScoreC3)[ind] = *(st -> nbMotsPrez);
-        (st -> tabKeysScoreC3)[ind] = keyCopy;
+        strcpy((char *) (st -> tabKeysScoreC3)[ind], (const char *) key);
     }
 }
 
 int getIndexInsertionC3(stC2_C3 *st) {
+    return getIndexInsertionValueC3(st, *(st -> nbMotsPrez));
+}
+
+int getIndexInsertionValueC3(stC2_C3 *st, int value) {
     int ind = 0;
-    while ((ind < *(st -> nbScoreTabs)) && ((st -> tabMeilleurScoreC3)[ind] > *(st -> nbMotsPrez))) {
+    while ((ind < *(st -> nbScoreTabs)) && ((st -> tabMeilleurScoreC3)[ind] > value)) {
         ++ind;
     }
     return ind;
