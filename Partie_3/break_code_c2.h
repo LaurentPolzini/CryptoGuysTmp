@@ -11,7 +11,7 @@ float *freq(char *msg, int msgLen);
 int indice_lettre(char lettre);
 
 void ajouteScoreC2(stC2_C3 *st, unsigned char *key, int ind);
-void traiteMsgClefC2(char *msg, double *distance);
+double traiteMsgClefC2(char *msg, double *distance, float stats[26]);
 
 /*
     Renvoie la distance de la fréquence message crypté 

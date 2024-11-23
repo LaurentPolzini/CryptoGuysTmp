@@ -16,6 +16,8 @@ char* encrypt_decrypt_xor(char* file_in, char* key, char* file_out) {
     // Ouvrir le fichier d'entrée
     FILE* in_f = fopen(file_in, "rb");
     if (!in_f) {
+        printf("%s : ", file_in);
+        fflush(stdout);
         perror("Erreur d'ouverture du fichier d'entrée");
         exit(EXIT_FAILURE);
     }
@@ -31,6 +33,8 @@ char* encrypt_decrypt_xor(char* file_in, char* key, char* file_out) {
     // Ouvrir le fichier de sortie
     FILE* out_f = fopen(file_out, "wb");
     if (!out_f) {
+        printf("%s : ", file_out);
+        fflush(stdout);
         perror("Erreur d'ouverture du fichier de sortie");
         fclose(in_f);
         exit(EXIT_FAILURE);
@@ -107,6 +111,8 @@ char* encrypt_mask(char* file_in, char* key, char* file_out) {
     // Ouvrir le fichier d'entrée
     FILE *fin = fopen(file_in, "rb");
     if (!fin) {
+        printf("%s : ", file_in);
+        fflush(stdout);
         perror("Erreur lors de l'ouverture du fichier d'entrée");
         return NULL;
     }
@@ -191,7 +197,7 @@ int encrypt_cbc(char *file_in, char *file_key, char *file_out, char *v_init, voi
     FILE *input = fopen(file_in, "rb");
     FILE *output = fopen(file_out, "wb");
     if (!input || !output) {
-        fprintf(stderr, "Erreur d'ouverture de fichier\n");
+        fprintf(stderr, "Erreur d'ouverture de fichier cbc\n");
         return -1;
     }
 
@@ -248,7 +254,7 @@ int decrypt_cbc(char *file_in, char *file_key, char *file_out, char *v_init, voi
     FILE *input = fopen(file_in, "rb");
     FILE *output = fopen(file_out, "wb");
     if (!input || !output) {
-        fprintf(stderr, "Erreur d'ouverture de fichier\n");
+        fprintf(stderr, "Erreur d'ouverture de fichier decrypt cbc\n");
         return -1;
     }
 

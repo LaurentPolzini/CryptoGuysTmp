@@ -60,12 +60,14 @@ int break_code_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen
 }
 */
 
-void traiteMsgClefC3(char *msg, int *nbMotsPrez, dictionnary *dico) {
+int traiteMsgClefC3(char *msg, int *nbMotsPrez, dictionnary *dico) {
     int nbMots = 0;
     char **mots = wordsArrayFromText(msg, strlen(msg), &nbMots);
     *nbMotsPrez = nbMotsPresents(mots, nbMots, dico);
 
     freeTabs((void **) mots, nbMots);
+
+    return *nbMotsPrez;
 }
 
 int nbMotsPresents(char **mots, int nbMots, dictionnary *dico) {

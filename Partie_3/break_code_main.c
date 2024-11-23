@@ -81,7 +81,7 @@ int main(int argc, char *argv[]) {
         break_code_c1(fileToCrack, keyLength, logFile);
     } else if (strcmp(method, "all") == 0) {
         if (dict != NULL) {
-            break_code_c2_c3(fileToCrack, dict, NULL, keyLength, logFile);
+            break_code_c2_c3(fileToCrack, dict, logFile, keyLength);
         } else {
             fprintf(stderr, "Error: dictionary is required for method 'all'\n");
             exit(1);

@@ -22,11 +22,6 @@
 */
 
 void freeTabs(void **tabs, int nbElems);
-int getIndexInsertionC2(stC2_C3 *st);
-void traiteMsgClefC2(char *msg, double *distance);
-
-extern float stat_thFr[26];
-extern float stat_thEn[26];
 
 // chaque clef accédera a la meme zone mémoire
 // le temps de calculer la distance et eventuellement
@@ -71,9 +66,11 @@ int break_code_c2(char *file_in, char *dict_file_in, char *score_out, int keyLen
     assigne une distance a une clef 
     (par rapport aux fréquences de lettres d'une langue)
 */
-void traiteMsgClefC2(char *msg, double *distance) {
+double traiteMsgClefC2(char *msg, double *distance, float stats[26]) {
     float *freqMsg = freq(msg, (int) strlen(msg));
-    *distance = distanceFreqs(stat_thFr, freqMsg);
+    *distance = distanceFreqs(stats, freqMsg);
+
+    return *distance;
 }
 
 void ajouteScoreC2(stC2_C3 *st, unsigned char *key, int ind) {

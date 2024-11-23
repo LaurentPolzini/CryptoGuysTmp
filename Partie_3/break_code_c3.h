@@ -20,7 +20,7 @@ typedef struct dictionnary {
     for an other usage
 */
 void ajouteScoreC3(stC2_C3 *st, unsigned char *key, int ind);
-void traiteMsgClefC3(char *msg, int *nbMotsPrez, dictionnary *dico);
+int traiteMsgClefC3(char *msg, int *nbMotsPrez, dictionnary *dico);
 
 char **wordsArrayFromText(char *text, off_t lenText, int *nbMot);
 

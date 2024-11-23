@@ -148,12 +148,22 @@ void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 f
 
     printf("Temps génération des %lu clefs : %f\n", nbClefs, difftime(tpsFin, tpsDepart));
 
-    FILE *log = fopen(logFile, "a+");
-    pError(log, "Erreur ouverture fichier log", 1);
-    fprintf(log, "text : %s ; number of keys : %lu ; time : %f\n", msg, nbClefs, difftime(tpsFin, tpsDepart));
-    fclose(log);
+    char *textLog = malloc(strlen(file_in) + strlen("text : ; number of keys : ; time : \n") + sizeof(unsigned long) + sizeof(double) + 1);
+    pError(textLog, "Erreur allocation memoire text log file", 1);
+    sprintf(textLog, "text : %s ; number of keys : %lu ; time : %f\n", file_in, nbClefs, difftime(tpsFin, tpsDepart));
 
+    if (logFile) {
+        FILE *log = fopen(logFile, "a+");
+        pError(log, "Erreur ouverture fichier log", 1);
+        fprintf(log, textLog, strlen(textLog));
+
+        fclose(log);
+    } else {
+        printf("%s", textLog);
+    }
+    
     free((void *) msg);
+    free(textLog);
     return;
 }
 
@@ -220,8 +230,9 @@ void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned lo
 
     if (c2c3) {
         associeMaxTabs(c2c3_UD, (stC2_C3 *) uD, nbThreadReel);
+        destroysInitedStC2C3(&c2c3_UD, nbThreadReel);
     }
-    destroysInitedStC2C3(&c2c3_UD, nbThreadReel);
+    
     free(pilesTests); // dedans tout est déjà free
     // des que ce n'est plus utile (a la fin du traitement)
     // ca free le tableau
@@ -258,6 +269,8 @@ void clefsFinales(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long
     /*
     int fileOutDescriptor = open(nameFileOut, O_WRONLY | O_CREAT, 0644);
     if (fileOutDescriptor == -1) {
+        printf("%s : ", nameFileOut);
+        fflush(stdout);
         pError(NULL, "Erreur ouverture fichier", 1);
     }
     */
