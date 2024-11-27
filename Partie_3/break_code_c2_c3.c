@@ -23,7 +23,7 @@ void functorC2_C3(unsigned char *key, void *stC2C3VOID);
 
 int tailleTabScore = 50;
 
-int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen) {
+int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFile) {
     if (pthread_mutex_init(&mutexEcritureFichier, NULL) != 0) {
         pError(NULL, "Erreur creation mutex", 4);
     }
@@ -41,7 +41,7 @@ int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int key
     char *cryptedMsg = ouvreEtLitFichier(file_in, &tailleMsg);
 
     dictionnary *dicoHash = NULL;
-    read_and_insert_words(dict_file_in, &dicoHash);
+    read_and_insert_words(dict_file_in, &dicoHash, NULL);
 
     stC2_C3 *stC2C3 = NULL;
     // je cherche un mot typiquement francais
@@ -52,10 +52,10 @@ int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int key
         stC2C3 = initSTc2_c3(cryptedMsg, tailleMsg, tailleTabScore, dicoHash, keyLen, fdScoreOut, stat_thEn);
     }
 
-    appelClefsFinales(file_in, keyLen, (void *) stC2C3, functorC2_C3, NULL, true);
+    appelClefsFinales(file_in, keyLen, (void *) stC2C3, functorC2_C3, logFile, true);
 
     char *msgUncrypted = encrypt_decrypt_xorMSG(cryptedMsg, (char *) (stC2C3 -> tabKeysScoreC3)[0], tailleMsg);
-    printf("\nMessage décrypté avec la meilleure clef (%s) : \n\n%s\n", (stC2C3 -> tabKeysScoreC3)[0], msgUncrypted);
+    printf("\nMessage décrypté avec la meilleure clef (\"%s\" : score %d) : \n\n%s\n", (stC2C3 -> tabKeysScoreC3)[0], (stC2C3 -> tabMeilleurScoreC3)[0], msgUncrypted);
 
     destroyStructC2_C3(&stC2C3);
     clear_table(&dicoHash);
@@ -238,7 +238,7 @@ void ecritClefScore(int fdFile, unsigned char *key, int tabPoid) {
         char *textToWrite = malloc(sizeof(char) * (2 + lenKey + strlen("clef : nombre de mots présents dans le dictionnaire : 100")));
         pError(textToWrite, "Erreur allocation memoire", 4);
 
-        sprintf(textToWrite, "clef : %s\tnombre de mots présents dans le dictionnaire : %d\n", key, tabPoid);
+        snprintf(textToWrite, sizeof(textToWrite), "clef : %s\tnombre de mots présents dans le dictionnaire : %d\n", key, tabPoid);
         if (write(fdFile, textToWrite, strlen(textToWrite)) == -1) {
             close(fdFile);
             pError(NULL, "Error writing to file", 4);

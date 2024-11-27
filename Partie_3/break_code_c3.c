@@ -7,7 +7,7 @@
 #include <pthread.h>
 #include "./crackage.h"
 #include "../utilitaire/utiL.h"
-#include "../srcHashMap/uthash.h"
+#include "../utilitaire/uthash.h"
 #include "./break_code_c3.h"
 #include "./break_code_c2.h"
 #include "./break_code_c1.h"
@@ -15,18 +15,6 @@
 
 int nbMotsPresents(char **mots, int nbMots, dictionnary *dico);
 int getIndexInsertionC3(stC2_C3 *st);
-
-//pthread_mutex_t *mutexScore;
-
-//-----------------------------------------------------------------
-/*
-    Functions' declarations
-*/
-void read_and_insert_words(const char *filename, dictionnary **dicoHash);
-void add_word(dictionnary **dicoHash, const char *word);
-dictionnary *find_word(dictionnary *dicoHash, const char *word);
-void clear_table(dictionnary **dicoHash);
-
 
 //-----------------------------------------------------------------
 /*
@@ -194,61 +182,3 @@ void indNextWord(char *text, off_t lenText, off_t *indText) {
     return;
 }
 
-//-----------------------------------------------------------------
-/*
-    Functions for the hash table
-
-    -read_and_insert_words : reads a file (a dictionnary scrabble)
-        and puts it into the hashtable
-    -add_word : add a word to a hashtable
-    -find_word : finds a word return true if found
-    -clear_table : destroys the hashtable pointed by *dicoHash
-*/
-void read_and_insert_words(const char *filename, dictionnary **dicoHash) {
-    FILE *file = fopen(filename, "r");
-    if (file == NULL) {
-        perror("Error opening file");
-        exit(EXIT_FAILURE);
-    }
-
-    char line[50]; // Buffer to store each line from the file
-    while (fgets(line, sizeof(line), file)) {
-        // Remove the newline character if present
-        line[strcspn(line, "\n")] = '\0';
-
-        // Add the word to the hash table
-        add_word(dicoHash, line);
-    }
-
-    fclose(file);
-}
-
-void add_word(dictionnary **dicoHash, const char *word) {
-    dictionnary *entry;
-
-    // Find the word in the hash table
-    HASH_FIND_STR(*dicoHash, word, entry);
-    if (entry == NULL) {
-        // Allocate memory for the new entry
-        entry = (dictionnary *) malloc(sizeof(dictionnary));
-        pError(entry, "Erreur allocation memoire", 3);
-        // Copy the word into the key field
-        strcpy(entry->word, word);
-        // Add the entry to the hash table
-        HASH_ADD_STR(*dicoHash, word, entry);
-    }
-}
-
-dictionnary *find_word(dictionnary *dicoHash, const char *word) {
-    dictionnary *dico;
-    HASH_FIND_STR(dicoHash, word, dico);
-    return dico;
-}
-
-void clear_table(dictionnary **dicoHash) {
-    dictionnary *entry, *tmp;
-    HASH_ITER(hh, *dicoHash, entry, tmp) {
-        HASH_DEL(*dicoHash, entry);
-        free(entry);
-    }
-}

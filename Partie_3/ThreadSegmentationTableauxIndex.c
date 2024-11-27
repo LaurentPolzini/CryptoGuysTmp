@@ -26,7 +26,7 @@
 
     le nombre de threads diminue en fonction de segmenteUntilI (1 : jusque ligne 0 ; 5 : jusque ligne 4)
 */
-nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand, int *nbThreadsMax, int *nbThreadsReel) {
+nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel) {
     nbEtTailleSegment infoSeg;
     infoSeg.nbSegment = malloc(sizeof(int) * tailleClef);
     pError(infoSeg.nbSegment, "Erreur création tableau du nombre de segments des caractères candidats", 1);
@@ -41,8 +41,10 @@ nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand,
         */
         infoSeg.nbSegment[indSeg] = 2;
         infoSeg.tailleSegment[indSeg] = strlen((const char *) carCand[indSeg]) / infoSeg.nbSegment[indSeg];
-        ++indSeg;
-        *nbThreadsReel *= 2;
+        *nbThreadsReel *= infoSeg.nbSegment[indSeg++];
+    }
+    if (*nbThreadsReel > *nbThreadsMax) {
+        *nbThreadsReel = *nbThreadsMax;
     }
     for (int i = indSeg ; i < tailleClef ; ++i) {
         infoSeg.nbSegment[i] = 1;
@@ -101,12 +103,12 @@ void freeSPile(sPileIndCourFin *sPiles) {
     voici les tableaux d'indice dont s'occupera chacun des threads
 */
 
-sPileIndCourFin **initialisePilesIndiceThreads(int tailleClef, unsigned char **carCand, int *nbThreadsMax, int *nbThreadsReel) {
+sPileIndCourFin **initialisePilesIndiceThreads(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel) {
     nbEtTailleSegment nts = setNbAndTailleSegment(tailleClef, carCand, nbThreadsMax, nbThreadsReel);
     // autant de tableaux que de threads
     sPileIndCourFin **piles = malloc(sizeof(sPileIndCourFin) * (*nbThreadsReel));
     pError(piles, "Erreur allocation tableau d'indice pour les threads", 1);
-    for (int i = 0 ; i < *nbThreadsReel ; ++i) {
+    for (long i = 0 ; i < *nbThreadsReel ; ++i) {
         piles[i] = malloc(sizeof(sPileIndCourFin));
         pError(piles[i], "Erreur allocation memoire piles threads", 1);
     }

@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include "break_code_c1.h"
 
-int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen);
 void afficheTab3(int *tab, int nbElems, unsigned char **keys);
 void afficheTab2(double *tab, int nbElems, unsigned char **keys);
 

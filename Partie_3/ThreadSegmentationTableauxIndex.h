@@ -39,7 +39,7 @@ void freeSPile(sPileIndCourFin *pile);
 
     voici les tableaux d'indice dont s'occupera chacun des threads
 */
-sPileIndCourFin **initialisePilesIndiceThreads(int tailleClef, unsigned char **carCand, int *nbThreadsMax, int *nbThreadsReel);
+sPileIndCourFin **initialisePilesIndiceThreads(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel);
 
 /* renvoit null si la fin
  sinon renvoie le tableau suivant
@@ -61,7 +61,7 @@ unsigned char *clefActuelle(sPileIndCourFin *pile, unsigned char **carCandParInd
     met dans nbThreads le nombre de segments crées, donc le nombre de tableau nbEtTailleSegment
     utilisés par les threads
 */
-nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand, int *nbThreadsMax, int *nbThreadsReel);
+nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel);
 
 void ajouteSegmentation(sPileIndCourFin **piles, int *nbPileCur, int nbSeg, int tailleSeg, unsigned char *carCand);
 

@@ -25,8 +25,7 @@ void afficheManBreakCode(void);
         -l Le fichier de log
         -h affiche un manuel d'utilisation, annihile toutes autres options
 */
-
-
+/*
 int main(int argc, char *argv[]) {
     char *fileToCrack = NULL;
     char *method = NULL; // all or c1
@@ -35,7 +34,7 @@ int main(int argc, char *argv[]) {
     char *logFile = NULL;
 
     int opt;
-
+    
     if ( !argContainsHelp(argc, argv) ) {
         while ( (opt = getopt(argc, argv, ":i:m:k:d:l:")) != -1 ) {
             switch (opt) {
@@ -74,7 +73,7 @@ int main(int argc, char *argv[]) {
     }
 
     if (method == NULL || fileToCrack == NULL) {
-        fprintf(stderr, "Error: required arguments -i (file to crack) and -m (method) are missing\n");
+        fprintf(stderr, "Error: required arguments -i (file to crack) or -m (method) are missing\n");
         exit(1);
     }
     if (strstr(method, "c1") != NULL) {
@@ -93,7 +92,7 @@ int main(int argc, char *argv[]) {
     
     return 0;
 }
-
+*/
 void afficheManBreakCode(void) {
     printf("\nUsage:\n");
     printf("./break_code [options]\n");

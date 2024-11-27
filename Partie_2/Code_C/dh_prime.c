@@ -3,12 +3,18 @@
 /// \date mai 2020 rév 2024
 /// \brief Calculs sur les nombres premiers, génération, tests, etc.
 
-#include "dh.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <assert.h>
+#include "dh_prime.h"
+#include "../../utilitaire/utiL.h"
+
 long random_long(long min,long max){
 /// \brief génère un uint aléatoire entre min et max
 /// \param[in] min et max des uint
 /// \return n : min≤n≤max
-  return (rand()%(max-min)) + min;
+  return trueRandom(max - min) + min;
 }
 
 long puissance_mod_n (long a, long e, long n) {
@@ -116,7 +122,17 @@ long seek_generator(long start,long p){
   return start;
 }
 
-void generate_shared_key(long min,long max){
+void affiche_precision_complexite(long expo) {
+  int nb_bits = __builtin_popcountl(expo); // Nombre de bits à 1
+  int total_bits = (int) (sizeof(long) * 8 - __builtin_clzl(expo)); // Nombre de bits au total
+
+  printf("Précision sur la complexité :\n");
+  printf("- L'exposant %ld a %d bits en base 2.\n", expo, total_bits);
+  printf("- Parmi eux, %d bits sont égaux à 1.\n", nb_bits);
+  printf("- Le nombre total de multiplications nécessaires est %d (carrés + multiplications).\n", total_bits + nb_bits);
+}
+
+void generate_shared_key(long min,long max, FILE *outfp){
   /// \brief calcule un nombre premier p de Sophie Germain et un générateur du groupe p/Zp.
   /// appelle le simulateur d'échange de clef partagée.
   /// \returns la clef partagée
@@ -124,7 +140,11 @@ void generate_shared_key(long min,long max){
   long premier = genPrimeSophieGermain(min,max,&cpt);
   fprintf(outfp,"premier = %ld # nombre premier de Sophie Germain\n",premier);
   long generateur = seek_generator(3,premier); // exemple 100
-  long ordre = puissance_mod_n (generateur, premier-1, premier); // generateur^{premier -1} (mod premier)
+
+  long expo = premier - 1; // Exposant
+  affiche_precision_complexite(expo);
+
+  long ordre = puissance_mod_n (generateur, expo, premier); // generateur^{premier -1} (mod premier)
   fprintf(outfp,"generateur = %ld # ordre = %ld\n",generateur,ordre);
   assert (generateur != -1);
 }

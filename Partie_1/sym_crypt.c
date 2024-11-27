@@ -12,13 +12,15 @@
 #include "mask.h"
 #include "../utilitaire/utiL.h"
 
-void afficher_aide();
-void creer_fichier_cle(const char* key);
+void afficher_aideP1(void);
+void creer_fichier_cle(char *fileName, const char* key);
 void appel_chiffrement(char* file_in, char* file_out, char* key, char* methode, char* v_init);
 
+/*
 int main(int argc, char* argv[]) {
     int opt;
     bool v_init_needed = false;
+    bool key_needed = true;
     char *file_in = NULL;
     char *file_out = NULL;
     char *key = NULL;
@@ -26,6 +28,8 @@ int main(int argc, char* argv[]) {
     char *methode = NULL;
     char *v_init = NULL;
     char *log_file = NULL;
+
+    (void) log_file;
 
     // Gestion des options
     while ((opt = getopt(argc, argv, "i:o:k:f:m:v:l:h")) != -1) {
@@ -38,7 +42,7 @@ int main(int argc, char* argv[]) {
                 break;
             case 'k':
                 key = optarg;
-                creer_fichier_cle(key);
+                creer_fichier_cle("key.txt", key);
                 key = charger_cle_depuis_fichier("key.txt");
                 break;
             case 'f':
@@ -49,6 +53,8 @@ int main(int argc, char* argv[]) {
                 methode = optarg;
                 if (strcmp(methode, "cbc-crypt") == 0 || strcmp(methode, "cbc-uncrypt") == 0) {
                     v_init_needed = true;
+                } else if (strcmp(methode, "mask-crypt") == 0) {
+                    key_needed = false;
                 }
                 break;
             case 'v':
@@ -63,19 +69,20 @@ int main(int argc, char* argv[]) {
                 log_file = optarg;
                 break;
             case 'h':
-                afficher_aide();
+                afficher_aideP1();
                 return 0;
             default:
                 fprintf(stderr, "Option invalide.\n");
-                afficher_aide();
+                afficher_aideP1();
                 exit(EXIT_FAILURE);
         }
     }
 
     // Vérification des arguments obligatoires
-    if (!file_in || !file_out || !key || !methode) {
+    // clef pas utilisée si methode mask
+    if (!file_in || !file_out || !methode || (!key && key_needed)) {
         fprintf(stderr, "Erreur : les options -i, -o, -k ou -m sont manquantes.\n");
-        afficher_aide();
+        afficher_aideP1();
         exit(EXIT_FAILURE);
     }
 
@@ -86,8 +93,9 @@ int main(int argc, char* argv[]) {
     if (key_filename) free(key);
     return 0;
 }
+*/
 
-void afficher_aide() {
+void afficher_aideP1(void) {
     printf("Usage:\n");
     printf("./sym_crypt -i <fichier_entrée> -o <fichier_sortie> -k <clé> [-f <fichier_clé>] -m <methode> [-v <vecteur_initialisation>] [-l <fichier_log>] [-h]\n");
     printf("Options:\n");
@@ -95,14 +103,14 @@ void afficher_aide() {
     printf("  -o\tFichier où sera écrit le message chiffré\n");
     printf("  -k\tClé de chiffrement (obligatoire sauf si -f est utilisé)\n");
     printf("  -f\tFichier contenant la clé\n");
-    printf("  -m\tMéthode de chiffrement : xor, mask, cbc-crypt, cbc-uncrypt\n");
+    printf("  -m\tMéthode de chiffrement : xor, mask-crypt, mask-uncrypt, cbc-crypt, cbc-uncrypt\n");
     printf("  -v\tFichier vecteur d'initialisation (obligatoire pour cbc-crypt et cbc-uncrypt)\n");
     printf("  -l\tFichier de log (optionnel)\n");
     printf("  -h\tAffiche cette aide\n");
 }
 
-void creer_fichier_cle(const char* key) {
-    FILE *fichier = fopen("key.txt", "wb");
+void creer_fichier_cle(char *fileName, const char* key) {
+    FILE *fichier = fopen(fileName, "wb");
     if (!fichier) {
         perror("Erreur lors de l'ouverture ou de la création du fichier");
         return;
@@ -113,7 +121,6 @@ void creer_fichier_cle(const char* key) {
 
     // Fermer le fichier
     fclose(fichier);
-    
 }
 
 char* charger_cle_depuis_fichier(const char* nom_fichier) {
@@ -136,9 +143,12 @@ void appel_chiffrement(char* namefile_in, char* namefile_out, char* key, char* m
     if (strcmp(methode, "xor") == 0) {
         // Chiffrement XOR
         encrypt_decrypt_xor(namefile_in, key, namefile_out);
-    } else if (strcmp(methode, "mask") == 0) {
-        // Chiffrement avec masque
+    } else if (strcmp(methode, "mask-crypt") == 0) {
+        // Chiffrement avec masque (clef pas obligatoire)
         encrypt_mask(namefile_in, key, namefile_out);
+    } else if (strcmp(methode, "mask-uncrypt") == 0) {
+        // dechiffrement du mask (clef obligatoire)
+        decrypt_mask(namefile_in, key, namefile_out);
     } else if (strcmp(methode, "cbc-crypt") == 0) {
         // Chiffrement CBC
         if (!v_init) {

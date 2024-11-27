@@ -7,9 +7,16 @@
 #include <string.h>
 #include <time.h>
 #include <sys/types.h>
+#include <stdbool.h>
 #include "xor.h"
 #include "mask.h"
+#include "../utilitaire/utiL.h"
+#include "../utilitaire/uthash.h"
 #define BLOCK_SIZE 16
+
+const char CHARSET_KEY[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+char *gen_key_unique(int length, char *key);
 
 // Chiffrer ou déchiffrer un message avec une clé
 char* encrypt_decrypt_xor(char* file_in, char* key, char* file_out) {
@@ -27,7 +34,7 @@ char* encrypt_decrypt_xor(char* file_in, char* key, char* file_out) {
     if (key_size == 0) {
         fprintf(stderr, "Erreur : la clé ne doit pas être vide\n");
         fclose(in_f);
-        return "-1";
+        return NULL;
     }
 
     // Ouvrir le fichier de sortie
@@ -91,18 +98,48 @@ char* encrypt_decrypt_xorMSG(char* msg, char* key, off_t tailleMsg) {
 }
 
 // Génère une clé aléatoire de longueur spécifiée
-char* gen_key(int length, char *key) {
-    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    int charset_size = sizeof(charset) - 1;
+char* gen_key(int length, char *key, bool mask) {
+    if (mask) {
+        return gen_key_unique(length, key);
+    } else {
+        int charset_size = sizeof(CHARSET_KEY) - 1;
 
-    // Initialiser le générateur aléatoire avec le temps actuel
-    srand(time(NULL));
-
-    for (int i = 0; i < length - 1; i++) {
-        int random_index = rand() % charset_size;
-        key[i] = charset[random_index];
+        for (int i = 0; i < length; i++) {
+            int random_index = trueRandom(charset_size);
+            key[i] = CHARSET_KEY[random_index];
+        }
+        key[length] = '\0'; // Terminer la clé par un caractère nul
     }
-    key[length - 1] = '\0'; // Terminer la clé par un caractère nul
+    
+    return key;
+}
+
+char *gen_key_unique(int length, char *key) {
+    dictionnary *dicoHash = NULL;
+    // put the generated keys into the hashmap
+
+    // the length of the longest key is needed for the hashmap
+    off_t lenMsg;
+    char *cLenMaxKey = ouvreEtLitFichier("./maxLenGeneratedKeys.txt", &lenMsg);
+    int tailleKeyMax = length; // taille max des clefs generees
+    if (cLenMaxKey) {
+        tailleKeyMax = atoi(cLenMaxKey);
+    }
+    
+    read_and_insert_words("./generated_keys.txt", &dicoHash, &tailleKeyMax);
+
+    do {
+        key = gen_key(length, key, false);
+    } while (find_word(dicoHash, key));
+
+    ouvreEtEcritMsg("./generated_keys.txt", key, length);
+    clear_table(&dicoHash);
+    if ((length > tailleKeyMax) || lenMsg == 0) {
+        snprintf(cLenMaxKey, sizeof(int), "%d", length);
+        remove("./maxLenGeneratedKeys.txt");
+        ouvreEtEcritMsg("./maxLenGeneratedKeys.txt", cLenMaxKey, strlen(cLenMaxKey));
+    }
+
     return key;
 }
 
@@ -122,11 +159,19 @@ char* encrypt_mask(char* file_in, char* key, char* file_out) {
     size_t taille_msg = ftell(fin);
     fseek(fin, 0, SEEK_SET);
 
+    char *tmpKey = malloc(taille_msg);
+    pError(tmpKey, "Erreur allocation mémoire generation clef (pour masque)", 1);
+
     // Vérifier la taille de la clé
-    if (strlen(key) < taille_msg) {
-        fclose(fin);
-        fprintf(stderr, "Erreur : la clé est plus courte que le message (%zu octets attendus, mais la clé fait %zu octets)\n", taille_msg, strlen(key));
-        return NULL;
+    if (!key || (strlen(key) < taille_msg)) {
+        printf("La clef n'est soit pas aussi longue que le message, soit la clef n'est pas fournie, génération de la clef...\n");
+        
+        gen_key(taille_msg, tmpKey, true);
+
+        printf("Clef générée : %s\n", tmpKey);
+    } else {
+        // sinon la clef est fournie, et de bonne taille, on utilise celle ci.
+        strcpy(tmpKey, (const char *) key);
     }
 
     // Ouvrir le fichier de sortie
@@ -142,7 +187,7 @@ char* encrypt_mask(char* file_in, char* key, char* file_out) {
     size_t bytes_read;
     while ((bytes_read = fread(buffer, 1, sizeof(buffer), fin)) > 0) {
         for (size_t i = 0; i < bytes_read; i++) {
-            buffer[i] ^= key[i % strlen(key)]; // Appliquer le chiffrement par masque
+            buffer[i] ^= tmpKey[i % strlen(tmpKey)]; // Appliquer le chiffrement par masque
         }
         fwrite(buffer, 1, bytes_read, fout); // Écrire le résultat dans le fichier de sortie
     }
@@ -150,6 +195,7 @@ char* encrypt_mask(char* file_in, char* key, char* file_out) {
     // Fermer les fichiers
     fclose(fin);
     fclose(fout);
+    free(tmpKey);
 
     return strdup(file_out); // Retourne le nom du fichier de sortie
 }

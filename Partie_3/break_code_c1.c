@@ -7,6 +7,7 @@
 #include <math.h>
 #include <unistd.h>
 #include <fcntl.h>
+#include <sys/resource.h>
 #include "./crackage.h"
 #include "./Pile.h"
 #include "./break_code_c1.h"
@@ -72,6 +73,8 @@ void afficheTab(int *tab, int len_key);
 stC2_C3 **init_stC2C3_forThread(stC2_C3 *original, int nbThreads);
 void destroysInitedStC2C3(stC2_C3 ***array, int nbThreads);
 void associeMaxTabs(stC2_C3 **array, stC2_C3 *toWhere, int nbThreads);
+
+char *format_number_with_thousands_separator(unsigned long number);
 
 typedef struct {
     unsigned char ***arr;
@@ -150,7 +153,7 @@ void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 f
 
     char *textLog = malloc(strlen(file_in) + strlen("text : ; number of keys : ; time : \n") + sizeof(unsigned long) + sizeof(double) + 1);
     pError(textLog, "Erreur allocation memoire text log file", 1);
-    sprintf(textLog, "text : %s ; number of keys : %lu ; time : %f\n", file_in, nbClefs, difftime(tpsFin, tpsDepart));
+    snprintf(textLog, sizeof(textLog), "text : %s ; number of keys : %lu ; time : %f\n", file_in, nbClefs, difftime(tpsFin, tpsDepart));
 
     if (logFile) {
         FILE *log = fopen(logFile, "a+");
@@ -173,7 +176,6 @@ void appelCaracteresCandidats(char *file_in, int keyLength) {
 
     unsigned char **carCandParIndice = caracteresCandidatsParIndice(msgLu, sizeMsg, keyLength);
 
-    printf("Il y a %lu clefs; combinées à partir de :\n", nbClefsTotal(carCandParIndice, keyLength));
     for (int i = 0 ; i < keyLength ; ++i) {
         printf("Caracteres possibles clef[%d] : \"%s\"\n", i, carCandParIndice[i]);
     }
@@ -184,14 +186,21 @@ void appelCaracteresCandidats(char *file_in, int keyLength) {
 
 void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, void *uD, FunctorC1 functor, bool c2c3) {
     unsigned char **carCandParIndice = caracteresCandidatsParIndice(msgCode, tailleMsgCode, len_key);
+    *nbClefs = nbClefsTotal(carCandParIndice, len_key);
+
+    char *nbKeysToString = format_number_with_thousands_separator(*nbClefs);
+    printf("Il y a %s clefs combinées à partir de :\n", nbKeysToString);
     for (int i = 0 ; i < len_key ; ++i) {
         printf("Caracteres possibles clef[%d] : \"%s\"\n", i, carCandParIndice[i]);
     }
-    int nbThreadsMax = 16;
-    int nbThreadReel = 1;
+
+    // nombre de threads selon la machine
+    long nbThreadsMax = sysconf(_SC_NPROCESSORS_CONF);
+    //long nbThreadsMax = 100;
+
+    long nbThreadReel = 1;
     sPileIndCourFin **pilesTests = initialisePilesIndiceThreads(len_key, carCandParIndice, &nbThreadsMax, &nbThreadReel);
 
-    *nbClefs = nbClefsTotal(carCandParIndice, len_key);
     unsigned long *nbClefTraiteeByThreads[nbThreadReel];
     unsigned long nbTotalClefsTraitees = 0;
     float pourcentage = 0;
@@ -703,4 +712,40 @@ void associeMaxTabs(stC2_C3 **array, stC2_C3 *toWhere, int nbThreads) {
     for (int i = 0 ; i < nbThreads ; ++i) {
         incrusteTab(array, toWhere, i);
     } 
+}
+/*
+    transform 1000 to 1'000
+    for readability for the number of keys
+*/
+char *format_number_with_thousands_separator(unsigned long number) {
+    int nbElem = 20;
+    char *result = malloc(nbElem);
+    pError(result, "Erreur allocation memoire", 1);
+    int i = 0, j = 0;
+    int len = 0;
+    char temp[nbElem];
+
+    // Convertir le nombre en chaîne de caractères
+    snprintf(temp, sizeof(temp), "%lu", number);
+
+    len = strlen(temp);
+
+    // Ajouter les séparateurs de milliers
+    for (i = len - 1; i >= 0; i--) {
+        result[j++] = temp[i];
+        // Insérer un séparateur tous les 3 chiffres
+        if ((len - i) % 3 == 0 && i != 0) {
+            result[j++] = '\'';
+        }
+    }
+
+    result[j] = '\0';  // Terminer la chaîne
+    // Inverser la chaîne pour obtenir l'ordre correct
+    for (i = 0; i < j / 2; i++) {
+        char temp_char = result[i];
+        result[i] = result[j - i - 1];
+        result[j - i - 1] = temp_char;
+    }
+
+    return result;
 }

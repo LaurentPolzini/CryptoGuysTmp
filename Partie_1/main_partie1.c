@@ -43,7 +43,7 @@ void print_file_content_clair(const char *file_path) {
     printf("%s\n", buffer);
 }
 
-void test_encrypt_decrypt() {
+void test_encrypt_decrypt(void) {
     printf("-------Début des tests de la fonction encrypt_decrypt_xor-------\n\n");
 
     char* file_in = "clair.txt";
@@ -93,7 +93,7 @@ void test_encrypt_decrypt() {
     // Test 2 : Test de gen_key
     printf("\n Test 2 : Test de gen_key\n");
     char keyy[17];
-    gen_key(17, keyy);
+    gen_key(17, keyy, false);
     printf("\nLa clé générée est : %s\n\n", keyy);
 
     //Ecrire la clé généré dans le fichier key.txt
@@ -131,7 +131,7 @@ void test_encrypt_decrypt() {
 }
 
 // Test pour encrypt_mask et decrypt_mask
-void test_encrypt_decrypt_mask() {
+void test_encrypt_decrypt_mask(void) {
     printf("-------Début des tests de encrypt_mask et decrypt_mask-------\n");
 
     // Fichiers d'entrée et de sortie
@@ -152,9 +152,9 @@ void test_encrypt_decrypt_mask() {
     fclose(f);
 
     // Générer une clé
-    int taille_cle = strlen(message)+1;  // Pour le masque jetable, la clé doit être au moins aussi longue que le message
-    char *cle = (char *)malloc(taille_cle + 1);
-    gen_key(taille_cle, cle);
+    int taille_cle = strlen(message) + 1;  // Pour le masque jetable, la clé doit être au moins aussi longue que le message
+    char *cle = (char *) malloc(taille_cle + 1);
+    gen_key(taille_cle, cle, true);
     printf("Clé générée pour le test : %s\n", cle);
 
     // Chiffrement avec encrypt_mask
@@ -200,7 +200,7 @@ void test_encrypt_decrypt_mask() {
 }
 
 // Générer des fichiers de test
-void generate_test_files() {
+void generate_test_files(void) {
     // Crée un fichier de test avec un message clair
      FILE *file = fopen("message.txt", "wb");
     fprintf(file, "Ceci est un message secret.");
@@ -219,7 +219,7 @@ void generate_test_files() {
     fclose(file);
 }
 
-void test_cbc() {
+void test_cbc(void) {
     printf("-------Début des tests de chiffrement et déchiffrement CBC-------\n");
     generate_test_files();
     // Fichiers d'entrée, de sortie et de clé

@@ -6,8 +6,8 @@
 
 int break_code_c1(char *file_in, int keyLength, char *logFile);
 
-int break_code_c2(char *file_in, char *dict_file_in, char *score_out, int keyLength, char *logFile);
+int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFile);
 
-int break_code_c3(char *file_in, char *dict_file_in, char *score_out);
+void crack_mask(const char* file_c1, const char* file_c2, const char* file_m1, const char* file_m2);
 
 #endif
