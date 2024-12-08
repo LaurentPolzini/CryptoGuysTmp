@@ -28,7 +28,7 @@ void freeTabs(void **tabs, int nbElems);
 // la mettre dans le tableau des meilleurs scores
 //pthread_mutex_t mutexScore;
 
-/*
+/*sqzwi
 int break_code_c2(char *file_in, char *dict_file_in, char *score_out, int keyLength, char *logFile) {
     (void) file_in, (void) dict_file_in, (void) score_out, (void) keyLength, (void) logFile;
     

@@ -1,10 +1,13 @@
-#ifndef __BREAK_CODE_C1_H__
-#define __BREAK_CODE_C1_H__
+#ifndef _BREAK_CODE_C1_H_
+#define _BREAK_CODE_C1_H_
 
 #include <stdbool.h>
 #include <unistd.h>
+#include "break_code_c2_c3.h"
 
-typedef struct {
+struct stC2_C3;
+
+typedef struct sMsgAndTaille {
     char *msg;
     off_t lenMsg;
     char *msgUncrypted;
@@ -39,6 +42,9 @@ void clefTrouve(unsigned char *curKey, void *actualKey);
 void ecritClef(unsigned char *clef, void *fileOutDescriptor);
 void doNothing(unsigned char *none, void *userData);
 void translateMsg(unsigned char *key, void *msg);
+
+
+void associeMaxTabs(struct stC2_C3 **array, struct stC2_C3 *toWhere, int nbThreads);
 
 
 #endif

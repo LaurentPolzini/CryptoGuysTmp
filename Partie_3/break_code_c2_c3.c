@@ -4,6 +4,9 @@
 #include <pthread.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <stdbool.h>
+#include <time.h>
+#include <float.h>
 #include "break_code_c2_c3.h"
 #include "break_code_c1.h"
 #include "break_code_c3.h"
@@ -17,32 +20,29 @@ extern float stat_thEn[26];
 
 pthread_mutex_t mutexEcritureFichier;
 
-void afficheTab2(double *tab, int nbElems, unsigned char **keys);
-
 void functorC2_C3(unsigned char *key, void *stC2C3VOID);
 
 int tailleTabScore = 50;
 
-int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFile) {
+int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFileName) {
     if (pthread_mutex_init(&mutexEcritureFichier, NULL) != 0) {
         pError(NULL, "Erreur creation mutex", 4);
     }
     int fdScoreOut = -1;
     if (score_out) {
-        fdScoreOut = open(score_out, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+        fdScoreOut = open(score_out, O_CREAT | O_TRUNC | O_WRONLY, 0644);
         if (fdScoreOut == -1) {
-            printf("%s : ", score_out);
-            fflush(stdout);
-            pError(NULL, "Error opening file", 4);
+            pError(NULL, "Erreur ouverture fichier score clefs", 4);
         }
-    } 
-
+    }
+    
     off_t tailleMsg = 0;
     char *cryptedMsg = ouvreEtLitFichier(file_in, &tailleMsg);
 
     dictionnary *dicoHash = NULL;
     read_and_insert_words(dict_file_in, &dicoHash, NULL);
 
+    /*
     stC2_C3 *stC2C3 = NULL;
     // je cherche un mot typiquement francais
     // si pas trouvé : anglais
@@ -51,15 +51,70 @@ int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int key
     } else {
         stC2C3 = initSTc2_c3(cryptedMsg, tailleMsg, tailleTabScore, dicoHash, keyLen, fdScoreOut, stat_thEn);
     }
+    appelClefsFinales(file_in, keyLen, (void *) stC2C3, functorC2_C3, logFileName, true);
+    */
+    stC2_C3 *stC2C3[keyLen];
+    bool frenchDico = find_word(dicoHash, "abaisser") != NULL;
+    int tmpKeyLen;
 
-    appelClefsFinales(file_in, keyLen, (void *) stC2C3, functorC2_C3, logFile, true);
+    // debut du traitement des clefs avec la taille de la clef comme maximum
+    // (tests toutes les valeurs inférieures a la taille entrée)
+    
+    stC2_C3 *compiledBest = initSTc2_c3(cryptedMsg, tailleMsg, tailleTabScore, dicoHash, keyLen, fdScoreOut, stat_thFr);;
+    clock_t start = clock();
 
-    char *msgUncrypted = encrypt_decrypt_xorMSG(cryptedMsg, (char *) (stC2C3 -> tabKeysScoreC3)[0], tailleMsg);
-    printf("\nMessage décrypté avec la meilleure clef (\"%s\" : score %d) : \n\n%s\n", (stC2C3 -> tabKeysScoreC3)[0], (stC2C3 -> tabMeilleurScoreC3)[0], msgUncrypted);
+    for (int i = 0 ; i < keyLen ; ++i) {
+        tmpKeyLen = i + 1;
+        if (frenchDico) {
+            stC2C3[i] = initSTc2_c3(cryptedMsg, tailleMsg, tailleTabScore, dicoHash, tmpKeyLen, fdScoreOut, stat_thFr);
+        } else {
+            stC2C3[i] = initSTc2_c3(cryptedMsg, tailleMsg, tailleTabScore, dicoHash, tmpKeyLen, fdScoreOut, stat_thEn);
+        }
+        appelClefsFinales(file_in, tmpKeyLen, (void *) stC2C3[i], functorC2_C3, logFileName, true);
 
-    destroyStructC2_C3(&stC2C3);
-    clear_table(&dicoHash);
+        associeMaxTabs(stC2C3, compiledBest, tmpKeyLen);
+    }
+    
+    FILE *fileLog = NULL;
+    if (logFileName) {
+        fileLog = fopen(logFileName, "a");
+        pError(fileLog, "Erreur ouverture fichier log c2 c3", 4);
+    }
+
+    ecritTab2(compiledBest -> tabMeilleurScoreC2, compiledBest -> tailleScoreTab, compiledBest -> tabKeysScoreC2, fileLog);
+    ecritTab3(compiledBest -> tabMeilleurScoreC3, compiledBest -> tailleScoreTab, compiledBest -> tabKeysScoreC3, fileLog);
+
+    fclose(fileLog);
+
+    // fin du traitement
+    clock_t end = clock();
+    
+    char *msgUncrypted = encrypt_decrypt_xorMSG(cryptedMsg, (char *) (compiledBest -> tabKeysScoreC3)[0], tailleMsg);
+    double timeC2C3 = ((double) (end - start)) / CLOCKS_PER_SEC;
+    printf("\nMessage : %s\ndécrypté en %fs avec la meilleure clef (\"%s\" : score %d)\n", msgUncrypted, timeC2C3, (compiledBest -> tabKeysScoreC3)[0], (compiledBest -> tabMeilleurScoreC3)[0]);
+
+    for (int i = 0 ; i < keyLen ; ++i) {
+        destroyStructC2_C3(&(stC2C3[i]));
+    }
+    destroyStructC2_C3(&compiledBest);
+    
     free(cryptedMsg);
+    /*
+    char *msgUncrypted = encrypt_decrypt_xorMSG(cryptedMsg, (char *) (stC2C3 -> tabKeysScoreC3)[0], tailleMsg);
+    printf("\nMessage : %s\ndécrypté en %fs avec la meilleure clef (\"%s\" : score %d)\n", msgUncrypted, 0.0, (stC2C3 -> tabKeysScoreC3)[0], (stC2C3 -> tabMeilleurScoreC3)[0]);
+    
+    FILE *fileLog = NULL;
+    if (logFileName) {
+        fileLog = fopen(logFileName, "a");
+        pError(fileLog, "Erreur ouverture fichier log c2 c3", 4);
+    }
+    ecritTab2(stC2C3 -> tabMeilleurScoreC2, stC2C3 -> tailleScoreTab, stC2C3 -> tabKeysScoreC2, fileLog);
+    ecritTab3(stC2C3 -> tabMeilleurScoreC3, stC2C3 -> tailleScoreTab, stC2C3 -> tabKeysScoreC3, fileLog);
+    
+    destroyStructC2_C3(&stC2C3);
+    */
+
+    clear_table(&dicoHash);
 
     if (pthread_mutex_destroy(&mutexEcritureFichier) != 0) {
         pError(NULL, "Erreur destruction mutex", 4);
@@ -89,7 +144,8 @@ void functorC2_C3(unsigned char *key, void *stC2C3VOID) {
     free((void *) ((varStructC2C3 -> msgAndTaille) -> msgUncrypted));
 }
 
-stC2_C3 *initSTc2_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, dictionnary *dico, int keyLen, int fdlogFile, float stat[26]) {
+
+stC2_C3 *initSTc2_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, struct dictionnary *dico, int keyLen, int fdlogFileP, float stat[26]) {
     stC2_C3 *sC2_C3 = malloc(sizeof(stC2_C3));
     pError(sC2_C3, "Erreur allocation memoire", 4);
 
@@ -110,6 +166,7 @@ stC2_C3 *initSTc2_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, di
     for (int i = 0 ; i < tailleTab ; ++i) {
         (sC2_C3 -> tabKeysScoreC2)[i] = malloc(sizeof(unsigned char) * (keyLen + 1));
         pError((sC2_C3 -> tabKeysScoreC2)[i], "Erreur allocation memoire", 4);
+        (sC2_C3 -> tabMeilleurScoreC2)[i] = DBL_MAX;
     }
 
     sC2_C3 -> tabMeilleurScoreC3 = malloc(sizeof(double) * tailleTab);
@@ -119,6 +176,7 @@ stC2_C3 *initSTc2_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, di
     for (int i = 0 ; i < tailleTab ; ++i) {
         (sC2_C3 -> tabKeysScoreC3)[i] = malloc(sizeof(unsigned char) * (keyLen + 1));
         pError((sC2_C3 -> tabKeysScoreC3)[i], "Erreur allocation memoire", 4);
+        (sC2_C3 -> tabMeilleurScoreC3)[i] = 0;
     }
 
     sC2_C3 -> nbScoreTabs = malloc(sizeof(int));
@@ -134,9 +192,9 @@ stC2_C3 *initSTc2_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, di
 
     sC2_C3 -> lenKey = keyLen;
 
-    sC2_C3 -> fdLogFile = fdlogFile;
-
     sC2_C3 -> stats = stat;
+
+    sC2_C3 -> fdLogFile = fdlogFileP;
 
     return sC2_C3;
 }
@@ -151,8 +209,6 @@ void destroyStructC2_C3(stC2_C3 **struc2C3) {
         free((*struc2C3) -> tabMeilleurScoreC2);
         free((*struc2C3) -> tabMeilleurScoreC3);
         free(*struc2C3);
-
-        close((*struc2C3) -> fdLogFile);
     }
 }
 
@@ -173,23 +229,26 @@ void freeTabs(void **tabs, int nbElems) {
     free(tabs);
 }
 
-void afficheTab2(double *tab, int nbElems, unsigned char **keys) {
-    printf("\nscores c2 : \n");
-    for (int i = 0 ; i < nbElems ; ++i) {
-        printf("%s : %f  ", keys[i], tab[i]);
-        fflush(stdout);
+void ecritTab2(double *tab, int nbElems, unsigned char **keys, FILE *file) {
+    if (file) {
+        fprintf(file, "\nscores c2 : \n");
+        for (int i = 0 ; i < nbElems ; ++i) {
+            fprintf(file, "%s : fréquences des lettres : %f\n", keys[i], tab[i]);
+        }
+        fprintf(file, "\n\n");
     }
-    printf("\n");
 }
 
-void afficheTab3(int *tab, int nbElems,  unsigned char **keys) {
-    printf("\nscores c3 : \n");
-    for (int i = 0 ; i < nbElems ; ++i) {
-        printf("%s : %i  ", keys[i], tab[i]);
-        fflush(stdout);
+void ecritTab3(int *tab, int nbElems,  unsigned char **keys, FILE *file) {
+    if (file) {
+        fprintf(file, "\nscores c3 : \n");
+        for (int i = 0 ; i < nbElems ; ++i) {
+            fprintf(file, "%s : nombres de mots existants : %d\n", keys[i], tab[i]);
+        }
+        fprintf(file, "\n\n");
     }
-    printf("\n");
 }
+
 
 stC2_C3 *copySC2C3(stC2_C3 *toCopy) {
     return initSTc2_c3((toCopy -> msgAndTaille) -> msg, (toCopy -> msgAndTaille) -> lenMsg, 
@@ -235,10 +294,17 @@ void ecritClefScore(int fdFile, unsigned char *key, int tabPoid) {
 
         int lenKey = strlen((const char *) key);
         // clef : 1234  nombre de mots présents dans le dictionnaire : 100
-        char *textToWrite = malloc(sizeof(char) * (2 + lenKey + strlen("clef : nombre de mots présents dans le dictionnaire : 100")));
+        size_t tailleAllouee = lenKey + strlen("clef : \tnombre de mots présents dans le dictionnaire : ") + 10 + 2;
+        char *textToWrite = malloc(tailleAllouee);
         pError(textToWrite, "Erreur allocation memoire", 4);
 
-        snprintf(textToWrite, sizeof(textToWrite), "clef : %s\tnombre de mots présents dans le dictionnaire : %d\n", key, tabPoid);
+        int ret = snprintf(textToWrite, tailleAllouee, 
+                   "clef : %s\tnombre de mots présents dans le dictionnaire : %d\n", 
+                   key, tabPoid);
+        if (ret < 0 || (size_t)ret >= tailleAllouee) {
+            free(textToWrite);
+            pError(NULL, "Erreur snprintf c2 c3 ecritClefScore", 4);
+        }
         if (write(fdFile, textToWrite, strlen(textToWrite)) == -1) {
             close(fdFile);
             pError(NULL, "Error writing to file", 4);

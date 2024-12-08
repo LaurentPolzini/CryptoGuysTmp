@@ -16,6 +16,7 @@
 #include "caracteresCandidatsIndexKey.h"
 #include "ThreadSegmentationTableauxIndex.h"
 #include "../Partie_1/xor.h"
+#include "./break_code_c2_c3.h"
 
 void appelCaracteresCandidats(char *file_in, int keyLength);
 
@@ -72,7 +73,6 @@ void afficheTab(int *tab, int len_key);
    
 stC2_C3 **init_stC2C3_forThread(stC2_C3 *original, int nbThreads);
 void destroysInitedStC2C3(stC2_C3 ***array, int nbThreads);
-void associeMaxTabs(stC2_C3 **array, stC2_C3 *toWhere, int nbThreads);
 
 char *format_number_with_thousands_separator(unsigned long number);
 
@@ -133,10 +133,6 @@ int break_code_c1(char *file_in, int keyLength, char *logFile) {
     return 0;
 }
 
-/*
-    File out peut etre la clef qu'on cherche aussi
-    c'est userData quoi
-*/
 void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 functor, char *logFile, bool c2c3) {
     off_t tailleMsg;
 
@@ -145,20 +141,22 @@ void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 f
     unsigned long nbClefs = 0;
 
     time_t tpsDepart = time(NULL);
-    //clefsFinales(msg, tailleMsg, keyLength, &nbClefs, userData);
     clefsByThreads(msg, tailleMsg, keyLength, &nbClefs, userData, functor, c2c3);
     time_t tpsFin = time(NULL);
 
-    printf("Temps génération des %lu clefs : %f\n", nbClefs, difftime(tpsFin, tpsDepart));
+    char *SlenKey = format_number_with_thousands_separator(nbClefs);
 
-    char *textLog = malloc(strlen(file_in) + strlen("text : ; number of keys : ; time : \n") + sizeof(unsigned long) + sizeof(double) + 1);
+    printf("Temps génération des %s clefs : %f\n", SlenKey, difftime(tpsFin, tpsDepart));
+
+    size_t tailleAllouee = strlen("text from : ; number of keys : ; time : \n") + strlen(file_in) + strlen(SlenKey) + 50;
+    char *textLog = malloc(tailleAllouee);
     pError(textLog, "Erreur allocation memoire text log file", 1);
-    snprintf(textLog, sizeof(textLog), "text : %s ; number of keys : %lu ; time : %f\n", file_in, nbClefs, difftime(tpsFin, tpsDepart));
+    snprintf(textLog, tailleAllouee, "text from : %s ; number of keys : %s ; time : %f\n", file_in, SlenKey, difftime(tpsFin, tpsDepart));
 
     if (logFile) {
-        FILE *log = fopen(logFile, "a+");
-        pError(log, "Erreur ouverture fichier log", 1);
-        fprintf(log, textLog, strlen(textLog));
+        FILE *log = fopen(logFile, "a");
+        pError(log, "Erreur ouverture fichier log c1", 1);
+        fprintf(log, "%s", textLog);
 
         fclose(log);
     } else {
@@ -189,17 +187,16 @@ void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned lo
     *nbClefs = nbClefsTotal(carCandParIndice, len_key);
 
     char *nbKeysToString = format_number_with_thousands_separator(*nbClefs);
-    printf("Il y a %s clefs combinées à partir de :\n", nbKeysToString);
-    for (int i = 0 ; i < len_key ; ++i) {
-        printf("Caracteres possibles clef[%d] : \"%s\"\n", i, carCandParIndice[i]);
+    printf("(taille %d) Il y a %s clefs possibles\n", len_key, nbKeysToString);
+    if (*nbClefs == 0) {
+        return;
     }
-
     // nombre de threads selon la machine
     long nbThreadsMax = sysconf(_SC_NPROCESSORS_CONF);
     //long nbThreadsMax = 100;
 
     long nbThreadReel = 1;
-    sPileIndCourFin **pilesTests = initialisePilesIndiceThreads(len_key, carCandParIndice, &nbThreadsMax, &nbThreadReel);
+    sPileIndCourFin **piles = initialisePilesIndiceThreads(len_key, carCandParIndice, &nbThreadsMax, &nbThreadReel);
 
     unsigned long *nbClefTraiteeByThreads[nbThreadReel];
     unsigned long nbTotalClefsTraitees = 0;
@@ -214,9 +211,9 @@ void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned lo
     
     for (int i = 0 ; i < nbThreadReel ; ++i) {
         if (c2c3) {
-            tinfos[i] = creeInfoThreadPILES(pilesTests[i], carCandParIndice, functor, len_key, (void *) (c2c3_UD[i]));
+            tinfos[i] = creeInfoThreadPILES(piles[i], carCandParIndice, functor, len_key, (void *) (c2c3_UD[i]));
         } else {
-            tinfos[i] = creeInfoThreadPILES(pilesTests[i], carCandParIndice, functor, len_key, uD);
+            tinfos[i] = creeInfoThreadPILES(piles[i], carCandParIndice, functor, len_key, uD);
         }
         pthread_create(&(thid[i]), NULL, clefsThreadPiles, &(tinfos[i]));
     }
@@ -242,7 +239,7 @@ void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned lo
         destroysInitedStC2C3(&c2c3_UD, nbThreadReel);
     }
     
-    free(pilesTests); // dedans tout est déjà free
+    free(piles); // dedans tout est déjà free
     // des que ce n'est plus utile (a la fin du traitement)
     // ca free le tableau
     return;   
@@ -708,7 +705,7 @@ void destroysInitedStC2C3(stC2_C3 ***array, int nbThreads) {
     associates to toWhere the compiled best arrays
     of the nbThreads array
 */
-void associeMaxTabs(stC2_C3 **array, stC2_C3 *toWhere, int nbThreads) {
+void associeMaxTabs(struct stC2_C3 **array, struct stC2_C3 *toWhere, int nbThreads) {
     for (int i = 0 ; i < nbThreads ; ++i) {
         incrusteTab(array, toWhere, i);
     } 

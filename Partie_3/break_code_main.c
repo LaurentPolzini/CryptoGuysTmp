@@ -25,18 +25,18 @@ void afficheManBreakCode(void);
         -l Le fichier de log
         -h affiche un manuel d'utilisation, annihile toutes autres options
 */
-/*
 int main(int argc, char *argv[]) {
     char *fileToCrack = NULL;
     char *method = NULL; // all or c1
     int keyLength = 0;
     char *dict = NULL;
     char *logFile = NULL;
+    char *scoreOut = NULL;
 
     int opt;
     
     if ( !argContainsHelp(argc, argv) ) {
-        while ( (opt = getopt(argc, argv, ":i:m:k:d:l:")) != -1 ) {
+        while ( (opt = getopt(argc, argv, ":i:m:k:d:l:s:")) != -1 ) {
             switch (opt) {
                 case 'i':
                     fileToCrack = optarg;
@@ -56,6 +56,10 @@ int main(int argc, char *argv[]) {
 
                 case 'l':
                     logFile = optarg;
+                    break;
+
+                case 's':
+                    scoreOut = optarg;
                     break;
 
                 case ':':
@@ -80,7 +84,7 @@ int main(int argc, char *argv[]) {
         break_code_c1(fileToCrack, keyLength, logFile);
     } else if (strcmp(method, "all") == 0) {
         if (dict != NULL) {
-            break_code_c2_c3(fileToCrack, dict, logFile, keyLength);
+            break_code_c2_c3(fileToCrack, dict, scoreOut, keyLength, logFile);
         } else {
             fprintf(stderr, "Error: dictionary is required for method 'all'\n");
             exit(1);
@@ -92,7 +96,7 @@ int main(int argc, char *argv[]) {
     
     return 0;
 }
-*/
+
 void afficheManBreakCode(void) {
     printf("\nUsage:\n");
     printf("./break_code [options]\n");
@@ -104,7 +108,8 @@ void afficheManBreakCode(void) {
     printf("-d\tThe dictionnary of the language used to write (only to be used if -m all)\n");
 
     printf("Optionnal Options :\n");
-    printf("-l\tThe log file (if not specified, stdin)\n");
+    printf("-l\tThe log file (if not specified, stdout)\n");
+    printf("-s\tThe file for the keys' scores\n");
     printf("-h\tThis help message\n");
 
     return;

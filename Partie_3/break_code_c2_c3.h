@@ -1,18 +1,15 @@
-#ifndef __BREAK_CODE_C2_C3_H__
-#define __BREAK_CODE_C2_C3_H__
+#ifndef _BREAK_CODE_C2_C3_H_
+#define _BREAK_CODE_C2_C3_H_
 
 #include <unistd.h>
 #include <stdbool.h>
 #include "break_code_c1.h"
 
-void afficheTab3(int *tab, int nbElems, unsigned char **keys);
-void afficheTab2(double *tab, int nbElems, unsigned char **keys);
-
 struct dictionnary;
 
-typedef struct {
+typedef struct stC2_C3 {
     // le message crypté et sa taille
-    sMsgAndTaille *msgAndTaille;
+    struct sMsgAndTaille *msgAndTaille;
     // immuable : la taille max des tableaux de scores
     int tailleScoreTab;
 
@@ -40,8 +37,13 @@ typedef struct {
     int fdLogFile;
 } stC2_C3;
 
+int break_code_c2_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFileName);
 
-stC2_C3 *initSTc2_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, struct dictionnary *dico, int keyLen, int fdlogFile, float stats[26]);
+// ecrit les clefs et leurs scores dans file (peut etre stdout)
+void ecritTab2(double *tab, int nbElems, unsigned char **keys, FILE *file);
+void ecritTab3(int *tab, int nbElems,  unsigned char **keys, FILE *file);
+
+stC2_C3 *initSTc2_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, struct dictionnary *dico, int keyLen, int fdlogFileP, float stat[26]);
 
 void ajouteScores(stC2_C3 *st, unsigned char *key);
 
