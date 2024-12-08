@@ -1,0 +1,56 @@
+{
+	"folders": [
+		{
+			"name": "Crypt_Temp",
+			"path": "."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"__bit_reference": "c",
+			"__node_handle": "c",
+			"atomic": "c",
+			"bitset": "c",
+			"chrono": "c",
+			"cstddef": "c",
+			"__memory": "c",
+			"limits": "c",
+			"locale": "c",
+			"optional": "c",
+			"ratio": "c",
+			"system_error": "c",
+			"tuple": "c",
+			"type_traits": "c",
+			"vector": "c",
+			"*.ds_store": "c",
+			"xor.h": "c",
+			"crackage.h": "c",
+			"queue.h": "c",
+			"break_code_c1.h": "c",
+			"pile.h": "c",
+			"util.h": "c",
+			"caracterescandidatsindexkey.h": "c",
+			"string.h": "c",
+			"stdio.h": "c",
+			"threadsegmentationtableauxindex.h": "c",
+			"tree.h": "c",
+			"array": "c",
+			"deque": "c",
+			"string": "c",
+			"string_view": "c",
+			"unordered_map": "c",
+			"time.h": "c",
+			"pthread.h": "c",
+			"murmurhash3.h": "c",
+			"uthash.h": "c",
+			"stdlib.h": "c",
+			"fcntl.h": "c",
+			"break_code_c3.h": "c",
+			"break_code_c2_c3.h": "c",
+			"break_code_c2.h": "c",
+			"__tuple": "c",
+			"dh_prime.h": "c",
+			"complex": "c"
+		}
+	}
+}

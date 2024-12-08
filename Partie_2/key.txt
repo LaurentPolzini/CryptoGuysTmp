@@ -4,3 +4,6 @@
 (Bob) clef : 81653
 (Alice) clef : 81653
 
+Clé partagée calculée : 965537307
+Clé partagée calculée : 1233126918
+Clé partagée calculée : 169806924

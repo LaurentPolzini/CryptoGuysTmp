@@ -1,6 +1,7 @@
 #ifndef __UTIL_H__
 #define __UTIL_H__
 #include <stdbool.h>
+#include <sys/types.h>
 #include "./uthash.h"
 
 // Hashmap for word dictionnary
