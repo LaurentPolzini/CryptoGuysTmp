@@ -79,3 +79,975 @@ text : ../script/CRACK/tests/crypted_crack/1234_msg2.txt ; number of keys : 6350
 text : ../script/CRACK/tests/crypted_crack/Clef1_msg2.txt ; number of keys : 3468400 ; time : 0.000000
 text : ../script/CRACK/tests/crypted_crack/Clef1_msg2.txt ; number of keys : 3468400 ; time : 7.000000
 text : ../script/CRACK/tests/crypted_crack/Clef1_msg2.txt ; number of keys : 3468400 ; time : 8.000000
+text from : Partie_3/tests/500_Millions/crypted_1234-500_000_000.txt ; number of keys : 279'531 ; time : 3.000000
+
+scores c2 : 
+tapa : fréquences des lettres : 136.155303
+tama : fréquences des lettres : 143.599291
+cabH : fréquences des lettres : 144.106332
+sabH : fréquences des lettres : 144.302252
+uabL : fréquences des lettres : 156.903252
+taja : fréquences des lettres : 160.679154
+dabH : fréquences des lettres : 160.957329
+sabL : fréquences des lettres : 161.803014
+cabL : fréquences des lettres : 162.494373
+ta8a : fréquences des lettres : 163.438221
+tabH : fréquences des lettres : 164.130823
+eabH : fréquences des lettres : 166.988182
+uabH : fréquences des lettres : 168.185714
+eabL : fréquences des lettres : 171.158911
+caba : fréquences des lettres : 172.333869
+taba : fréquences des lettres : 172.401771
+tapL : fréquences des lettres : 173.200208
+rabH : fréquences des lettres : 175.804293
+cebH : fréquences des lettres : 177.894079
+tabL : fréquences des lettres : 177.994373
+tala : fréquences des lettres : 178.679153
+tajJ : fréquences des lettres : 179.397906
+kaba : fréquences des lettres : 180.568428
+ta0a : fréquences des lettres : 180.990247
+ta9a : fréquences des lettres : 181.176798
+tamL : fréquences des lettres : 181.839885
+daba : fréquences des lettres : 185.009891
+cetH : fréquences des lettres : 185.085910
+dapa : fréquences des lettres : 185.346215
+tapH : fréquences des lettres : 187.073720
+saba : fréquences des lettres : 187.074614
+tapM : fréquences des lettres : 187.126733
+ta2a : fréquences des lettres : 187.204232
+ta5a : fréquences des lettres : 187.204232
+tajK : fréquences des lettres : 187.272907
+zabH : fréquences des lettres : 187.647906
+laba : fréquences des lettres : 188.432848
+faba : fréquences des lettres : 188.710401
+tetH : fréquences des lettres : 188.783883
+ta3a : fréquences des lettres : 189.796823
+zaba : fréquences des lettres : 189.847218
+ta0J : fréquences des lettres : 190.315348
+tapJ : fréquences des lettres : 190.514490
+jada : fréquences des lettres : 190.651579
+ta4a : fréquences des lettres : 190.894089
+haba : fréquences des lettres : 191.080793
+rabL : fréquences des lettres : 192.870911
+jaba : fréquences des lettres : 193.146379
+jabH : fréquences des lettres : 194.152092
+maba : fréquences des lettres : 194.184440
+
+
+
+scores c3 : 
+de7L : nombres de mots existants : 9
+de0L : nombres de mots existants : 8
+de2L : nombres de mots existants : 8
+de3L : nombres de mots existants : 8
+de4L : nombres de mots existants : 8
+de5L : nombres de mots existants : 8
+de6L : nombres de mots existants : 8
+de8L : nombres de mots existants : 8
+de9L : nombres de mots existants : 8
+he68 : nombres de mots existants : 8
+aab2 : nombres de mots existants : 8
+aab4 : nombres de mots existants : 8
+ty7L : nombres de mots existants : 7
+s4f2 : nombres de mots existants : 7
+t4f2 : nombres de mots existants : 7
+ue7L : nombres de mots existants : 7
+ve68 : nombres de mots existants : 7
+ve7L : nombres de mots existants : 7
+tab2 : nombres de mots existants : 7
+hy68 : nombres de mots existants : 7
+c4f2 : nombres de mots existants : 7
+hyf2 : nombres de mots existants : 7
+h4f2 : nombres de mots existants : 7
+h4l2 : nombres de mots existants : 7
+h4m2 : nombres de mots existants : 7
+h4o2 : nombres de mots existants : 7
+h4p1 : nombres de mots existants : 7
+h4p2 : nombres de mots existants : 7
+de7K : nombres de mots existants : 7
+de7M : nombres de mots existants : 7
+ea7L : nombres de mots existants : 7
+he08 : nombres de mots existants : 7
+he28 : nombres de mots existants : 7
+he38 : nombres de mots existants : 7
+he48 : nombres de mots existants : 7
+he58 : nombres de mots existants : 7
+he78 : nombres de mots existants : 7
+he88 : nombres de mots existants : 7
+he98 : nombres de mots existants : 7
+hh68 : nombres de mots existants : 7
+je68 : nombres de mots existants : 7
+ke68 : nombres de mots existants : 7
+ke7L : nombres de mots existants : 7
+aad2 : nombres de mots existants : 7
+fkb2 : nombres de mots existants : 7
+heb2 : nombres de mots existants : 7
+hhl2 : nombres de mots existants : 7
+hml2 : nombres de mots existants : 7
+jeb2 : nombres de mots existants : 7
+tv7L : nombres de mots existants : 6
+
+
+text from : tests/1_Million/crypted_rutab-1_000_000.txt ; number of keys : 1'315'440 ; time : 00 heure 00 minutes et 00 secondtext from : tests/1_Million/crypted_rutab-1_000_000.txt ; number of keys : 1'315'440 ; time : 00 heure 00 minutes et 00 secondtext from : tests/1_Million/crypted_rutab-1_000_000.txt ; number of keys : 1'315'440 ; time : 00 heure 00 minutes et 00 secondtext from : msgsTests/msgCrypte.txt ; number of keys : 0 ; time : 0 heures 0 minutes et 0 secondetext from : msgsTests/msgCrypte.txt ; number of keys : 0 ; time : 0 heures 0 minutes et 0 secondetext from : msgsTests/msgCrypte.txt ; number of keys : 0 ; time : 0 heures 0 minutes et 0 secondetext from : msgsTests/msgCrypte.txt ; number of keys : 3'200 ; time : 0 heures 0 minutes et 0 secondetext from : ../msgsTests/msgCrypte.txt ; number of keys : 555'390 ; time : 0 heures 0 minutes et 1 seconde
+scores c3 : 
+prru : nombres de mots existants : 13
+psru : nombres de mots existants : 13
+ptru : nombres de mots existants : 13
+puru : nombres de mots existants : 13
+pvru : nombres de mots existants : 13
+pwru : nombres de mots existants : 13
+pxru : nombres de mots existants : 13
+pyru : nombres de mots existants : 13
+pzru : nombres de mots existants : 13
+p6zm : nombres de mots existants : 13
+p6zu : nombres de mots existants : 13
+1234 : nombres de mots existants : 13
+prju : nombres de mots existants : 13
+psju : nombres de mots existants : 13
+ptju : nombres de mots existants : 13
+puju : nombres de mots existants : 13
+pvju : nombres de mots existants : 13
+pwju : nombres de mots existants : 13
+pxju : nombres de mots existants : 13
+pyju : nombres de mots existants : 13
+pzju : nombres de mots existants : 13
+p6fm : nombres de mots existants : 13
+p6fu : nombres de mots existants : 13
+paru : nombres de mots existants : 13
+pbru : nombres de mots existants : 13
+pcru : nombres de mots existants : 13
+pdru : nombres de mots existants : 13
+peru : nombres de mots existants : 13
+pfru : nombres de mots existants : 13
+pgru : nombres de mots existants : 13
+phru : nombres de mots existants : 13
+piru : nombres de mots existants : 13
+pjru : nombres de mots existants : 13
+pkru : nombres de mots existants : 13
+plru : nombres de mots existants : 13
+pmru : nombres de mots existants : 13
+pnru : nombres de mots existants : 13
+poru : nombres de mots existants : 13
+ppru : nombres de mots existants : 13
+pqru : nombres de mots existants : 13
+paju : nombres de mots existants : 13
+pbju : nombres de mots existants : 13
+pcju : nombres de mots existants : 13
+pdju : nombres de mots existants : 13
+peju : nombres de mots existants : 13
+pfju : nombres de mots existants : 13
+pgju : nombres de mots existants : 13
+phju : nombres de mots existants : 13
+piju : nombres de mots existants : 13
+pjju : nombres de mots existants : 13
+
+
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 555'390 ; time : 0 heures 0 minutes et 3 seconde
+
+scores c3 : 
+prru : nombres de mots existants : 13
+psru : nombres de mots existants : 13
+ptru : nombres de mots existants : 13
+puru : nombres de mots existants : 13
+pvru : nombres de mots existants : 13
+pwru : nombres de mots existants : 13
+pxru : nombres de mots existants : 13
+pyru : nombres de mots existants : 13
+pzru : nombres de mots existants : 13
+p6zm : nombres de mots existants : 13
+p6zu : nombres de mots existants : 13
+1234 : nombres de mots existants : 13
+prju : nombres de mots existants : 13
+psju : nombres de mots existants : 13
+ptju : nombres de mots existants : 13
+puju : nombres de mots existants : 13
+pvju : nombres de mots existants : 13
+pwju : nombres de mots existants : 13
+pxju : nombres de mots existants : 13
+pyju : nombres de mots existants : 13
+pzju : nombres de mots existants : 13
+p6fm : nombres de mots existants : 13
+p6fu : nombres de mots existants : 13
+paru : nombres de mots existants : 13
+pbru : nombres de mots existants : 13
+pcru : nombres de mots existants : 13
+pdru : nombres de mots existants : 13
+peru : nombres de mots existants : 13
+pfru : nombres de mots existants : 13
+pgru : nombres de mots existants : 13
+phru : nombres de mots existants : 13
+piru : nombres de mots existants : 13
+pjru : nombres de mots existants : 13
+pkru : nombres de mots existants : 13
+plru : nombres de mots existants : 13
+pmru : nombres de mots existants : 13
+pnru : nombres de mots existants : 13
+poru : nombres de mots existants : 13
+ppru : nombres de mots existants : 13
+pqru : nombres de mots existants : 13
+paju : nombres de mots existants : 13
+pbju : nombres de mots existants : 13
+pcju : nombres de mots existants : 13
+pdju : nombres de mots existants : 13
+peju : nombres de mots existants : 13
+pfju : nombres de mots existants : 13
+pgju : nombres de mots existants : 13
+phju : nombres de mots existants : 13
+piju : nombres de mots existants : 13
+pjju : nombres de mots existants : 13
+
+
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 555'390 ; time : 0 heures 0 minutes et 3 seconde
+
+scores c3 : 
+prrm : nombres de mots existants : 10
+prru : nombres de mots existants : 10
+psrm : nombres de mots existants : 10
+psru : nombres de mots existants : 10
+ptrm : nombres de mots existants : 10
+ptru : nombres de mots existants : 10
+purm : nombres de mots existants : 10
+puru : nombres de mots existants : 10
+pxrm : nombres de mots existants : 10
+pxru : nombres de mots existants : 10
+pyrm : nombres de mots existants : 10
+pyru : nombres de mots existants : 10
+pzrm : nombres de mots existants : 10
+pzru : nombres de mots existants : 10
+p6zm : nombres de mots existants : 10
+prjm : nombres de mots existants : 10
+prju : nombres de mots existants : 10
+psjm : nombres de mots existants : 10
+psju : nombres de mots existants : 10
+ptjm : nombres de mots existants : 10
+ptju : nombres de mots existants : 10
+pujm : nombres de mots existants : 10
+puju : nombres de mots existants : 10
+pxjm : nombres de mots existants : 10
+pxju : nombres de mots existants : 10
+pyjm : nombres de mots existants : 10
+pyju : nombres de mots existants : 10
+pzjm : nombres de mots existants : 10
+pzju : nombres de mots existants : 10
+p6fm : nombres de mots existants : 10
+q7jm : nombres de mots existants : 10
+r7jm : nombres de mots existants : 10
+w7jm : nombres de mots existants : 10
+phrm : nombres de mots existants : 10
+pirm : nombres de mots existants : 10
+pjrm : nombres de mots existants : 10
+pkrm : nombres de mots existants : 10
+plrm : nombres de mots existants : 10
+pmrm : nombres de mots existants : 10
+pprm : nombres de mots existants : 10
+ppru : nombres de mots existants : 10
+pqrm : nombres de mots existants : 10
+pqru : nombres de mots existants : 10
+phjm : nombres de mots existants : 10
+pijm : nombres de mots existants : 10
+pjjm : nombres de mots existants : 10
+pkjm : nombres de mots existants : 10
+pljm : nombres de mots existants : 10
+pmjm : nombres de mots existants : 10
+ppjm : nombres de mots existants : 10
+
+
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 555'390 ; time : 0 heures 0 minutes et 3 seconde
+
+scores c3 : 
+prru : nombres de mots existants : 13
+psru : nombres de mots existants : 13
+ptru : nombres de mots existants : 13
+puru : nombres de mots existants : 13
+pvru : nombres de mots existants : 13
+pwru : nombres de mots existants : 13
+pxru : nombres de mots existants : 13
+pyru : nombres de mots existants : 13
+pzru : nombres de mots existants : 13
+p6zm : nombres de mots existants : 13
+p6zu : nombres de mots existants : 13
+1234 : nombres de mots existants : 13
+prju : nombres de mots existants : 13
+psju : nombres de mots existants : 13
+ptju : nombres de mots existants : 13
+puju : nombres de mots existants : 13
+pvju : nombres de mots existants : 13
+pwju : nombres de mots existants : 13
+pxju : nombres de mots existants : 13
+pyju : nombres de mots existants : 13
+pzju : nombres de mots existants : 13
+p6fm : nombres de mots existants : 13
+p6fu : nombres de mots existants : 13
+paru : nombres de mots existants : 13
+pbru : nombres de mots existants : 13
+pcru : nombres de mots existants : 13
+pdru : nombres de mots existants : 13
+peru : nombres de mots existants : 13
+pfru : nombres de mots existants : 13
+pgru : nombres de mots existants : 13
+phru : nombres de mots existants : 13
+piru : nombres de mots existants : 13
+pjru : nombres de mots existants : 13
+pkru : nombres de mots existants : 13
+plru : nombres de mots existants : 13
+pmru : nombres de mots existants : 13
+pnru : nombres de mots existants : 13
+poru : nombres de mots existants : 13
+ppru : nombres de mots existants : 13
+pqru : nombres de mots existants : 13
+paju : nombres de mots existants : 13
+pbju : nombres de mots existants : 13
+pcju : nombres de mots existants : 13
+pdju : nombres de mots existants : 13
+peju : nombres de mots existants : 13
+pfju : nombres de mots existants : 13
+pgju : nombres de mots existants : 13
+phju : nombres de mots existants : 13
+piju : nombres de mots existants : 13
+pjju : nombres de mots existants : 13
+
+
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 555'390 ; time : 0 heures 0 minutes et 3 seconde
+
+scores c3 : 
+prru : nombres de mots existants : 13
+psru : nombres de mots existants : 13
+ptru : nombres de mots existants : 13
+puru : nombres de mots existants : 13
+pvru : nombres de mots existants : 13
+pwru : nombres de mots existants : 13
+pxru : nombres de mots existants : 13
+pyru : nombres de mots existants : 13
+pzru : nombres de mots existants : 13
+p6zm : nombres de mots existants : 13
+p6zu : nombres de mots existants : 13
+1234 : nombres de mots existants : 13
+prju : nombres de mots existants : 13
+psju : nombres de mots existants : 13
+ptju : nombres de mots existants : 13
+puju : nombres de mots existants : 13
+pvju : nombres de mots existants : 13
+pwju : nombres de mots existants : 13
+pxju : nombres de mots existants : 13
+pyju : nombres de mots existants : 13
+pzju : nombres de mots existants : 13
+p6fm : nombres de mots existants : 13
+p6fu : nombres de mots existants : 13
+paru : nombres de mots existants : 13
+pbru : nombres de mots existants : 13
+pcru : nombres de mots existants : 13
+pdru : nombres de mots existants : 13
+peru : nombres de mots existants : 13
+pfru : nombres de mots existants : 13
+pgru : nombres de mots existants : 13
+phru : nombres de mots existants : 13
+piru : nombres de mots existants : 13
+pjru : nombres de mots existants : 13
+pkru : nombres de mots existants : 13
+plru : nombres de mots existants : 13
+pmru : nombres de mots existants : 13
+pnru : nombres de mots existants : 13
+poru : nombres de mots existants : 13
+ppru : nombres de mots existants : 13
+pqru : nombres de mots existants : 13
+paju : nombres de mots existants : 13
+pbju : nombres de mots existants : 13
+pcju : nombres de mots existants : 13
+pdju : nombres de mots existants : 13
+peju : nombres de mots existants : 13
+pfju : nombres de mots existants : 13
+pgju : nombres de mots existants : 13
+phju : nombres de mots existants : 13
+piju : nombres de mots existants : 13
+pjju : nombres de mots existants : 13
+pkju : nombres de mots existants : 13
+plju : nombres de mots existants : 13
+pmju : nombres de mots existants : 13
+pnju : nombres de mots existants : 13
+poju : nombres de mots existants : 13
+ppju : nombres de mots existants : 13
+pqju : nombres de mots existants : 13
+prrm : nombres de mots existants : 12
+psrm : nombres de mots existants : 12
+ptrm : nombres de mots existants : 12
+purm : nombres de mots existants : 12
+pvrm : nombres de mots existants : 12
+pwrm : nombres de mots existants : 12
+pxrm : nombres de mots existants : 12
+pyrm : nombres de mots existants : 12
+pzrm : nombres de mots existants : 12
+p6sm : nombres de mots existants : 12
+p6su : nombres de mots existants : 12
+123h : nombres de mots existants : 12
+123i : nombres de mots existants : 12
+123j : nombres de mots existants : 12
+123o : nombres de mots existants : 12
+123t : nombres de mots existants : 12
+prjm : nombres de mots existants : 12
+psjm : nombres de mots existants : 12
+ptjm : nombres de mots existants : 12
+pujm : nombres de mots existants : 12
+pvjm : nombres de mots existants : 12
+pwjm : nombres de mots existants : 12
+pxjm : nombres de mots existants : 12
+pyjm : nombres de mots existants : 12
+pzjm : nombres de mots existants : 12
+p2fu : nombres de mots existants : 12
+p6hm : nombres de mots existants : 12
+p6hu : nombres de mots existants : 12
+p6mm : nombres de mots existants : 12
+p6mu : nombres de mots existants : 12
+p6nm : nombres de mots existants : 12
+p6nu : nombres de mots existants : 12
+p6om : nombres de mots existants : 12
+p6ou : nombres de mots existants : 12
+parm : nombres de mots existants : 12
+pbrm : nombres de mots existants : 12
+pcrm : nombres de mots existants : 12
+pdrm : nombres de mots existants : 12
+perm : nombres de mots existants : 12
+pfrm : nombres de mots existants : 12
+pgrm : nombres de mots existants : 12
+phrm : nombres de mots existants : 12
+pirm : nombres de mots existants : 12
+
+
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 12 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 416 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 13'888 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 555'390 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 12 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 416 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 13'888 ; time : 0 heures 0 minutes et 1 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 555'390 ; time : 0 heures 0 minutes et 5 seconde
+
+scores c3 : 
+1234 : nombres de mots existants : 13
+123o : nombres de mots existants : 12
+123i : nombres de mots existants : 12
+123h : nombres de mots existants : 12
+123j : nombres de mots existants : 12
+1237 : nombres de mots existants : 7
+q230 : nombres de mots existants : 6
+p23j : nombres de mots existants : 6
+p230 : nombres de mots existants : 6
+q231 : nombres de mots existants : 6
+1232 : nombres de mots existants : 6
+1236 : nombres de mots existants : 6
+1230 : nombres de mots existants : 6
+3231 : nombres de mots existants : 5
+q232 : nombres de mots existants : 5
+123f : nombres de mots existants : 5
+223h : nombres de mots existants : 5
+523j : nombres de mots existants : 5
+12f0 : nombres de mots existants : 5
+w230 : nombres de mots existants : 5
+12a4 : nombres de mots existants : 5
+12r2 : nombres de mots existants : 5
+r23u : nombres de mots existants : 5
+v231 : nombres de mots existants : 5
+223j : nombres de mots existants : 5
+12r4 : nombres de mots existants : 5
+r230 : nombres de mots existants : 5
+q236 : nombres de mots existants : 5
+r231 : nombres de mots existants : 5
+p231 : nombres de mots existants : 5
+1231 : nombres de mots existants : 5
+8230 : nombres de mots existants : 4
+w236 : nombres de mots existants : 4
+823u : nombres de mots existants : 4
+5232 : nombres de mots existants : 4
+5236 : nombres de mots existants : 4
+12a0 : nombres de mots existants : 4
+p233 : nombres de mots existants : 4
+5231 : nombres de mots existants : 4
+223f : nombres de mots existants : 4
+5230 : nombres de mots existants : 4
+323u : nombres de mots existants : 4
+123a : nombres de mots existants : 4
+r236 : nombres de mots existants : 4
+123u : nombres de mots existants : 4
+p232 : nombres de mots existants : 4
+p236 : nombres de mots existants : 4
+12a7 : nombres de mots existants : 3
+7231 : nombres de mots existants : 3
+12a1 : nombres de mots existants : 3
+523f : nombres de mots existants : 3
+1274 : nombres de mots existants : 3
+1250 : nombres de mots existants : 3
+223a : nombres de mots existants : 3
+1264 : nombres de mots existants : 3
+12r7 : nombres de mots existants : 3
+623u : nombres de mots existants : 3
+2230 : nombres de mots existants : 3
+1r30 : nombres de mots existants : 3
+1s30 : nombres de mots existants : 3
+1t30 : nombres de mots existants : 3
+1u30 : nombres de mots existants : 3
+1v30 : nombres de mots existants : 3
+1w30 : nombres de mots existants : 3
+1x30 : nombres de mots existants : 3
+1y30 : nombres de mots existants : 3
+1z30 : nombres de mots existants : 3
+1a30 : nombres de mots existants : 3
+1b30 : nombres de mots existants : 3
+1c30 : nombres de mots existants : 3
+1d30 : nombres de mots existants : 3
+1e30 : nombres de mots existants : 3
+1f30 : nombres de mots existants : 3
+1g30 : nombres de mots existants : 3
+1h30 : nombres de mots existants : 3
+1i30 : nombres de mots existants : 3
+1j30 : nombres de mots existants : 3
+1k30 : nombres de mots existants : 3
+1l30 : nombres de mots existants : 3
+1m30 : nombres de mots existants : 3
+1n30 : nombres de mots existants : 3
+1o30 : nombres de mots existants : 3
+1p30 : nombres de mots existants : 3
+1q30 : nombres de mots existants : 3
+223u : nombres de mots existants : 3
+523a : nombres de mots existants : 2
+0230 : nombres de mots existants : 2
+6230 : nombres de mots existants : 2
+p2a2 : nombres de mots existants : 2
+723u : nombres de mots existants : 2
+2232 : nombres de mots existants : 2
+1530 : nombres de mots existants : 1
+125u : nombres de mots existants : 1
+173a : nombres de mots existants : 1
+2231 : nombres de mots existants : 1
+2234 : nombres de mots existants : 1
+1734 : nombres de mots existants : 1
+4232 : nombres de mots existants : 1
+4231 : nombres de mots existants : 1
+1730 : nombres de mots existants : 0
+
+
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 12 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 416 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 13'888 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 555'390 ; time : 0 heures 0 minutes et 2 seconde
+
+scores c3 : 
+1234 : nombres de mots existants : 13
+123o : nombres de mots existants : 12
+123i : nombres de mots existants : 12
+123h : nombres de mots existants : 12
+123j : nombres de mots existants : 12
+1237 : nombres de mots existants : 7
+q230 : nombres de mots existants : 6
+p23j : nombres de mots existants : 6
+p230 : nombres de mots existants : 6
+q231 : nombres de mots existants : 6
+1232 : nombres de mots existants : 6
+1236 : nombres de mots existants : 6
+1230 : nombres de mots existants : 6
+3231 : nombres de mots existants : 5
+q232 : nombres de mots existants : 5
+123f : nombres de mots existants : 5
+223h : nombres de mots existants : 5
+523j : nombres de mots existants : 5
+12f0 : nombres de mots existants : 5
+w230 : nombres de mots existants : 5
+12a4 : nombres de mots existants : 5
+12r2 : nombres de mots existants : 5
+r23u : nombres de mots existants : 5
+v231 : nombres de mots existants : 5
+223j : nombres de mots existants : 5
+12r4 : nombres de mots existants : 5
+r230 : nombres de mots existants : 5
+q236 : nombres de mots existants : 5
+r231 : nombres de mots existants : 5
+p231 : nombres de mots existants : 5
+1231 : nombres de mots existants : 5
+8230 : nombres de mots existants : 4
+w236 : nombres de mots existants : 4
+823u : nombres de mots existants : 4
+5232 : nombres de mots existants : 4
+5236 : nombres de mots existants : 4
+12a0 : nombres de mots existants : 4
+p233 : nombres de mots existants : 4
+5231 : nombres de mots existants : 4
+223f : nombres de mots existants : 4
+5230 : nombres de mots existants : 4
+323u : nombres de mots existants : 4
+123a : nombres de mots existants : 4
+r236 : nombres de mots existants : 4
+123u : nombres de mots existants : 4
+p232 : nombres de mots existants : 4
+p236 : nombres de mots existants : 4
+12a7 : nombres de mots existants : 3
+7231 : nombres de mots existants : 3
+12a1 : nombres de mots existants : 3
+523f : nombres de mots existants : 3
+1274 : nombres de mots existants : 3
+1250 : nombres de mots existants : 3
+223a : nombres de mots existants : 3
+1264 : nombres de mots existants : 3
+12r7 : nombres de mots existants : 3
+623u : nombres de mots existants : 3
+2230 : nombres de mots existants : 3
+1r30 : nombres de mots existants : 3
+1s30 : nombres de mots existants : 3
+1t30 : nombres de mots existants : 3
+1u30 : nombres de mots existants : 3
+1v30 : nombres de mots existants : 3
+1w30 : nombres de mots existants : 3
+1x30 : nombres de mots existants : 3
+1y30 : nombres de mots existants : 3
+1z30 : nombres de mots existants : 3
+1a30 : nombres de mots existants : 3
+1b30 : nombres de mots existants : 3
+1c30 : nombres de mots existants : 3
+1d30 : nombres de mots existants : 3
+1e30 : nombres de mots existants : 3
+1f30 : nombres de mots existants : 3
+1g30 : nombres de mots existants : 3
+1h30 : nombres de mots existants : 3
+1i30 : nombres de mots existants : 3
+1j30 : nombres de mots existants : 3
+1k30 : nombres de mots existants : 3
+1l30 : nombres de mots existants : 3
+1m30 : nombres de mots existants : 3
+1n30 : nombres de mots existants : 3
+1o30 : nombres de mots existants : 3
+1p30 : nombres de mots existants : 3
+1q30 : nombres de mots existants : 3
+223u : nombres de mots existants : 3
+523a : nombres de mots existants : 2
+0230 : nombres de mots existants : 2
+6230 : nombres de mots existants : 2
+p2a2 : nombres de mots existants : 2
+723u : nombres de mots existants : 2
+2232 : nombres de mots existants : 2
+1530 : nombres de mots existants : 1
+125u : nombres de mots existants : 1
+173a : nombres de mots existants : 1
+2231 : nombres de mots existants : 1
+2234 : nombres de mots existants : 1
+1734 : nombres de mots existants : 1
+4232 : nombres de mots existants : 1
+4231 : nombres de mots existants : 1
+1730 : nombres de mots existants : 0
+
+
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 12 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 416 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 13'888 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 555'390 ; time : 0 heures 0 minutes et 3 seconde
+
+scores c3 : 
+1234 : nombres de mots existants : 13
+123o : nombres de mots existants : 12
+123i : nombres de mots existants : 12
+123h : nombres de mots existants : 12
+123j : nombres de mots existants : 12
+1237 : nombres de mots existants : 7
+q230 : nombres de mots existants : 6
+p23j : nombres de mots existants : 6
+p230 : nombres de mots existants : 6
+q231 : nombres de mots existants : 6
+1232 : nombres de mots existants : 6
+1236 : nombres de mots existants : 6
+1230 : nombres de mots existants : 6
+3231 : nombres de mots existants : 5
+q232 : nombres de mots existants : 5
+123f : nombres de mots existants : 5
+223h : nombres de mots existants : 5
+523j : nombres de mots existants : 5
+12f0 : nombres de mots existants : 5
+w230 : nombres de mots existants : 5
+12a4 : nombres de mots existants : 5
+12r2 : nombres de mots existants : 5
+r23u : nombres de mots existants : 5
+v231 : nombres de mots existants : 5
+223j : nombres de mots existants : 5
+12r4 : nombres de mots existants : 5
+r230 : nombres de mots existants : 5
+q236 : nombres de mots existants : 5
+r231 : nombres de mots existants : 5
+p231 : nombres de mots existants : 5
+1231 : nombres de mots existants : 5
+8230 : nombres de mots existants : 4
+w236 : nombres de mots existants : 4
+823u : nombres de mots existants : 4
+5232 : nombres de mots existants : 4
+5236 : nombres de mots existants : 4
+12a0 : nombres de mots existants : 4
+p233 : nombres de mots existants : 4
+5231 : nombres de mots existants : 4
+223f : nombres de mots existants : 4
+5230 : nombres de mots existants : 4
+323u : nombres de mots existants : 4
+123a : nombres de mots existants : 4
+r236 : nombres de mots existants : 4
+123u : nombres de mots existants : 4
+p232 : nombres de mots existants : 4
+p236 : nombres de mots existants : 4
+12a7 : nombres de mots existants : 3
+7231 : nombres de mots existants : 3
+12a1 : nombres de mots existants : 3
+523f : nombres de mots existants : 3
+1274 : nombres de mots existants : 3
+1250 : nombres de mots existants : 3
+223a : nombres de mots existants : 3
+1264 : nombres de mots existants : 3
+12r7 : nombres de mots existants : 3
+623u : nombres de mots existants : 3
+2230 : nombres de mots existants : 3
+1r30 : nombres de mots existants : 3
+1s30 : nombres de mots existants : 3
+1t30 : nombres de mots existants : 3
+1u30 : nombres de mots existants : 3
+1v30 : nombres de mots existants : 3
+1w30 : nombres de mots existants : 3
+1x30 : nombres de mots existants : 3
+1y30 : nombres de mots existants : 3
+1z30 : nombres de mots existants : 3
+1a30 : nombres de mots existants : 3
+1b30 : nombres de mots existants : 3
+1c30 : nombres de mots existants : 3
+1d30 : nombres de mots existants : 3
+1e30 : nombres de mots existants : 3
+1f30 : nombres de mots existants : 3
+1g30 : nombres de mots existants : 3
+1h30 : nombres de mots existants : 3
+1i30 : nombres de mots existants : 3
+1j30 : nombres de mots existants : 3
+1k30 : nombres de mots existants : 3
+1l30 : nombres de mots existants : 3
+1m30 : nombres de mots existants : 3
+1n30 : nombres de mots existants : 3
+1o30 : nombres de mots existants : 3
+1p30 : nombres de mots existants : 3
+1q30 : nombres de mots existants : 3
+223u : nombres de mots existants : 3
+523a : nombres de mots existants : 2
+0230 : nombres de mots existants : 2
+6230 : nombres de mots existants : 2
+p2a2 : nombres de mots existants : 2
+723u : nombres de mots existants : 2
+2232 : nombres de mots existants : 2
+1530 : nombres de mots existants : 1
+125u : nombres de mots existants : 1
+173a : nombres de mots existants : 1
+2231 : nombres de mots existants : 1
+2234 : nombres de mots existants : 1
+1734 : nombres de mots existants : 1
+4232 : nombres de mots existants : 1
+4231 : nombres de mots existants : 1
+1730 : nombres de mots existants : 0
+
+
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 30 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 1'024 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 36'960 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 1'297'032 ; time : 0 heures 0 minutes et 5 seconde
+
+scores c3 : 
+6az4 : nombres de mots existants : 3
+4530 : nombres de mots existants : 2
+64w4 : nombres de mots existants : 2
+x33u : nombres de mots existants : 2
+p204 : nombres de mots existants : 2
+64d4 : nombres de mots existants : 2
+64j4 : nombres de mots existants : 2
+64k4 : nombres de mots existants : 2
+64i4 : nombres de mots existants : 2
+64s4 : nombres de mots existants : 2
+64h4 : nombres de mots existants : 2
+64m4 : nombres de mots existants : 2
+64n4 : nombres de mots existants : 2
+64o4 : nombres de mots existants : 2
+64y4 : nombres de mots existants : 2
+64u4 : nombres de mots existants : 2
+64t4 : nombres de mots existants : 2
+64v4 : nombres de mots existants : 2
+64a4 : nombres de mots existants : 2
+64e4 : nombres de mots existants : 2
+64p4 : nombres de mots existants : 2
+64z4 : nombres de mots existants : 2
+64r4 : nombres de mots existants : 2
+9274 : nombres de mots existants : 1
+1w30 : nombres de mots existants : 1
+t274 : nombres de mots existants : 1
+b57q : nombres de mots existants : 1
+14r4 : nombres de mots existants : 1
+g274 : nombres de mots existants : 1
+1434 : nombres de mots existants : 1
+1230 : nombres de mots existants : 1
+02r4 : nombres de mots existants : 1
+4230 : nombres de mots existants : 1
+63r4 : nombres de mots existants : 1
+r274 : nombres de mots existants : 1
+1430 : nombres de mots existants : 1
+x53u : nombres de mots existants : 1
+b27q : nombres de mots existants : 1
+42r4 : nombres de mots existants : 1
+63z4 : nombres de mots existants : 1
+b274 : nombres de mots existants : 1
+133h : nombres de mots existants : 0
+133i : nombres de mots existants : 0
+133j : nombres de mots existants : 0
+133o : nombres de mots existants : 0
+133t : nombres de mots existants : 0
+1274 : nombres de mots existants : 0
+133z : nombres de mots existants : 0
+133q : nombres de mots existants : 0
+147q : nombres de mots existants : 0
+4274 : nombres de mots existants : 0
+x530 : nombres de mots existants : 0
+123u : nombres de mots existants : 0
+1s3q : nombres de mots existants : 0
+1331 : nombres de mots existants : 0
+1374 : nombres de mots existants : 0
+1v3z : nombres de mots existants : 0
+p424 : nombres de mots existants : 0
+133p : nombres de mots existants : 0
+6434 : nombres de mots existants : 0
+193u : nombres de mots existants : 0
+1474 : nombres de mots existants : 0
+b2r4 : nombres de mots existants : 0
+6374 : nombres de mots existants : 0
+1w3z : nombres de mots existants : 0
+1s3h : nombres de mots existants : 0
+1s3i : nombres de mots existants : 0
+1s3j : nombres de mots existants : 0
+1s3o : nombres de mots existants : 0
+1s3t : nombres de mots existants : 0
+1y3u : nombres de mots existants : 0
+1e3u : nombres de mots existants : 0
+6474 : nombres de mots existants : 0
+1k3u : nombres de mots existants : 0
+1j3u : nombres de mots existants : 0
+1h3u : nombres de mots existants : 0
+1g3u : nombres de mots existants : 0
+6338 : nombres de mots existants : 0
+143z : nombres de mots existants : 0
+143q : nombres de mots existants : 0
+0274 : nombres de mots existants : 0
+1z3u : nombres de mots existants : 0
+1x3u : nombres de mots existants : 0
+1p3u : nombres de mots existants : 0
+1u3u : nombres de mots existants : 0
+1c3u : nombres de mots existants : 0
+1f3u : nombres de mots existants : 0
+1i3u : nombres de mots existants : 0
+1l3u : nombres de mots existants : 0
+1n3u : nombres de mots existants : 0
+1o3u : nombres de mots existants : 0
+1r3u : nombres de mots existants : 0
+1330 : nombres de mots existants : 0
+137q : nombres de mots existants : 0
+1a3u : nombres de mots existants : 0
+1v3u : nombres de mots existants : 0
+143u : nombres de mots existants : 0
+1w3u : nombres de mots existants : 0
+1s3z : nombres de mots existants : 0
+133u : nombres de mots existants : 0
+
+
+text from : ../msgsTests/msgCrypte.txt ; number of keys : 1'297'032 ; time : 0 heures 0 minutes et 6 seconde
+
+scores c3 : 
+xsv0 : nombres de mots existants : 6
+ysv0 : nombres de mots existants : 6
+1234 : nombres de mots existants : 6
+xsf0 : nombres de mots existants : 6
+ysf0 : nombres de mots existants : 6
+xkv0 : nombres de mots existants : 6
+ykv0 : nombres de mots existants : 6
+xkf0 : nombres de mots existants : 6
+ykf0 : nombres de mots existants : 6
+dsv0 : nombres de mots existants : 6
+dsf0 : nombres de mots existants : 6
+dkv0 : nombres de mots existants : 6
+dkf0 : nombres de mots existants : 6
+ssv0 : nombres de mots existants : 5
+tsv0 : nombres de mots existants : 5
+usv0 : nombres de mots existants : 5
+vsv0 : nombres de mots existants : 5
+wsv0 : nombres de mots existants : 5
+xsr0 : nombres de mots existants : 5
+xss0 : nombres de mots existants : 5
+xst0 : nombres de mots existants : 5
+xsu0 : nombres de mots existants : 5
+xsw0 : nombres de mots existants : 5
+xsx0 : nombres de mots existants : 5
+xsy0 : nombres de mots existants : 5
+xsz0 : nombres de mots existants : 5
+xtv0 : nombres de mots existants : 5
+xuv0 : nombres de mots existants : 5
+xvv0 : nombres de mots existants : 5
+xwv0 : nombres de mots existants : 5
+xxv0 : nombres de mots existants : 5
+xyv0 : nombres de mots existants : 5
+xzv0 : nombres de mots existants : 5
+x0r0 : nombres de mots existants : 5
+x3v0 : nombres de mots existants : 5
+x6z0 : nombres de mots existants : 5
+ysr0 : nombres de mots existants : 5
+yss0 : nombres de mots existants : 5
+yst0 : nombres de mots existants : 5
+ysu0 : nombres de mots existants : 5
+ysw0 : nombres de mots existants : 5
+ysx0 : nombres de mots existants : 5
+ysy0 : nombres de mots existants : 5
+ysz0 : nombres de mots existants : 5
+ytv0 : nombres de mots existants : 5
+yuv0 : nombres de mots existants : 5
+yvv0 : nombres de mots existants : 5
+ywv0 : nombres de mots existants : 5
+yxv0 : nombres de mots existants : 5
+yyv0 : nombres de mots existants : 5
+yzv0 : nombres de mots existants : 5
+y6z0 : nombres de mots existants : 5
+zsv0 : nombres de mots existants : 5
+ssf0 : nombres de mots existants : 5
+tsf0 : nombres de mots existants : 5
+usf0 : nombres de mots existants : 5
+vsf0 : nombres de mots existants : 5
+wsf0 : nombres de mots existants : 5
+xsa0 : nombres de mots existants : 5
+xsb0 : nombres de mots existants : 5
+xsc0 : nombres de mots existants : 5
+xsd0 : nombres de mots existants : 5
+xse0 : nombres de mots existants : 5
+xsg0 : nombres de mots existants : 5
+xsh0 : nombres de mots existants : 5
+xsi0 : nombres de mots existants : 5
+xsj0 : nombres de mots existants : 5
+xsk0 : nombres de mots existants : 5
+xsm0 : nombres de mots existants : 5
+xsn0 : nombres de mots existants : 5
+xso0 : nombres de mots existants : 5
+xsp0 : nombres de mots existants : 5
+xsq0 : nombres de mots existants : 5
+xtf0 : nombres de mots existants : 5
+xuf0 : nombres de mots existants : 5
+xvf0 : nombres de mots existants : 5
+xwf0 : nombres de mots existants : 5
+xxf0 : nombres de mots existants : 5
+xyf0 : nombres de mots existants : 5
+xzf0 : nombres de mots existants : 5
+x0f0 : nombres de mots existants : 5
+x3f0 : nombres de mots existants : 5
+ysa0 : nombres de mots existants : 5
+ysb0 : nombres de mots existants : 5
+ysc0 : nombres de mots existants : 5
+ysd0 : nombres de mots existants : 5
+yse0 : nombres de mots existants : 5
+ysg0 : nombres de mots existants : 5
+ysh0 : nombres de mots existants : 5
+ysi0 : nombres de mots existants : 5
+ysj0 : nombres de mots existants : 5
+ysk0 : nombres de mots existants : 5
+ysm0 : nombres de mots existants : 5
+ysn0 : nombres de mots existants : 5
+yso0 : nombres de mots existants : 5
+ysp0 : nombres de mots existants : 5
+ysq0 : nombres de mots existants : 5
+ytf0 : nombres de mots existants : 5
+yuf0 : nombres de mots existants : 5
+yvf0 : nombres de mots existants : 5

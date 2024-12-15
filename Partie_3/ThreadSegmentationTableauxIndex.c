@@ -15,7 +15,7 @@
     donne
     [2] [2] 2 segments de taille 2
     [2] [1] 2 segments de taille 1
-    [1] [4] 1 segments de taille 4
+    [1] [4] 1 segments de taille 4 (strlen("5678"))
 
 
     produit du nombre de segments : 2 * 2 * 1 = 4
@@ -35,10 +35,6 @@ nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand,
     int indSeg = 0;
 
     while (*nbThreadsReel < *nbThreadsMax && indSeg < tailleClef) {
-        /*
-        int segments = *nbThreadsMax / (1 << indSeg);  // Ajuste le nombre de segments selon les threads disponibles
-        infoSeg.nbSegment[indSeg] = (segments > 1) ? segments : 2; // amélioration chatgpt
-        */
         infoSeg.nbSegment[indSeg] = 2;
         infoSeg.tailleSegment[indSeg] = strlen((const char *) carCand[indSeg]) / infoSeg.nbSegment[indSeg];
         *nbThreadsReel *= infoSeg.nbSegment[indSeg++];
@@ -50,20 +46,6 @@ nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand,
         infoSeg.nbSegment[i] = 1;
         infoSeg.tailleSegment[i] = strlen((const char *) carCand[i]);
     }
-    /*
-    *nbThreads = 1;
-
-    for (int i = 0 ; i < segmenteUntilI ; ++i) {
-        infoSeg.nbSegment[i] = ceil((double) sqrt(strlen((const char *) carCand[i])));
-        infoSeg.tailleSegment[i] = strlen((const char *) carCand[i]) / infoSeg.nbSegment[i];
-        
-        *nbThreads = *nbThreads * infoSeg.nbSegment[i];
-    }
-    for (int i = segmenteUntilI ; i < tailleClef ; ++i) {
-        infoSeg.nbSegment[i] = 1;
-        infoSeg.tailleSegment[i] = strlen((const char *) carCand[i]);
-    }
-    */
    
     return infoSeg;
 }

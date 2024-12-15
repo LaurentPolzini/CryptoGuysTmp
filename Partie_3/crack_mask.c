@@ -1,53 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <getopt.h>
-#include "../Partie_1/mask.h"
-#include "../Partie_1/xor.h"
-
-// Fonction pour lire un fichier binaire et charger son contenu dans un tableau
-unsigned char* read_file(const char* filename, size_t* length) {
-    FILE *file = fopen(filename, "rb");
-    if (!file) {
-        perror("Erreur d'ouverture du fichier");
-        return NULL;
-    }
-    
-    fseek(file, 0, SEEK_END);
-    *length = ftell(file);
-    fseek(file, 0, SEEK_SET);
-    
-    unsigned char* buffer = malloc(*length);
-    if (!buffer) {
-        perror("Erreur d'allocation mémoire");
-        fclose(file);
-        return NULL;
-    }
-    
-    fread(buffer, 1, *length, file);
-    fclose(file);
-    return buffer;
-}
-
-// Fonction pour écrire le contenu d'un tableau dans un fichier binaire
-void write_file(const char* filename, unsigned char* data, size_t length) {
-    FILE *file = fopen(filename, "wb");
-    if (!file) {
-        perror("Erreur d'ouverture du fichier de sortie");
-        return;
-    }
-    
-    fwrite(data, 1, length, file);
-    fclose(file);
-}
+#include "../Partie_1/chiffrement.h"
+#include "../utilitaire/utiL.h"
 
 // Fonction pour réaliser l'attaque sur la réutilisation d'un masque jetable
+/*
+    file_c1, file_c2 : des messages chiffrés
+    file_m1 : file_c1 en clair
+    file_m2 : le deuxieme message qui sera en clair
+*/
 void crack_mask(const char* file_c1, const char* file_c2, const char* file_m1, const char* file_m2) {
-    size_t len_c1, len_c2, len_m1;
+    off_t len_c1, len_c2, len_m1;
     
     // Charger les fichiers
-    unsigned char* C1 = read_file(file_c1, &len_c1);
-    unsigned char* C2 = read_file(file_c2, &len_c2);
-    unsigned char* M1 = read_file(file_m1, &len_m1);
+    unsigned char* C1 = (unsigned char *) ouvreEtLitFichier((char *) file_c1, &len_c1);
+    unsigned char* C2 = (unsigned char *) ouvreEtLitFichier((char *) file_c2, &len_c2);
+    unsigned char* M1 = (unsigned char *) ouvreEtLitFichier((char *) file_m1, &len_m1);
 
     if (!C1 || !C2 || !M1) {
         fprintf(stderr, "Erreur lors du chargement des fichiers.\n");
@@ -70,18 +39,18 @@ void crack_mask(const char* file_c1, const char* file_c2, const char* file_m1, c
     }
 
     // Calcul de M2 = C1 ^ C2 ^ M1
-    for (size_t i = 0; i < len_c1; i++) {
+    for (off_t i = 0; i < len_c1; i++) {
         M2[i] = C1[i] ^ C2[i] ^ M1[i];
     }
 
+    printf("Décryptage réussi : %s\nRésultat enregistré dans %s\n", M2, file_m2);
+
     // Écriture du résultat dans le fichier de sortie
-    write_file(file_m2, M2, len_c1);
+    ouvreEtEcritMsg((char*) file_m2, (char*) M2, len_c1);
 
     // Libération de la mémoire
     free(C1);
     free(C2);
     free(M1);
     free(M2);
-
-    printf("Décryptage réussi. Résultat enregistré dans %s\n", file_m2);
 }

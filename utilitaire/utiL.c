@@ -5,8 +5,11 @@
 #include <stdbool.h>
 #include <string.h>
 #include <fcntl.h>
+#include <math.h>
 #include "./utiL.h"
 #include "./uthash.h"
+
+#define MAX_RANDOM ((1 << 31) - 1)
 
 /*
     to know if there is a -h in a command
@@ -45,6 +48,7 @@ char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage) {
     }
     long sizeBuffer = 512;
     char *msgLu = malloc(sizeBuffer);
+    pError(msgLu, "Erreur allocation memoire", 1);
     long curSizeBuff = sizeBuffer;
 
     ssize_t bytesRead = 0;
@@ -55,11 +59,12 @@ char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage) {
             curSizeBuff *= 2;
             char *temp = realloc(msgLu, curSizeBuff);
             if (!temp) {
+                free(msgLu);
                 close(fdFile_In);
                 pError(NULL, "Erreur allocation tableau temporaire de lecture du fichier", 1);
             }
             msgLu = temp;
-        }        
+        }
     }
     msgLu[totalBytesRead] = '\0';
     if (sizeMessage) {
@@ -72,18 +77,18 @@ char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage) {
 }
 
 /*
-    opens a file and put the word word into the file file_name
+    opens a file and put the text text into the file file_name
 */
-void ouvreEtEcritMsg(char *file_in, char *word, int lenWord) {
-    int fdFile_In = open(file_in, O_WRONLY | O_APPEND | O_CREAT, 0644);
+void ouvreEtEcritMsg(char *file_in, char *text, off_t len_text) {
+    int fdFile_In = open(file_in, O_CREAT | O_WRONLY | O_APPEND, 0644);
     if (fdFile_In == -1) {
         pError(NULL, "Erreur ouverture fichier d'entrée", 1);
     }
-    char tmpWord[lenWord + 2];
-    memcpy(tmpWord, word, lenWord);
-    tmpWord[lenWord] = '\n';
+    char tmpWord[len_text + 2];
+    memcpy(tmpWord, text, len_text);
+    tmpWord[len_text] = '\n';
 
-    if (write(fdFile_In, tmpWord, lenWord + 1) == -1) {
+    if (write(fdFile_In, tmpWord, len_text + 1) == -1) {
         pError(NULL, "Erreur ecriture fichier (ouvreEtEcritMsg)", 1);
     }
     close(fdFile_In);
@@ -92,8 +97,90 @@ void ouvreEtEcritMsg(char *file_in, char *word, int lenWord) {
 /*
     true random number generator
 */
-uint32_t trueRandom(uint32_t value) {
-    return arc4random_uniform(value);
+#if defined(__linux__)
+unsigned int get_random_value(void) {
+    int fd = open("/dev/urandom", O_RDONLY);
+    if (fd == -1) {
+        perror("Unable to open /dev/urandom");
+        exit(1);
+    }
+
+    unsigned int random_value;
+    ssize_t bytes_read = read(fd, &random_value, sizeof(random_value));
+    if (bytes_read != sizeof(random_value)) {
+        perror("Unable to read enough random data");
+        exit(1);
+    }
+
+    close(fd);
+    return random_value;
+}
+#endif
+
+uint32_t true_random(uint32_t value) {
+	#ifdef __APPLE__
+	return arc4random_uniform(value);
+	#else
+	return get_random_value() % value;
+	#endif
+}
+
+void freeTabs(void **tabs, int nbElems) {
+    for (int i = 0 ; i < nbElems ; ++i) {
+        free(tabs[i]);
+    }
+    free(tabs);
+}
+
+/*
+    transform 1000 to 1'000
+    for readability for the number of keys
+*/
+char *format_number_with_thousands_separator(unsigned long number) {
+    int nbElem = 20;
+    char *result = malloc(nbElem);
+    pError(result, "Erreur allocation memoire", 1);
+    int i = 0, j = 0;
+    int len = 0;
+    char temp[nbElem];
+
+    // Convertir le nombre en chaîne de caractères
+    snprintf(temp, sizeof(temp), "%lu", number);
+
+    len = strlen(temp);
+
+    // Ajouter les séparateurs de milliers
+    for (i = len - 1; i >= 0; i--) {
+        result[j++] = temp[i];
+        // Insérer un séparateur tous les 3 chiffres
+        if ((len - i) % 3 == 0 && i != 0) {
+            result[j++] = '\'';
+        }
+    }
+
+    result[j] = '\0';  // Terminer la chaîne
+    // Inverser la chaîne pour obtenir l'ordre correct
+    for (i = 0; i < j / 2; i++) {
+        char temp_char = result[i];
+        result[i] = result[j - i - 1];
+        result[j - i - 1] = temp_char;
+    }
+
+    return result;
+}
+
+char *format_seconds_to_string(double timeInSeconds) {
+    int hours = (int)(timeInSeconds / 3600);
+    int minutes = (int) (fmod(timeInSeconds, 3600) / 60);
+    int seconds = (int) fmod(timeInSeconds, 60);
+
+    int tailleMsg = strlen("00 heures 05 minutes et 10 secondes") + 10;
+    char *msg = malloc(tailleMsg);
+    pError(msg, "Erreur allocation mémoire", 1);
+
+    snprintf(msg, tailleMsg, "%d heures %d minutes et %d secondes", hours, minutes, seconds);
+
+    return msg;
 }
 
 

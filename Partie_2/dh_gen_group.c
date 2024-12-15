@@ -16,7 +16,7 @@ void afficheMan_dh_gen_group(void);
         -o Fichier où écrire les résultats de la génération
         -h affiche un manuel d'utilisation, annule l'option -o si présente
 */
-
+/*
 int main(int argc, char *argv[]) {
     
     char *fileResults = NULL;
@@ -46,7 +46,7 @@ int main(int argc, char *argv[]) {
     
     return 0;
 }
-
+*/
 
 /*
     generates the parameter (g and p) for the exponential

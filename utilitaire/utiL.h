@@ -20,10 +20,16 @@ void pError(void *ptr, char *msg, int exitStatus);
 // et stocke dans sizeMessage la taille du fichier
 char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage);
 
-// ecrit dans le fichier file_in le mot word
-void ouvreEtEcritMsg(char *file_in, char *word, int lenWord);
+// ecrit dans le fichier file_in le texte text
+void ouvreEtEcritMsg(char *file_in, char *text, off_t len_text);
 
-uint32_t trueRandom(uint32_t value);
+uint32_t true_random(uint32_t value);
+
+void freeTabs(void **tabs, int nbElems);
+
+char *format_number_with_thousands_separator(unsigned long number);
+
+char *format_seconds_to_string(double timeInSeconds);
 
 //-----------------------------------------------------------------
 /*

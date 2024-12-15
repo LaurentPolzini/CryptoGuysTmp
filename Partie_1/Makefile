@@ -26,10 +26,10 @@ main_partie1: main_partie1.o encrypt_decrypt_xor.o
 	$(CC) $(CFLAGS) -o $(MAINTARGET) main_partie1.o encrypt_decrypt_xor.o
 
 # Règle pour compiler les fichiers C en fichiers objets
-encrypt_decrypt_xor.o: encrypt_decrypt_xor.c mask.h xor.h ../utilitaire/utiL.h
+encrypt_decrypt_xor.o: encrypt_decrypt_xor.c chiffrement.h ../utilitaire/utiL.h
 	$(CC) $(CFLAGS) -c encrypt_decrypt_xor.c
 
-sym_crypt.o: sym_crypt.c mask.h xor.h
+sym_crypt.o: sym_crypt.c chiffrement.h
 	$(CC) $(CFLAGS) -c sym_crypt.c
 
 ../utilitaire/utiL.o: ../utilitaire/utiL.c ../utilitaire/utiL.h

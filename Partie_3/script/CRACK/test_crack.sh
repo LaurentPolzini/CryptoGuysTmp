@@ -23,8 +23,8 @@ function test_crack_c1 {
         diff -B $TEST/keys0/${k}_${i} $TEST/ref_keys0/${k}_${i} &>/dev/null
         echo "Exit code from diff: $?"
         RET=$?
-        [ $RET -eq 2 ] && printf "\t%-12s [${ok}OK${wipe}]\n" "$i" && return
-        [ $RET -ne 2 ] && printf "\t%-12s [${ko}KO${wipe}]\n" "$i" && return
+        [ $RET -eq 0 ] && printf "\t%-12s [${ok}OK${wipe}]\n" "$i" && return
+        [ $RET -ne 0 ] && printf "\t%-12s [${ko}KO${wipe}]\n" "$i" && return
         done < ./$TEST/file_list_crack.txt
       done  < ./$TEST/keys_crack.txt
     else
@@ -48,8 +48,8 @@ function test_crack_c1 {
           diff -B $TEST/keys1/${k}_${i} $TEST/ref_keys1/${k}_${i} &>/dev/null
           RET=$?
           printf "retour $RET \n"
-          [ $RET -eq 1 ] && printf "\t%-12s [${ok}OK${wipe}]\n" "$i"
-          [ $RET -ne 1 ] && printf "\t%-12s [${ko}KO${wipe}]\n" "$i" && return
+          [ $RET -eq 0 ] && printf "\t%-12s [${ok}OK${wipe}]\n" "$i"
+          [ $RET -ne 0 ] && printf "\t%-12s [${ko}KO${wipe}]\n" "$i"
           done < ./$TEST/file_list_crack.txt
         done  < ./$TEST/keys_crack.txt
       else
@@ -63,6 +63,6 @@ function test {
         [ $RET -ne 0 ] && printf "%-12s [${ko}KO${wipe}]\n" "$1"
     }
 
-#test crack_c1; # validité
+test crack_c1; # validité
 test crack_all;
     exit 0

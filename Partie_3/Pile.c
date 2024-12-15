@@ -79,7 +79,7 @@ Pile *modifyStackValueINT(Pile *p, unsigned int atIndex, int newValue) {
 // copie la clef dans *destination
 // pileCopy alloue une zone mémoire mise dans *dest
 void pileCopyValueCHAR(Pile *p, unsigned char **dest) {
-    pError((void *) p, "La pile n'existe pas ! (pileCopyValue)", 3);
+    pError((void *) p, "La pile n'existe pas ! (pileCopyValueCHAR)", 3);
 
     unsigned int tailleReelle = pileTaille(p) + 1;
     unsigned char *chaineFinale = malloc(tailleReelle);
@@ -93,7 +93,7 @@ void pileCopyValueCHAR(Pile *p, unsigned char **dest) {
 }
 
 Pile *pileCopyINT(Pile *from) {
-    pError((void *) from, "La pile de copie est null !", 3);
+    pError((void *) from, "La pile de copie est null ! (pileCopyINT)", 3);
 
     Pile *to = pileCreate(from->nbElemMax);
     pError((void *) to, "Erreur création clef", 3);

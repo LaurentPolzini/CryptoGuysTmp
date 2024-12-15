@@ -5,9 +5,8 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdbool.h>
-#include "xor.h"
-#include "cbc.h"
-#include "mask.h"
+#include "chiffrement.h"
+#include "../utilitaire/utiL.h"
 
 
 // Afficher le contenu d'un fichier en hexadécimal
@@ -51,7 +50,7 @@ void test_encrypt_decrypt(void) {
     char* file_out_decrypted = "decrypt.txt";
     char* key_file = "key.txt";
     
-    char* key = charger_cle_depuis_fichier(key_file);
+    char* key = ouvreEtLitFichier(key_file, NULL);
     // Test 1 : Vérifier que le chiffrement et déchiffrement fonctionnent correctement
 
     //Chiffrer le message
@@ -118,7 +117,7 @@ void test_encrypt_decrypt(void) {
     // Test 4 : Clé incorrecte
     printf("\n \n Test 4 : Déchiffrement avec une clé incorrecte\n");
     FILE *incorrect_key = fopen("incorrect_key.txt", "wb");
-    key = charger_cle_depuis_fichier("incorrect_key.txt");
+    key = ouvreEtLitFichier("incorrect_key.txt", NULL);
     fclose(incorrect_key);
 
     encrypt_decrypt_xor(file_out_encrypted, key, file_out_decrypted);
@@ -226,7 +225,6 @@ void test_cbc(void) {
     char *file_in = "clair.txt";
     char *file_key = "key.txt";
     char *v_init = "iv.txt";
-    void *method = NULL;
     char *file_out_encrypted = "message_encrypted.bin";
     char *file_out_decrypted = "message_decrypted.txt";
 
@@ -237,7 +235,7 @@ void test_cbc(void) {
     print_file_content_clair(file_in);
 
     // Chiffrement
-    if (encrypt_cbc(file_in, file_key, file_out_encrypted, v_init, method) == 0) {
+    if (encrypt_cbc(file_in, file_key, file_out_encrypted, v_init) == 0) {
         printf("Chiffrement réussi.\n");
         print_file_content(file_out_encrypted); // Afficher le contenu du fichier chiffré
     } else {
@@ -248,7 +246,7 @@ void test_cbc(void) {
     print_file_content(file_out_decrypted);
 
     // Déchiffrement
-    if (decrypt_cbc(file_out_encrypted, file_key, file_out_decrypted, v_init, method) == 0) {
+    if (decrypt_cbc(file_out_encrypted, file_key, file_out_decrypted, v_init) == 0) {
         printf("Déchiffrement réussi.\n");
         print_file_content_clair(file_out_decrypted); // Afficher le contenu du fichier déchiffré
     } else {
@@ -260,7 +258,7 @@ void test_cbc(void) {
     fwrite("invalid_iv_value", 1, 16, f_incorrect_iv);
     fclose(f_incorrect_iv);
 
-    decrypt_cbc(file_out_encrypted, file_key, file_out_decrypted, "incorrect_iv.txt", NULL);
+    decrypt_cbc(file_out_encrypted, file_key, file_out_decrypted, "incorrect_iv.txt");
     if (system("cmp -s clair.txt message_decrypted.txt") != 0) {
         printf("Test réussi : Déchiffrement échoue avec un IV incorrect\n");
     } else {

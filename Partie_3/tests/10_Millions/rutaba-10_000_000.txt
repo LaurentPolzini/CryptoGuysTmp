@@ -1,0 +1,5 @@
+Test numero 2 : Ceci est un texte a 10 millions de clefs.
+Serieusement je ne trouve pas la bonne longueur c'est enervant.
+Faut encore rallonger
+stop
+/

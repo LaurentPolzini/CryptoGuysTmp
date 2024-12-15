@@ -1,0 +1,3 @@
+Test numero 1 : Il y a approximativement 1 million de clefs possibles pour
+ce texte.
+

@@ -8,8 +8,7 @@
 #include <time.h>
 #include <sys/types.h>
 #include <stdbool.h>
-#include "xor.h"
-#include "mask.h"
+#include "chiffrement.h"
 #include "../utilitaire/utiL.h"
 #include "../utilitaire/uthash.h"
 #define BLOCK_SIZE 16
@@ -105,7 +104,7 @@ char* gen_key(int length, char *key, bool mask) {
         int charset_size = sizeof(CHARSET_KEY) - 1;
 
         for (int i = 0; i < length; i++) {
-            int random_index = trueRandom(charset_size);
+            int random_index = true_random(charset_size);
             key[i] = CHARSET_KEY[random_index];
         }
         key[length] = '\0'; // Terminer la clé par un caractère nul
@@ -117,28 +116,32 @@ char* gen_key(int length, char *key, bool mask) {
 char *gen_key_unique(int length, char *key) {
     dictionnary *dicoHash = NULL;
     // put the generated keys into the hashmap
+    char *absolutMaxKeyLenPath = "/Users/laurentpolzin/Documents/UT3/S5/Projet_Avance/crypto/Crypt_Temp/Partie_1/maxLenGeneratedKeys.txt";
+    char *absolutKeysListsPath = "/Users/laurentpolzin/Documents/UT3/S5/Projet_Avance/crypto/Crypt_Temp/keys.txt";
 
     // the length of the longest key is needed for the hashmap
     off_t lenMsg;
-    char *cLenMaxKey = ouvreEtLitFichier("./maxLenGeneratedKeys.txt", &lenMsg);
+
+    char *cLenMaxKey = ouvreEtLitFichier(absolutMaxKeyLenPath, &lenMsg);
     int tailleKeyMax = length; // taille max des clefs generees
-    if (cLenMaxKey) {
+
+    if (tailleKeyMax < atoi(cLenMaxKey)) { // longueur max enregistrée
         tailleKeyMax = atoi(cLenMaxKey);
+    } else { // nouvelle longueur max
+        char cMaxKey[20];
+        snprintf(cMaxKey, sizeof(cMaxKey), "%d", tailleKeyMax);
+        remove(absolutMaxKeyLenPath);
+        ouvreEtEcritMsg(absolutMaxKeyLenPath, cMaxKey, strlen(cMaxKey));
     }
-    
-    read_and_insert_words("./generated_keys.txt", &dicoHash, &tailleKeyMax);
+
+    read_and_insert_words(absolutKeysListsPath, &dicoHash, &tailleKeyMax);
 
     do {
         key = gen_key(length, key, false);
     } while (find_word(dicoHash, key));
 
-    ouvreEtEcritMsg("./generated_keys.txt", key, length);
+    ouvreEtEcritMsg(absolutKeysListsPath, key, length);
     clear_table(&dicoHash);
-    if ((length > tailleKeyMax) || lenMsg == 0) {
-        snprintf(cLenMaxKey, sizeof(int), "%d", length);
-        remove("./maxLenGeneratedKeys.txt");
-        ouvreEtEcritMsg("./maxLenGeneratedKeys.txt", cLenMaxKey, strlen(cLenMaxKey));
-    }
 
     return key;
 }
@@ -164,11 +167,11 @@ char* encrypt_mask(char* file_in, char* key, char* file_out) {
 
     // Vérifier la taille de la clé
     if (!key || (strlen(key) < taille_msg)) {
-        printf("La clef n'est soit pas aussi longue que le message, soit la clef n'est pas fournie, génération de la clef...\n");
+        printf("Soit la clef n'est pas fournie, soit la clef n'est pas aussi longue que le message, génération de la clef...\n");
         
         gen_key(taille_msg, tmpKey, true);
-
-        printf("Clef générée : %s\n", tmpKey);
+        printf("clef gen : %s\n", tmpKey);
+        printf("Clef générée et écrite dans ../keys.txt\n");
     } else {
         // sinon la clef est fournie, et de bonne taille, on utilise celle ci.
         strcpy(tmpKey, (const char *) key);
@@ -202,6 +205,7 @@ char* encrypt_mask(char* file_in, char* key, char* file_out) {
 
 // Fonction pour déchiffrer un fichier avec un masque jetable
 char* decrypt_mask(char* file_in, char* key, char* file_out) {
+    pError(key, "La clef ne doit pas etre vide !", 1);
     return encrypt_mask(file_in, key, file_out); // Le déchiffrement est identique au chiffrement
 }
 
@@ -238,8 +242,7 @@ void remove_padding(char *file_out) {
 }
 
 // Chiffrement CBC
-int encrypt_cbc(char *file_in, char *file_key, char *file_out, char *v_init, void *method) {
-    (void) method;
+int encrypt_cbc(char *file_in, char *file_key, char *file_out, char *v_init) {
     FILE *input = fopen(file_in, "rb");
     FILE *output = fopen(file_out, "wb");
     if (!input || !output) {
@@ -295,8 +298,7 @@ int encrypt_cbc(char *file_in, char *file_key, char *file_out, char *v_init, voi
 }
 
 // Déchiffrement CBC
-int decrypt_cbc(char *file_in, char *file_key, char *file_out, char *v_init, void *method) {
-    (void) method;
+int decrypt_cbc(char *file_in, char *file_key, char *file_out, char *v_init) {
     FILE *input = fopen(file_in, "rb");
     FILE *output = fopen(file_out, "wb");
     if (!input || !output) {

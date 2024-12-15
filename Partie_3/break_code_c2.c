@@ -1,94 +1,362 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <fcntl.h>
 #include <ctype.h>
 #include <string.h>
 #include <pthread.h>
+#include <float.h>
+#include <fcntl.h>
 #include "./crackage.h"
 #include "../utilitaire/utiL.h"
-#include "./break_code_c2.h"
+#include "../Partie_1/chiffrement.h"
 #include "./break_code_c1.h"
-#include "../Partie_1/xor.h"
+#include "./break_code_c2.h"
 #include "break_code_c2_c3.h"
+
+extern float stat_thFr[26];
+extern float stat_thEn[26];
 
 /*
     msgAndTaille : le msg crypté, décrypté, sa taille
     distance la distance de la clef actuelle
-    tabMeilleurScore le tableau des meilleurs scores (0 = excellent)
-    nbScoreTab le nombre total de score actuel
-    tabKeysScore le tableau des clefs à l'indice 
+    tab_meilleures_freq_lettres le tableau des meilleurs scores (0 = excellent)
+    ptr_tailleActuelleTab le nombre total de score actuel
+    tab_keys_correspondantes le tableau des clefs à l'indice 
         correspondant à tabMeilleurScore
 */
+struct struct_c2 {
+    struct sMsgAndTaille *msgAndTaille;
+    int tailleScoreTab;
+    int lenKey;
 
-void freeTabs(void **tabs, int nbElems);
+    int *ptr_tailleActuelleTab;
+    double *tab_meilleures_freq_lettres;
+    unsigned char **tab_keys_correspondantes;
 
-// chaque clef accédera a la meme zone mémoire
-// le temps de calculer la distance et eventuellement
-// la mettre dans le tableau des meilleurs scores
-//pthread_mutex_t mutexScore;
+    float *stats;
 
-/*sqzwi
-int break_code_c2(char *file_in, char *dict_file_in, char *score_out, int keyLength, char *logFile) {
-    (void) file_in, (void) dict_file_in, (void) score_out, (void) keyLength, (void) logFile;
-    
+    double *distance;
+
+    int fdScoreOut;
+};
+
+
+int break_code_c2(char *file_in, float *stats, char *score_out, int keyLength, char *logFileName) {
     off_t tailleMsg = 0;
     char *msgCrypted = ouvreEtLitFichier(file_in, &tailleMsg);
-    char *msgDecrypte = encrypt_decrypt_xorMSG(msgCrypted, "Clef1", tailleMsg);
-    printf("msg : %s\n", msgDecrypte);
-    double dist;
-    traiteMsgClefC2(msgDecrypte, &dist);
 
-    printf("score du texte décodé : %f\n", dist);
+    int fdScoreOut = -1;
+    FILE *logFile = NULL;
 
-    if (pthread_mutex_init(&mutexScore, NULL) != 0) {
-        pError(NULL, "Erreur creation mutex score break_code_c2", 2);
+    init_params(score_out, &fdScoreOut, logFileName, &logFile);
+
+    struct_c2 *s_c2 = init_struct_c2(msgCrypted, tailleMsg, TAILLE_TAB_SCORE, keyLength, stats, fdScoreOut);
+    stC2_C3 *sc2c3 = init_stC2_C3(s_c2, NULL);
+
+    printf("Attaque brutale avec dico : c1, c2 enchaînées...\n");
+
+    unsigned long nbKeys;
+    appelClefsFinales(file_in, keyLength, (void *) sc2c3, functorC2, logFileName, true, &nbKeys);
+
+    printf("Début de C2...\n");
+    printf("Fin de C2 : meilleure clef = %s (score : %.2f)\n", get_meilleur_clef_c2(s_c2), get_meilleur_score_c2(s_c2));
+
+    printf("Nombre de clefs = %ld\n", nbKeys);
+
+    int nbScoreAffichage = 50;
+    printf("Voici les %d meilleurs clefs, avec leur score (0 = parfait) : \n", nbScoreAffichage);
+    for (int i = 0 ; i < nbScoreAffichage ; ++i) {
+        printf("key : %s ; score : %.2f\n", (s_c2 -> tab_keys_correspondantes)[i], (s_c2 -> tab_meilleures_freq_lettres)[i]);
     }
 
-    stC2_C3 *stC2C3 = initSTc2_c3(msgCrypted, tailleMsg, tailleTabMeilleurScore);
+    affiche_meilleures_clefs_c2(s_c2, msgCrypted, tailleMsg, 1);
 
-    appelClefsFinales(file_in, keyLength, (void *) stC2C3, functorC2, logFile);
+    ecritTab_c2(s_c2 -> tab_meilleures_freq_lettres, *(s_c2 -> ptr_tailleActuelleTab), s_c2 -> tab_keys_correspondantes, logFile);
 
-    if (pthread_mutex_destroy(&mutexScore) != 0) {
-        pError(NULL, "Erreur destruction mutex score break_code_c2", 2);
-    }
-
-    printf("Voici les 10 meilleurs clefs, avec leur score (0 = bien) : \n");
-    for (int i = 0 ; i < 50 ; ++i) {
-        printf("key : %s ; score : %f\n", (stC2C3 -> tabKeysScore)[i], (stC2C3 -> tabMeilleurScore)[i]);
-    }
-    destroyStructC2_C3(&stC2C3);
+    destruct_stC2_C3(&sc2c3);
+    destroy_params(&fdScoreOut, &logFile);
 
     return 0;
 }
+
+//---------------------------------------------------------------------------------------------------------------------
+/*
+    traitement de la clef en cours
 */
+void functorC2(unsigned char *key, void *argStruc) {
+    struct_c2 *varStructC2 = ((stC2_C3 *) argStruc) -> s_c2;
+
+    // recoit un message codé, le décrypte avec la clef
+    translateMsg(key, (void *) (varStructC2 -> msgAndTaille));
+    traiteMsgClefC2((varStructC2 -> msgAndTaille) -> msgUncrypted, varStructC2 -> distance, varStructC2 -> stats);
+
+    int inser = getIndexInsertionC2_struc(varStructC2);
+    ajouteScoreC2(varStructC2, key, inser);
+
+    ecritClefScore_c2(varStructC2 -> fdScoreOut, key, *(varStructC2 -> distance));
+
+    free((void *) ((varStructC2 -> msgAndTaille) -> msgUncrypted));
+}
+
 /*
     assigne une distance a une clef 
     (par rapport aux fréquences de lettres d'une langue)
 */
-double traiteMsgClefC2(char *msg, double *distance, float stats[26]) {
+double traiteMsgClefC2(char *msg, double *distance, float *stats) {
     float *freqMsg = freq(msg, (int) strlen(msg));
     *distance = distanceFreqs(stats, freqMsg);
 
     return *distance;
 }
 
-void ajouteScoreC2(stC2_C3 *st, unsigned char *key, int ind) {
-    if (ind < st -> tailleScoreTab) {
-        for (int i = *(st -> nbScoreTabs) ; i > ind ; --i) {
-            // décaler tout le tableau vers la droite
-            // (copier tous les elements pour en inserer un nouveau)
-            if (i != st -> tailleScoreTab) { // indice inexistant
-                (st -> tabMeilleurScoreC2)[i] = (st -> tabMeilleurScoreC2)[i - 1];
-                strcpy((char *) (st -> tabKeysScoreC2)[i], (const char *) (st -> tabKeysScoreC2)[i - 1]);
-            }
+
+//---------------------------------------------------------------------------------------------------------------------
+/*
+    creation/ destruction de la structure struct_c2
+    et getters sur ses attributs
+*/
+struct_c2 *init_struct_c2(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, int keyLen, float *stat, int fdScore) {
+    struct_c2 *s_c2 = malloc(sizeof(struct_c2));
+    pError(s_c2, "Erreur allocation memoire", 2);
+
+    s_c2 -> msgAndTaille = malloc(sizeof(sMsgAndTaille));
+    pError(s_c2 -> msgAndTaille, "Erreur allocation memoire", 2);
+    (s_c2 -> msgAndTaille) -> msg = malloc(tailleMsgCrypted);
+    pError((s_c2 -> msgAndTaille) -> msg, "Erreur allocation memoire", 2);
+    memcpy((s_c2 -> msgAndTaille) -> msg, msgCrypted, tailleMsgCrypted);
+    
+    (s_c2 -> msgAndTaille) -> lenMsg = tailleMsgCrypted;
+
+    s_c2 -> tailleScoreTab = tailleTab;
+
+    s_c2 -> tab_meilleures_freq_lettres = malloc(sizeof(double) * tailleTab);
+    pError(s_c2 -> tab_meilleures_freq_lettres, "Erreur allocation memoire", 2);
+
+    s_c2 -> tab_keys_correspondantes = malloc(sizeof(char *) * tailleTab);
+    pError(s_c2 -> tab_keys_correspondantes, "Erreur allocation memoire", 2);
+
+    for (int i = 0 ; i < tailleTab ; ++i) {
+        (s_c2 -> tab_meilleures_freq_lettres)[i] = DBL_MAX;
+
+        (s_c2 -> tab_keys_correspondantes)[i] = malloc(keyLen + 1);
+        pError((s_c2 -> tab_keys_correspondantes)[i], "Erreur allocation mémoire", 2);
+    }
+
+    s_c2 -> stats = stat;
+
+    s_c2 -> distance = malloc(sizeof(double));
+    pError(s_c2 -> distance, "Erreur allocation memoire", 2);
+    *(s_c2 -> distance) = DBL_MAX;
+
+    s_c2 -> ptr_tailleActuelleTab = malloc(sizeof(int));
+    pError(s_c2 -> ptr_tailleActuelleTab, "Erreur allocation memoire", 2);
+    *(s_c2 -> ptr_tailleActuelleTab) = 0;
+
+    s_c2 -> lenKey = keyLen;
+
+    s_c2 -> fdScoreOut = fdScore;
+
+    return s_c2;
+}
+
+void destruct_struct_c2(struct_c2 **s_c2) {
+    if (s_c2) {
+        free(((*s_c2) -> msgAndTaille) -> msg);
+        free((void *) ((*s_c2) -> msgAndTaille));
+
+        for (int i = 0 ; i < *((*s_c2) -> ptr_tailleActuelleTab) ; ++i) {
+            free((void *) ((*s_c2) -> tab_keys_correspondantes)[i]);
         }
-        // insertion du nouvel element
-        (st -> tabMeilleurScoreC2)[ind] = *(st -> distance);
-        strcpy((char *) (st -> tabKeysScoreC2)[ind], (const char *) key);
+        free((void *) (*s_c2) -> tab_meilleures_freq_lettres);
+        free((void *) (*s_c2) -> tab_keys_correspondantes);
+
+        free((void *) (*s_c2) -> ptr_tailleActuelleTab);
+        free((void *) (*s_c2) -> distance);
+
+        free((void *) (*s_c2));
     }
 }
 
+struct_c2 *copy_s_c2(struct_c2 *to_copy) {
+    struct_c2 *copied = NULL;
+    if (to_copy) {
+        copied = init_struct_c2((to_copy -> msgAndTaille) -> msg, (to_copy -> msgAndTaille) -> lenMsg, to_copy -> tailleScoreTab, to_copy -> lenKey, to_copy -> stats, to_copy -> fdScoreOut);
+    }
+    return copied;
+}
+
+unsigned char **get_keys_s_c2(struct_c2 *s_c2) {
+    if (s_c2) {
+        return s_c2 -> tab_keys_correspondantes;
+    }
+    return NULL;
+}
+
+int get_taille_tab_s_c2(struct_c2 *s_c2) {
+    if (s_c2) {
+        return *(s_c2 -> ptr_tailleActuelleTab);
+    }
+    return -1;
+}
+
+double get_meilleur_score_c2(struct_c2 *s_c2) {
+    if (s_c2) {
+        return (s_c2 -> tab_meilleures_freq_lettres)[0];
+    }
+    return -1;
+}
+
+unsigned char *get_meilleur_clef_c2(struct_c2 *s_c2) {
+    if (s_c2) {
+        return (s_c2 -> tab_keys_correspondantes)[0];
+    }
+    return NULL;
+}
+
+int get_taille_actuelle_tab_s_c2(struct_c2 *s_c2) {
+    return *(s_c2 -> ptr_tailleActuelleTab);
+}
+
+double *get_meilleur_scores_c2(struct_c2 *s_c2) {
+    return s_c2 -> tab_meilleures_freq_lettres;
+}
+unsigned char **get_meilleur_clefs_c2(struct_c2 *s_c2) {
+    return s_c2 -> tab_keys_correspondantes;
+}
+
+//---------------------------------------------------------------------------------------------------------------------
+/*
+    gestion des scores
+*/
+void compile_structs_c2(struct_c2 *to, struct_c2 *from) {
+    int indInser;
+    for (int i = 0 ; i < *(from -> ptr_tailleActuelleTab) ; ++i) {
+        *(to -> distance) = (from -> tab_meilleures_freq_lettres)[i];
+        indInser = getIndexInsertionC2_struc(to);
+
+        ajouteScoreC2(to, (from -> tab_keys_correspondantes)[i], indInser);
+
+        if (*(to -> ptr_tailleActuelleTab) < to -> tailleScoreTab) {
+            *(to -> ptr_tailleActuelleTab) += 1;
+        }
+    }
+}
+
+void ajouteScoreC2(struct_c2 *st, unsigned char *key, int ind) {
+    if (ind < st -> tailleScoreTab) {
+        for (int i = *(st -> ptr_tailleActuelleTab) ; i > ind ; --i) {
+            // décaler tout le tableau vers la droite
+            // (copier tous les elements pour en inserer un nouveau)
+            if (i != st -> tailleScoreTab) { // indice inexistant
+                (st -> tab_meilleures_freq_lettres)[i] = (st -> tab_meilleures_freq_lettres)[i - 1];
+                strcpy((char *) (st -> tab_keys_correspondantes)[i], (const char *) (st -> tab_keys_correspondantes)[i - 1]);
+            }
+        }
+        // insertion du nouvel element
+        (st -> tab_meilleures_freq_lettres)[ind] = *(st -> distance);
+        strcpy((char *) (st -> tab_keys_correspondantes)[ind], (const char *) key);
+        if (*(st -> ptr_tailleActuelleTab) != st -> tailleScoreTab) {
+            *(st -> ptr_tailleActuelleTab) += 1;
+        }
+    }
+}
+
+int getIndexInsertionC2_struc(struct_c2 *st) {
+    return getIndexInsertionValueC2(st, *(st -> distance));
+}
+
+int getIndexInsertionValueC2(struct_c2 *st, double value) {
+    int ind = 0;
+    while ((ind < *(st -> ptr_tailleActuelleTab)) && ((st -> tab_meilleures_freq_lettres)[ind] < value)) {
+        ++ind;
+    }
+
+    return ind;
+}
+
+/*
+    affichage des nbClefsAffichee meilleurs scores
+    affiche les clefs ayant le meme score
+*/
+void affiche_meilleures_clefs_c2(struct_c2 *sc2, char *msgCrypte, off_t lenMsg, int nbClefsAffichee) {
+    if (sc2) {
+        printf("Voici les scores et la traduction des %d meilleurss clefs\n", nbClefsAffichee);
+
+        char *msgUncrypted;
+        int indScore = 0; // afficher le premier score
+
+        int tailleActuelle = get_taille_actuelle_tab_s_c2(sc2);
+        double bestScore = get_meilleur_score_c2(sc2);
+
+        char *bestKeyCur = (char *) get_meilleur_clefs_c2(sc2)[indScore];
+        double bestScoreCur = get_meilleur_score_c2(sc2);
+
+        while ((indScore < tailleActuelle) && indScore < nbClefsAffichee && bestScoreCur == bestScore) {
+            msgUncrypted = encrypt_decrypt_xorMSG(msgCrypte, bestKeyCur, lenMsg);
+
+            printf("\nMessage : %s\ndécrypté avec la meilleure clef (\"%s\" : score %.2f)\n", msgUncrypted, bestKeyCur, bestScoreCur);
+
+            free(msgUncrypted);
+            printf("\n");
+            ++indScore;
+            bestKeyCur = (char *) get_meilleur_clefs_c2(sc2)[indScore];
+            bestScoreCur = get_meilleur_scores_c2(sc2)[indScore];
+        }
+    }   
+}
+
+/*
+    ecrit les fréquences des lettres (c2)
+    faite pour etre utilisee par des threads (acces parallele a un fichier)
+
+    Ecrit dans un fichier (généralement un log file) 
+    une chaine de caracteres de cette forme
+    "clef : 1234 distance des fréquences réelles et référentielles : 100"
+*/
+void ecritClefScore_c2(int fdFile, unsigned char *key, double freq_lettres) {
+    if (fdFile != -1) {
+        if (pthread_mutex_lock(&MUTEX_ECRITURE_SCORE) != 0) {
+            pError(NULL, "Erreur prise token mutex ecriture file", 4);
+        }
+
+        int lenKey = strlen((const char *) key);
+        // clef : 1234  nombre de mots présents dans le dictionnaire : 100
+        size_t tailleAllouee = lenKey + strlen("clef : \tdistance des fréquences réelles et référentielles : ") + 10 + 2;
+        char *textToWrite = malloc(tailleAllouee);
+        pError(textToWrite, "Erreur allocation memoire", 4);
+
+        int ret = snprintf(textToWrite, tailleAllouee, 
+                   "clef : %s\tdistance des fréquences réelles et référentielles : %.2f\n", 
+                   key, freq_lettres);
+        if (ret < 0 || (size_t)ret >= tailleAllouee) {
+            free(textToWrite);
+            pError(NULL, "Erreur snprintf c2 ecritClefScore", 4);
+        }
+        if (write(fdFile, textToWrite, strlen(textToWrite)) == -1) {
+            close(fdFile);
+            pError(NULL, "Error writing to file", 4);
+        }
+
+        free(textToWrite);
+
+        if (pthread_mutex_unlock(&MUTEX_ECRITURE_SCORE) != 0) {
+            pError(NULL, "Erreur don token mutex ecriture file", 4);
+        }
+    }
+}
+
+void ecritTab_c2(double *tab, int nbElems, unsigned char **keys, FILE *file) {
+    if (file) {
+        fprintf(file, "\nscores c2 : \n");
+        for (int i = 0 ; i < nbElems ; ++i) {
+            fprintf(file, "%s : fréquences des lettres : %f\n", keys[i], tab[i]);
+        }
+        fprintf(file, "\n\n");
+    }
+}
+
+//-------------------------------------------------------------------------------------
+// Fonctions de calculs des fréquences de lettres
 /*
     Renvoit un tableau des fréquences des 26 lettres de l'alphabet
     dans le message msg.
@@ -143,15 +411,3 @@ double distanceFreqs(float *freqLanguage, float *decryptedFreq) {
     return distance;
 }
 
-int getIndexInsertionC2(stC2_C3 *st) {
-    return getIndexInsertionValueC2(st, *(st -> distance));
-}
-
-int getIndexInsertionValueC2(stC2_C3 *st, double value) {
-    int ind = 0;
-    while ((ind < *(st -> nbScoreTabs)) && ((st -> tabMeilleurScoreC2)[ind] < value)) {
-        ++ind;
-    }
-
-    return ind;
-}

@@ -1,0 +1,5 @@
+Ceci est un texte a un milliard. Je ne suis pas sur que le test passe;
+Je le rallonge un minimum.
+il faut ajuster la taille du texte ainsi que la taille de la clef.
+le nombre de clef augmente proportionnelement a sa taille.
+Plus le texte se rallonge plus le nombre de clef descend

@@ -1,63 +1,584 @@
 #include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <ctype.h>
+#include <stdlib.h> // malloc
+#include <ctype.h> // isalpha...
 #include <string.h>
-#include <stdbool.h>
-#include <pthread.h>
-#include "./crackage.h"
-#include "../utilitaire/utiL.h"
-#include "../utilitaire/uthash.h"
+#include <pthread.h> // mutex d'ecriture
+#include <fcntl.h> // open
+#include <time.h> // calcul du temps
+#include "./crackage.h" // library de cette partie
+#include "../utilitaire/utiL.h" // pError...
+#include "../utilitaire/uthash.h" // dictionnary
 #include "./break_code_c3.h"
-#include "./break_code_c2.h"
-#include "./break_code_c1.h"
-#include "break_code_c2_c3.h"
+#include "./break_code_c1.h" // appel programme de recherche des clefs possible
+#include "./break_code_c2.h" // filtrage sur les fréquences des lettres
+#include "./break_code_c2_c3.h" // struct_c2_c3
+#include "../Partie_1/chiffrement.h" // encrypt_decrypt_xor_msg
+
+extern float stat_thFr[26];
+extern float stat_thEn[26];
+
+typedef struct scores_keys {
+    int *tab_nb_mots_prez;
+    unsigned char **keys;
+    int tailleTab;
+    int *tailleActuelle;
+} scores_keys;
+
+struct struct_c3 {
+    scores_keys *struct_score;
+    sMsgAndTaille *msgAndTaille;
+
+    int *ptr_nb_mots_prez;
+    dictionnary *dico;
+
+    int len_key;
+
+    int fdScoreOut;
+};
+
+scores_keys *init_struct_score(int taille_tab, int lenKey);
+void destruct_struct_score(scores_keys **s_score);
+
+void traite_clefs_generee_c2(struct_c3 *s_c3, struct_c2 *s_c2);
 
 int nbMotsPresents(char **mots, int nbMots, dictionnary *dico);
-int getIndexInsertionC3(stC2_C3 *st);
+
+void test_text_word_splitter(dictionnary *dico);
 
 //-----------------------------------------------------------------
+
 /*
-    main
+    juste c3 : sans passer par l'émondage c2
 */
-/*
-int break_code_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFile) {
-    (void) file_in, (void) dict_file_in, (void) score_out;
+int break_code_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFileName) {
+    int fdScoreOut = -1;
+    FILE *logFile = NULL;
+
+    init_params(score_out, &fdScoreOut, logFileName, &logFile);
 
     dictionnary *dicoHash = NULL;
 
-    if (pthread_mutex_init(&mutexScore, NULL) != 0) {
-        pError(NULL, "Erreur creation mutex score break_code_c2", 2);
-    }
+    // Read words from the Scrabble dictionary and insert them into the hash table
+    read_and_insert_words(dict_file_in, &dicoHash, NULL);
+    
+    off_t tailleMsg = 0;
+    char *cryptedMsg = ouvreEtLitFichier(file_in, &tailleMsg);
+
+    printf("Attaque brutale avec dico : c1, c3 enchaînées...\n");
+    printf("==>dico name = %s\n", dict_file_in);
+    printf("Créé et initialisé\n");
+
+    struct_c3 *s_c3 = init_struct_c3(cryptedMsg, tailleMsg, TAILLE_TAB_SCORE, keyLen, dicoHash, fdScoreOut);
+
+    stC2_C3 *stC2C3 = init_stC2_C3(NULL, s_c3);
+
+    unsigned long nbKeys;
+    appelClefsFinales(file_in, keyLen, (void *) stC2C3, functorC3, logFileName, true, &nbKeys);
+    printf("Début de C3...\n");
+    printf("Fin de C3\n");
+
+    printf("Nombre de clefs = %ld\n", nbKeys);
+
+    affiche_meilleures_clefs_c3(s_c3, cryptedMsg, tailleMsg, 10);
+
+    ecritTab_c3(get_tab_nb_mots(s_c3), get_tab_tailleActuelle(s_c3), get_keys_c3(s_c3), logFile);
+
+    destruct_stC2_C3(&stC2C3);
+    clear_table(&dicoHash);
+
+    destroy_params(&fdScoreOut, &logFile);
+    
+    return 0;
+}
+
+/*
+    keylen utilisée en tant que tel
+*/
+int break_code_all_exact_len(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFileName) {
+    int fdScoreOut = -1;
+    FILE *logFile = NULL;
+
+    init_params(score_out, &fdScoreOut, logFileName, &logFile);
+    dictionnary *dicoHash = NULL;
 
     // Read words from the Scrabble dictionary and insert them into the hash table
-    read_and_insert_words(dict_file_in, &dicoHash);
+    read_and_insert_words(dict_file_in, &dicoHash, NULL);
 
     off_t tailleMsg = 0;
     char *cryptedMsg = ouvreEtLitFichier(file_in, &tailleMsg);
 
-    stC2_C3 *stC2C3 = initSTc2_c3(cryptedMsg, tailleMsg, tailleTabScore);
+    printf("Attaque brutale avec dico : c1, c2, c3 enchaînées...\n");
+    printf("==>dico name = %s\n", dict_file_in);
+    printf("Créé et initialisé\n");
 
-    appelClefsFinales(file_in, keyLen, (void *) stC2C3, functorC3, logFile);
+    struct_c2 *s_c2;
+    float *stats = stat_thEn;
+    if (find_word(dicoHash, "abaisser")) {
+        stats = stat_thFr;
+    }
 
+    s_c2 = init_struct_c2(cryptedMsg, tailleMsg, TAILLE_TAB_SCORE, keyLen, stats, fdScoreOut);
 
-    destroyStructC2_C3(&stC2C3);
-    clear_table(&dicoHash);
+    // NULL pour pas qu'il y ait de copies de c3
+    stC2_C3 *sc2c3 = init_stC2_C3(s_c2, NULL);
+
+    unsigned long nbKeys;
+    // true pour copier les structures
+    appelClefsFinales(file_in, keyLen, (void *) sc2c3, functorC2, logFileName, true, &nbKeys);
+    // comme je passe par un fonctor, c2 n'a que comme debut celui de c1
+    // et comme fin, c1.
+    // en passant par un stockage de clef en revanche,
+    // il y aurait un debut de c1, fin c1, et debut c2, fin c2
+    // (traitement des clefs apres generation, pas pendant)
+    printf("Début de C2...\n");
+    printf("Fin de C2\n");
+
+    printf("Nombre de clefs = %ld\n", nbKeys);
+
+    struct_c3 *s_c3 = init_struct_c3(cryptedMsg, tailleMsg, get_taille_tab_s_c2(s_c2), keyLen, dicoHash, -1);
+
+    printf("Début de C3...\n");
+    traite_clefs_generee_c2(s_c3, s_c2);
+    printf("Meilleur score = %d\n", get_meilleur_score_c3(s_c3));
+    printf("Fin de C3 : meilleure clef = %s\n", get_meilleur_clef_c3(s_c3));
+
+    ecritTab_c3(get_tab_nb_mots(s_c3), get_tab_tailleActuelle(s_c3), get_keys_c3(s_c3), logFile);
+
+    destroy_params(&fdScoreOut, &logFile);
+    destruct_stC2_C3(&sc2c3);
 
     return 0;
 }
+
+/*
+    keylen utilisée de 1 à keyLen
+*/
+int break_code_all_max_len(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFileName) {
+    int fdScoreOut = -1;
+    FILE *logFile = NULL;
+
+    init_params(score_out, &fdScoreOut, logFileName, &logFile);
+    dictionnary *dicoHash = NULL;
+
+    // Read words from the Scrabble dictionary and insert them into the hash table
+    read_and_insert_words(dict_file_in, &dicoHash, NULL);
+
+    off_t tailleMsg = 0;
+    char *cryptedMsg = ouvreEtLitFichier(file_in, &tailleMsg);
+
+    float *stats = stat_thEn;
+    if (find_word(dicoHash, "abaisser")) {
+        stats = stat_thFr;
+    }
+
+    printf("Attaque brutale avec dico : c1, c2, c3 enchaînées...\n");
+    printf("==>dico name = %s\n", dict_file_in);
+    printf("Créé et initialisé\n");
+
+    struct_c2 *compiled_best = init_struct_c2(cryptedMsg, tailleMsg, TAILLE_TAB_SCORE, keyLen, stats, fdScoreOut);
+
+    struct_c2 *s_c2;
+    stC2_C3 *sc2c3;
+    int tmpKeyLen;
+    unsigned long nbKeys;
+    unsigned long nbKeysTMP = 0;
+
+    for (int i = 0 ; i < keyLen ; ++i) {
+        tmpKeyLen = i + 1;
+
+        s_c2 = init_struct_c2(cryptedMsg, tailleMsg, TAILLE_TAB_SCORE, tmpKeyLen, stats, fdScoreOut);
+
+        sc2c3 = init_stC2_C3(s_c2, NULL);
+
+        // true pour copier les structures
+        appelClefsFinales(file_in, tmpKeyLen, (void *) sc2c3, functorC2, logFileName, true, &nbKeys);
+        nbKeysTMP += nbKeys;
+
+        printf("\n\n");
+
+        compile_structs_c2(compiled_best, s_c2);
+
+        destruct_stC2_C3(&sc2c3);
+    }
+    printf("Début de C2...\n");
+    printf("Fin de C2\n");
+
+    printf("Nombre de clefs total = %ld\n", nbKeysTMP);
+
+    struct_c3 *s_c3 = init_struct_c3(cryptedMsg, tailleMsg, get_taille_tab_s_c2(compiled_best), keyLen, dicoHash, -1);
+    //time_t deb = time(NULL);
+    printf("Début de C3...\n");
+    traite_clefs_generee_c2(s_c3, compiled_best);
+    printf("Fin de C3\n");
+    printf("Fin de C3 : meilleure clef = %s\n", get_meilleur_clef_c3(s_c3));
+    //time_t fin = time(NULL);
+
+    affiche_meilleures_clefs_c3(s_c3, cryptedMsg, tailleMsg, 10);
+
+    ecritTab_c3(get_tab_nb_mots(s_c3), get_tab_tailleActuelle(s_c3), get_keys_c3(s_c3), logFile);
+
+    destroy_params(&fdScoreOut, &logFile);
+
+    return 0;
+}
+
+/*
+    pour "all" (émondage c1 -> c2 -> c3 final)
+
+    assigne un nombre de mots présents dans le dictionnaire
+    à partir des clefs de c2
+        => Toutefois, il est possible et meme probable
+        que c2 donne des clefs nulles selon le style
+        de l'écrivain
+
+        pour voir les différences on peut lancer juste c2 et juste c3
+        afin de comparer leurs meilleures clefs
+*/
+void traite_clefs_generee_c2(struct_c3 *s_c3, struct_c2 *s_c2) {
+    char *uncrypted_msg;
+    int indInsertion;
+
+    for (int i = 0 ; i < (s_c3 -> struct_score) -> tailleTab ; ++i) {
+        uncrypted_msg = encrypt_decrypt_xorMSG((s_c3 -> msgAndTaille) -> msg, (char *) get_keys_s_c2(s_c2)[i], (s_c3 -> msgAndTaille) -> lenMsg);
+        traiteMsgClefC3(uncrypted_msg, s_c3 -> ptr_nb_mots_prez, s_c3 -> dico);
+        free(uncrypted_msg);
+
+        indInsertion = getIndexInsertionC3_struc(s_c3);
+        ajouteScoreC3(s_c3, get_keys_s_c2(s_c2)[i], indInsertion);
+    }
+}
+
+/*
+    pour utiliser uniquement c3 (sans passer par c2)
+    permet de voir les différences de scores de clefs
+*/
+void functorC3(unsigned char *key, void *argStruc) {
+    struct_c3 *varStructC3 = ((stC2_C3 *) argStruc) -> s_c3;
+
+    // recoit un message codé, le décrypte avec la clef
+    translateMsg(key, (void *) (varStructC3 -> msgAndTaille));
+
+    traiteMsgClefC3((varStructC3 -> msgAndTaille) -> msgUncrypted, varStructC3 -> ptr_nb_mots_prez, varStructC3 -> dico);
+    int ind = getIndexInsertionC3_struc(varStructC3);
+    ajouteScoreC3(varStructC3, key, ind);
+
+    ecritClefScore_c3(varStructC3 -> fdScoreOut, key, *(varStructC3 -> ptr_nb_mots_prez));
+
+    free((void *) ((varStructC3 -> msgAndTaille) -> msgUncrypted));
+}
+
+
+//------------------------------------------------------------------------------------------------------------
+/*
+    Fonctions d'initialisations/ destructions des structures
+
+    ces structures servent pour le functor sur les clefs dans c1
+
+    On a aussi des getters des attributs
+*/
+scores_keys *init_struct_score(int taille_tab, int lenKey) {
+    scores_keys *s_score = malloc(sizeof(scores_keys));
+    pError(s_score, "Erreur allocation memoire", 3);
+    s_score -> tab_nb_mots_prez = malloc(sizeof(double) * taille_tab);
+    pError(s_score -> tab_nb_mots_prez, "Erreur allocation memoire", 3);
+
+    s_score -> keys = malloc(sizeof(char *) * taille_tab);
+    pError(s_score -> keys, "Erreur allocation memoire", 3);
+
+    for (int i = 0 ; i < taille_tab ; ++i) {
+        (s_score -> tab_nb_mots_prez)[i] = 0;
+
+        (s_score -> keys)[i] = malloc(lenKey + 1);
+        pError((s_score -> keys)[i], "Erreur allocation mémoire", 3);
+    }
+
+    s_score -> tailleActuelle = malloc(sizeof(int));
+    *(s_score -> tailleActuelle) = 0;
+
+    s_score -> tailleTab = taille_tab;
+
+    return s_score;
+}
+
+void destruct_struct_score(scores_keys **s_score) {
+    for (int i = 0 ; i < (*s_score) -> tailleTab ; ++i) {
+        free((void *) ((*s_score) -> keys)[i]);
+    }
+    free((void *) (*s_score) -> tab_nb_mots_prez);
+    free((void *) (*s_score) -> keys);
+    
+    free((void *) (*s_score) -> tailleActuelle);
+
+    free((void *) *s_score);
+}
+
+struct_c3 *init_struct_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, int keyLen, dictionnary *dicO, int fdScore) {
+    struct_c3 *s_c3 = malloc(sizeof(struct_c3));
+    pError(s_c3, "Erreur allocation memoire", 3);
+
+    s_c3 -> msgAndTaille = malloc(sizeof(sMsgAndTaille));
+    pError(s_c3 -> msgAndTaille, "Erreur allocation memoire", 3);
+    (s_c3 -> msgAndTaille) -> msg = malloc(tailleMsgCrypted);
+    pError((s_c3 -> msgAndTaille) -> msg, "Erreur allocation memoire", 3);
+    memcpy((s_c3 -> msgAndTaille) -> msg, msgCrypted, tailleMsgCrypted);
+    
+    (s_c3 -> msgAndTaille) -> lenMsg = tailleMsgCrypted;
+
+    s_c3 -> struct_score = init_struct_score(tailleTab, keyLen);
+    
+    s_c3 -> dico = dicO;
+
+    s_c3 -> ptr_nb_mots_prez = malloc(sizeof(int));
+    *(s_c3 -> ptr_nb_mots_prez) = 0;
+    pError(s_c3 -> ptr_nb_mots_prez, "Erreur allocation memoire", 3);
+
+    s_c3 -> len_key = keyLen;
+
+    s_c3 -> fdScoreOut = fdScore;
+
+    return s_c3;
+}
+
+struct_c3 *copy_s_c3(struct_c3 *to_copy) {
+    struct_c3 *copied = NULL;
+    if (to_copy) {
+        copied = init_struct_c3((to_copy -> msgAndTaille) -> msg, (to_copy -> msgAndTaille) -> lenMsg, get_tailleTab(to_copy), to_copy -> len_key, to_copy -> dico, to_copy -> fdScoreOut);
+    }
+    return copied;
+}
+
+void destruct_struct_c3(struct_c3 **s_c3) {
+    if (s_c3) {
+        free(((*s_c3) -> msgAndTaille) -> msg);
+        free((void *) ((*s_c3) -> msgAndTaille));
+
+        destruct_struct_score(&((*s_c3) -> struct_score));
+
+        free((void *) (*s_c3) -> ptr_nb_mots_prez);
+
+        free((void *) (*s_c3));
+    }
+}
+
+int *get_tab_nb_mots(struct_c3 *s_c3) {
+    return (s_c3 -> struct_score) -> tab_nb_mots_prez;
+}
+
+unsigned char **get_keys_c3(struct_c3 *s_c3) {
+    if (s_c3) {
+        return (s_c3 -> struct_score) -> keys;
+    }
+    return NULL;
+}
+
+int get_tailleTab(struct_c3 *s_c3) {
+    if (s_c3) {
+        return (s_c3 -> struct_score) -> tailleTab;
+    }
+    return -1;
+}
+
+int get_tab_tailleActuelle(struct_c3 *s_c3) {
+    if (s_c3) {
+        return *((s_c3 -> struct_score) -> tailleActuelle);
+    }
+    return -1;
+}
+
+int get_meilleur_score_c3(struct_c3 *s_c3) {
+    if (s_c3) {
+        return (s_c3 -> struct_score -> tab_nb_mots_prez)[0];
+    }
+    return -1;
+}
+
+unsigned char *get_meilleur_clef_c3(struct_c3 *s_c3) {
+    if (s_c3) {
+        return (s_c3 -> struct_score -> keys)[0];
+    }
+    return NULL;
+}
+
+//------------------------------------------------------------------------------------------------------------
+/*
+    Fonctions pour gérer les scores de la structure struct_c3
 */
 
+/*
+    insere les valeurs de from dans to (si utile)
+*/
+void compile_structs_c3(struct_c3 *to, struct_c3 *from) {
+    int indInser;
+    for (int i = 0 ; i < get_tab_tailleActuelle(from) ; ++i) {
+        *(to -> ptr_nb_mots_prez) = get_tab_nb_mots(from)[i];
+        indInser = getIndexInsertionC3_struc(to);
+
+        ajouteScoreC3(to, get_keys_c3(from)[i], indInser);
+
+        if (get_tab_tailleActuelle(to) < get_tailleTab(to)) {
+            *((to -> struct_score) -> tailleActuelle) += 1;
+        }
+    }
+}
+
+/*
+    une structure struct_c3 contenant 2 tableaux :
+        un tableau 1 possédant les meilleurs scores (plus on est haut mieux c'est)
+        un tableau 2 de clefs à l'indice correspondant au tableau 1
+
+    ajoute le score s_c3 -> *(ptr_nb_mots_prez) dans le 
+    tableau avec la clef key correspondante
+*/
+void ajouteScoreC3(struct_c3 *s_c3, unsigned char *key, int ind) {
+    if (ind < get_tailleTab(s_c3)) {
+        for (int i = get_tab_tailleActuelle(s_c3) ; i > ind ; --i) {
+            // décaler tout le tableau vers la droite
+            // (copier tous les elements pour en inserer un nouveau)
+            if (i != get_tailleTab(s_c3)) {
+                get_tab_nb_mots(s_c3)[i] = get_tab_nb_mots(s_c3)[i - 1];
+                strcpy((char *) get_keys_c3(s_c3)[i], (const char *) get_keys_c3(s_c3)[i - 1]);
+            }
+        }
+        // insertion du nouvel element
+        get_tab_nb_mots(s_c3)[ind] = *(s_c3 -> ptr_nb_mots_prez);
+        strcpy((char *) get_keys_c3(s_c3)[ind], (const char *) key);
+
+        if (*((s_c3 -> struct_score) -> tailleActuelle) != (s_c3 -> struct_score) -> tailleTab) {
+            *((s_c3 -> struct_score) -> tailleActuelle) += 1;
+        }
+    }
+}
+
+/*
+    Retournent l'indice d'insertion d'une valeur
+        ( getIndexInsertionC3_struc -> valeur = s_c3 -> *(ptr_nb_mots_prez)
+        getIndexInsertionValueC3 -> valeur = value )
+    dans le tableau de nombres de mots présents
+*/
+int getIndexInsertionC3_struc(struct_c3 *s_c3) {
+    return getIndexInsertionValueC3(get_tab_nb_mots(s_c3), get_tab_tailleActuelle(s_c3), *(s_c3 -> ptr_nb_mots_prez));
+}
+
+int getIndexInsertionValueC3(int *tab_score_c3, int tailleTab, int value) {
+    int ind = 0;
+    while ((ind < tailleTab) && (tab_score_c3[ind] > value)) {
+        ++ind;
+    }
+    return ind;
+}
+
+/*
+    affiche les meilleures clefs avec le message decrypté
+*/
+void affiche_meilleures_clefs_c3(struct_c3 *sc3, char *msgCrypte, off_t lenMsg, int nbClefsAffichee) {
+    if (sc3) {
+        printf("Voici les scores et la traduction des %d meilleurss clefs\n", nbClefsAffichee);
+
+        char *msgUncrypted;
+        int indScore = 0; // afficher le premier score
+
+        int tailleActuelle = get_tab_tailleActuelle(sc3);
+        double bestScore = get_tab_nb_mots(sc3)[0];
+
+        char *bestKeyCur = (char *) get_keys_c3(sc3)[indScore];
+        int bestScoreCur = get_tab_nb_mots(sc3)[indScore];
+
+        while ((indScore < tailleActuelle) && indScore < nbClefsAffichee && bestScoreCur == bestScore) {
+            msgUncrypted = encrypt_decrypt_xorMSG(msgCrypte, bestKeyCur, lenMsg);
+
+            printf("\nMessage : %s\ndécrypté avec la meilleure clef (\"%s\" : score %d)\n", msgUncrypted, bestKeyCur, bestScoreCur);
+
+            free(msgUncrypted);
+            printf("\n");
+            ++indScore;
+            bestKeyCur = (char *) get_keys_c3(sc3)[indScore];
+            bestScoreCur = get_tab_nb_mots(sc3)[indScore];
+        }
+    }   
+}
+
+
+/*
+    ecrit les scores de nombres de mots presents (c3)
+    faite pour etre utilisee par des threads (acces parallele a un fichier)
+
+    Ecrit dans un fichier (généralement un log file) 
+    une chaine de caracteres de cette forme
+    "clef : 1234  nombre de mots présents dans le dictionnaire : 100"
+*/
+void ecritClefScore_c3(int fdFile, unsigned char *key, int nbMotsPrez) {
+    if (fdFile != -1) {
+        if (pthread_mutex_lock(&MUTEX_ECRITURE_SCORE) != 0) {
+            pError(NULL, "Erreur prise token mutex ecriture file", 4);
+        }
+
+        int lenKey = strlen((const char *) key);
+        // clef : 1234  nombre de mots présents dans le dictionnaire : 100
+        size_t tailleAllouee = lenKey + strlen("clef : \tnombre de mots présents dans le dictionnaire : ") + 10 + 2;
+        char *textToWrite = malloc(tailleAllouee);
+        pError(textToWrite, "Erreur allocation memoire", 4);
+
+        int ret = snprintf(textToWrite, tailleAllouee, 
+                   "clef : %s\tnombre de mots présents dans le dictionnaire : %d\n", 
+                   key, nbMotsPrez);
+        if (ret < 0 || (size_t)ret >= tailleAllouee) {
+            free(textToWrite);
+            pError(NULL, "Erreur snprintf c3 ecritClefScore", 4);
+        }
+        if (write(fdFile, textToWrite, strlen(textToWrite)) == -1) {
+            close(fdFile);
+            pError(NULL, "Error writing to file", 4);
+        }
+
+        free(textToWrite);
+
+        if (pthread_mutex_unlock(&MUTEX_ECRITURE_SCORE) != 0) {
+            pError(NULL, "Erreur don token mutex ecriture file", 4);
+        }
+    }
+}
+
+/*
+    pareil mais pas pour les threads
+*/
+void ecritTab_c3(int *tab, int nbElems,  unsigned char **keys, FILE *file) {
+    if (file) {
+        fprintf(file, "\nscores c3 : \n");
+        for (int i = 0 ; i < nbElems ; ++i) {
+            fprintf(file, "%s : nombres de mots existants : %d\n", keys[i], tab[i]);
+        }
+        fprintf(file, "\n\n");
+    }
+}
+
+//--------------------------------------------------------------------------------------------------
+/*
+    Fonctions indépendantes de recherches et calcul du nombre
+    de mots présents dans le dictionnaire dico
+*/
+
+/*
+    Retourne et met (si non null) dans nbMotsPrez
+    le nombre de mots présents du message msg dans dico
+*/
 int traiteMsgClefC3(char *msg, int *nbMotsPrez, dictionnary *dico) {
     int nbMots = 0;
     char **mots = wordsArrayFromText(msg, strlen(msg), &nbMots);
-    *nbMotsPrez = nbMotsPresents(mots, nbMots, dico);
+    int nbMotsPresent = nbMotsPresents(mots, nbMots, dico);
+    if (nbMotsPrez) {
+        *nbMotsPrez = nbMotsPresent;
+    }
 
     freeTabs((void **) mots, nbMots);
 
-    return *nbMotsPrez;
+    return nbMotsPresent;
 }
 
+/*
+    Retourne à partir d'un tableau de mots le nombre de mots
+    présents dans le dictionnaires
+    le retour est donc forcément <= à nbMots
+*/
 int nbMotsPresents(char **mots, int nbMots, dictionnary *dico) {
     int nbMotsPrez = 0;
     for (int i = 0 ; i < nbMots ; ++i) {
@@ -69,40 +590,7 @@ int nbMotsPresents(char **mots, int nbMots, dictionnary *dico) {
     return nbMotsPrez;
 }
 
-/*
-    une structure st contenant 2 tableaux :
-        un tableau 1 possédant les meilleurs scores (plus proche de 0 mieux c'est)
-        un tableau 2 de clefs à l'indice correspondant au tableau 1
-*/
-void ajouteScoreC3(stC2_C3 *st, unsigned char *key, int ind) {
-    if (ind < st -> tailleScoreTab) {
-        for (int i = *(st -> nbScoreTabs) ; i > ind ; --i) {
-            // décaler tout le tableau vers la droite
-            // (copier tous les elements pour en inserer un nouveau)
-            if (i != st -> tailleScoreTab) {
-                (st -> tabMeilleurScoreC3)[i] = (st -> tabMeilleurScoreC3)[i - 1];
-                strcpy((char *) (st -> tabKeysScoreC3)[i], (const char *) (st -> tabKeysScoreC3)[i - 1]);
-            }
-        }
-        // insertion du nouvel element
-        (st -> tabMeilleurScoreC3)[ind] = *(st -> nbMotsPrez);
-        strcpy((char *) (st -> tabKeysScoreC3)[ind], (const char *) key);
-    }
-}
 
-int getIndexInsertionC3(stC2_C3 *st) {
-    return getIndexInsertionValueC3(st, *(st -> nbMotsPrez));
-}
-
-int getIndexInsertionValueC3(stC2_C3 *st, int value) {
-    int ind = 0;
-    while ((ind < *(st -> nbScoreTabs)) && ((st -> tabMeilleurScoreC3)[ind] > value)) {
-        ++ind;
-    }
-    return ind;
-}
-
-//-----------------------------------------------------------------
 /*
     Functions to transform a text to an array of words
 
@@ -111,7 +599,7 @@ int getIndexInsertionValueC3(stC2_C3 *st, int value) {
     return [toto, and, titi, go, tothe, market]
 */
 char **wordsArrayFromText(char *text, off_t lenText, int *nbMot) {
-    int arrayLen = 100; // 50 words at the beginning
+    int arrayLen = 100; // 100 words at the beginning
     char **wordsArray = malloc(sizeof(char *) * arrayLen);
     pError(wordsArray, "Erreur allocation memoire", 3);
 
@@ -136,9 +624,6 @@ char **wordsArrayFromText(char *text, off_t lenText, int *nbMot) {
 /*
     Retourne le prochain mot à partir du curseur indText
     Un mot est composé uniquement de caractères alphabétiques
-
-    Return the next word from indText to the last alpha character
-    indText should begin from an alpha character
 */
 char *nextWord(char *text, off_t lenText, off_t *indText) {
     int lenWord = 50;
@@ -170,7 +655,7 @@ char *nextWord(char *text, off_t lenText, off_t *indText) {
     Toto (va) au marché
 
     indText = 0 -> 0
-    indText = 0 -> 6
+    indText = 4 -> 6
 
     changes indText to where the next alpha character begins
     should start at a non alpha character
@@ -180,5 +665,21 @@ void indNextWord(char *text, off_t lenText, off_t *indText) {
         ++(*indText);
     }
     return;
+}
+
+void test_text_word_splitter(dictionnary *dico) {
+    char *text = "Je dois etre decode le plus rapidement possible, idealement en moins de dix minutes";
+    off_t lenText = strlen(text);
+    int nbMots = 0;
+    
+    char **words = wordsArrayFromText(text, lenText, &nbMots);
+    int nbMotsPrez = 0;
+
+    for (int i = 0 ; i < nbMots ; ++i) {
+        if (find_word(dico, words[i])) {
+            ++nbMotsPrez;
+        }
+    }
+    printf("Il y a %d mots presents sur %d\n", nbMotsPrez, nbMots);
 }
 

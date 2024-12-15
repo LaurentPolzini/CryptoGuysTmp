@@ -2,7 +2,7 @@
 #define __TREE_H__
 
 #include <stdbool.h>
-#include "Pile.h"
+#include "../Pile.h"
 
 typedef struct _Tree Tree;
 
@@ -26,5 +26,7 @@ unsigned long getTailleClef(Tree *t);
 bool treeEmpty(Tree *t);
 
 void getClefsCandidates(Tree *t, unsigned char **clefs);
+
+void freeDoubleArray(unsigned char ***arr, unsigned long len);
 
 #endif

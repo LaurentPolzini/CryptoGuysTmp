@@ -14,7 +14,7 @@ long random_long(long min,long max){
 /// \brief génère un uint aléatoire entre min et max
 /// \param[in] min et max des uint
 /// \return n : min≤n≤max
-  return trueRandom(max - min) + min;
+  return true_random(max - min) + min;
 }
 
 long puissance_mod_n (long a, long e, long n) {

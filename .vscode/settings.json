@@ -22,7 +22,18 @@
         "queue.h": "c",
         "break_code_c1.h": "c",
         "pile.h": "c",
-        "util.h": "c"
+        "util.h": "c",
+        "chiffrement.h": "c",
+        "threadsegmentationtableauxindex.h": "c",
+        "break_code_c2_c3.h": "c",
+        "stdbool.h": "c",
+        "array": "c",
+        "__tuple": "c",
+        "stdio.h": "c",
+        "break_code_c2.h": "c",
+        "caracterescandidatsindexkey.h": "c",
+        "getopt.h": "c",
+        "pthread.h": "c"
     },
     "makefile.configureOnOpen": false
 }

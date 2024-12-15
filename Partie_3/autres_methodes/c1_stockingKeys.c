@@ -3,47 +3,47 @@
 #include <pthread.h>
 #include <string.h>
 #include <math.h>
-#include "break_code_c1.h"
-#include "../utilitaire/utiL.h"
+#include "../break_code_c1.h"
+#include "../../utilitaire/utiL.h"
 #include "c1_stockingKeys.h"
+#include "../caracteresCandidatsIndexKey.h"
+#include "Tree.h"
 
-/*
-    un thread est crée par segment de clefs
-        son role est d'ajouter tous les nouveaux caracteres candidats
-        a chaque clef du segment
 
-        => threadInfo doit etre constitué de
-        unsigned char *carCandidats; // les caracteres candidats
-        int nbCarCand;
-        unsigned char **clef; // le tableau de clefs
-        int debutSegment; // debut des clefs qu'on traitera
-        int finSegment; // fin des clefs qu'on traitera
-        unsigned char **newKeys; // ou ecrire les nouvelles clefs
-        int tailleclef; // le nombre de clefs actuelles
-*/
-/*
-void *ajouteCandidatsThreads(void *threadIntel) {
-    threadInfoKey ti = *((threadInfoKey *) threadIntel);
+void appelClefsParCombo(char *file_in, int keyLength, char *logFile) {
+    (void) logFile;
+    off_t siz;
+    char *msgCrypted = ouvreEtLitFichier(file_in, &siz);
 
-    unsigned long indTmp;
+    unsigned long nbClefs;
+    unsigned char **clefs = clefFinalesParCombinaisons(msgCrypted, siz, keyLength, &nbClefs);
 
-    for (unsigned long i = ti.debutSegment ; i < ti.finSegment ; ++i) {
-        for (int j = 0 ; j < ti.nbCarCand ; ++j) {
-            indTmp = (i * ti.nbCarCand) + j;
-            ti.keys[indTmp] = malloc(ti.tailleclef + 2); // 2 : nouveau caractere et \0
-            pError(ti.keys[indTmp], "Erreur creation nouvelle clef", 1);
-
-            // copie le 1 dans les 2 premieres cases
-            strcpy((char *) ti.keys[indTmp], (const char *) (ti.clef)[i]);
-            // met le 4 et le 5 dans les cases 1 et 2 (fin 0 et 1 quoi)
-            ti.keys[indTmp][ti.tailleclef] = ti.carCandidats[j];
-            ti.keys[indTmp][ti.tailleclef + 1] = '\0';
+    for (unsigned long i = 0 ; i < nbClefs ; ++i) {
+        if (strstr((char *) clefs[i], "rutabag")) {
+            printf("Trouvé !\n");
         }
     }
-
-    pthread_exit(NULL);
 }
-*/
+
+
+unsigned char **clefFinalesParCombinaisons(char *msgCode, unsigned long tailleMsgCode, int len_key, unsigned long *nbClefs) {
+    unsigned char **carCandParIndice = caracteresCandidatsParIndice(msgCode, tailleMsgCode, len_key);
+    unsigned char **clefs = malloc(sizeof(unsigned char *));
+    pError(clefs, "Erreur creation tableau de clefs de base", 1);
+    clefs[0] = malloc(1);
+    pError(clefs[0], "Erreur allocation chaine de caractere vide", 1);
+    strcpy((char *) clefs[0], "\0");
+    
+    unsigned long nbClefsTMP = 1;
+    int tailleClefs = 0;
+    for (int i = 0 ; i < len_key ; ++i) {
+        ajouteCandidats(&clefs, &nbClefsTMP, &tailleClefs, carCandParIndice[i], (int) strlen((const char *) carCandParIndice[i]));
+    }
+
+    *nbClefs = nbClefsTMP;
+    return clefs;
+}
+
 /*
     Dans clefs les clefs pour l'instant 
     soit les caracteres candidats 
@@ -58,8 +58,6 @@ void *ajouteCandidatsThreads(void *threadIntel) {
 
     a la fin de tous les appels de carCandidats on a dans ***clefs toutes les clefs
 */
-
-/*
 void ajouteCandidats(unsigned char ***clefs, unsigned long *nbClefs, int *tailleClefs, unsigned char *carCandidats, int nbCarCand) {
     // initialise les nouvelles infos : 
     // nouveaux nb de clefs et nouveau tableau de clefs en consequence
@@ -98,32 +96,15 @@ void ajouteCandidats(unsigned char ***clefs, unsigned long *nbClefs, int *taille
     return;
 }
 
-unsigned char **clefFinalesParCombinaisons(char *msgCode, unsigned long tailleMsgCode, int len_key, unsigned long *nbClefs) {
-    unsigned char **carCandParIndice = caracteresCandidatsParIndice((unsigned char *) msgCode, tailleMsgCode, len_key);
-    unsigned char **clefs = malloc(sizeof(unsigned char *));
-    pError(clefs, "Erreur creation tableau de clefs de base", 1);
-    clefs[0] = malloc(1);
-    pError(clefs[0], "Erreur allocation chaine de caractere vide", 1);
-    strcpy((char *) clefs[0], "\0");
-    
-    unsigned long nbClefsTMP = 1;
-    int tailleClefs = 0;
-    for (int i = 0 ; i < len_key ; ++i) {
-        ajouteCandidats(&clefs, &nbClefsTMP, &tailleClefs, carCandParIndice[i], (int) strlen((const char *) carCandParIndice[i]));
-    }
-
-    *nbClefs = nbClefsTMP;
-    return clefs;
-}
-
-
-threadInfoKey createThreadInfo(unsigned char *carCandidats, int nbCarCand, unsigned long debutSegment,
-    unsigned long finSegment, unsigned long tailleclef, int fileInDescriptor, int fileOutDescriptor) {
+threadInfoKey createThreadInfo(unsigned char *carCandidats, int nbCarCand, unsigned char **actualKeys, unsigned long debutSegment,
+    unsigned long finSegment, unsigned char **new_keys, unsigned long tailleclef, int fileInDescriptor, int fileOutDescriptor) {
         threadInfoKey ti;
         ti.carCandidats = carCandidats;
         ti.nbCarCand = nbCarCand;
+        ti.actual_keys = actualKeys;
         ti.debutSegment = debutSegment;
         ti.finSegment = finSegment;
+        ti.next_keys = new_keys;
         ti.tailleclef = tailleclef;
         ti.fileInDescriptor = fileInDescriptor;
         ti.fileOutDescriptor = fileOutDescriptor;
@@ -131,6 +112,43 @@ threadInfoKey createThreadInfo(unsigned char *carCandidats, int nbCarCand, unsig
         return ti;
 }
 
+/*
+    un thread est crée par segment de clefs
+        son role est d'ajouter tous les nouveaux caracteres candidats
+        a chaque clef du segment
+
+        => threadInfo doit etre constitué de
+        unsigned char *carCandidats; // les caracteres candidats
+        int nbCarCand;
+        unsigned char **clef; // le tableau de clefs
+        int debutSegment; // debut des clefs qu'on traitera
+        int finSegment; // fin des clefs qu'on traitera
+        unsigned char **newKeys; // ou ecrire les nouvelles clefs
+        int tailleclef; // le nombre de clefs actuelles
+*/
+void *ajouteCandidatsThreads(void *threadIntel) {
+    threadInfoKey ti = *((threadInfoKey *) threadIntel);
+
+    unsigned long indTmp;
+
+    for (unsigned long i = ti.debutSegment ; i < ti.finSegment ; ++i) {
+        for (int j = 0 ; j < ti.nbCarCand ; ++j) {
+            indTmp = (i * ti.nbCarCand) + j;
+            ti.next_keys[indTmp] = malloc(ti.tailleclef + 2); // 2 : nouveau caractere et \0
+            pError(ti.next_keys[indTmp], "Erreur creation nouvelle clef", 1);
+
+            // copie le 1 dans les 2 premieres cases
+            strcpy((char *) ti.next_keys[indTmp], (const char *) (ti.actual_keys)[i]);
+            // met le 4 et le 5 dans les cases 1 et 2 (fin 0 et 1 quoi)
+            ti.next_keys[indTmp][ti.tailleclef] = ti.carCandidats[j];
+            ti.next_keys[indTmp][ti.tailleclef + 1] = '\0';
+        }
+    }
+
+    pthread_exit(NULL);
+}
+
+/*
 void *ajouteCandidatsThreads2(void *threadIntel) {
     threadInfoKey ti = *((threadInfoKey *) threadIntel);
 
@@ -169,7 +187,7 @@ void *ajouteCandidatsThreads2(void *threadIntel) {
             newKeys[indTmp][ti.tailleclef + 1] = '\0';
 
             if (indTmp == tailleBuffFile - 1) {
-                ecritClef(ti.fileOut, newKeys, tailleBuffFile);
+                ecritClef(newKeys, ti.fileOutDescriptor);
             }
         }
     }

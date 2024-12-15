@@ -1,0 +1,3 @@
+Ceci est un second message pour tester le break masque.
+Il faut que ca fasse la meme longueur que le premier texte
+car ca utilise la mem

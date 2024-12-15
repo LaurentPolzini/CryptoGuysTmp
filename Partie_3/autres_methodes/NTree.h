@@ -2,7 +2,7 @@
 #define __NTREE_H__
 
 #include <stdbool.h>
-#include "./Pile.h"
+#include "../Pile.h"
 
 // définition de structure d'arbre N-aire opaque
 typedef struct _NTree TreeNaire;
@@ -23,11 +23,11 @@ Arbre *NTreeCreate(void);
 // retourne la valeur de l'arbre t
 unsigned char NTreeValue(TreeNaire *t);
 
-Arbre *NTreeAdd(Arbre *tree, unsigned char *value, int tailleValue);
+Arbre *ArbreAdd(Arbre *tree, unsigned char *value, int tailleValue);
 
 // Ajoute une valeur à l'arbre Naire
 // je met la valeur dans chaque sous arbre de tree
-//TreeNaire *NTreeAdd(TreeNaire *tree, unsigned char *value, int tailleValue);
+TreeNaire *NTreeAdd(TreeNaire *tree, unsigned char *value, int tailleValue);
 
 // détruit l'arbre t
 void arbreDelete(ptrArbre *t);
@@ -71,9 +71,9 @@ int tailleClefs(Arbre *tree);
 // clef un tableau de chaine de caractères (est modifé)
 // input (par arbre): [[568], [1], [23]]
 // output (dans clef): [[512], [513], [612], [513], [812], [813]]
-/*
-void getClefsCandidates(Arbre *t, unsigned char **clef);
+
+void getClefsCandidatesNT(Arbre *t, unsigned char **clef);
 
 void getClefsCandidatesTHREAD(Arbre *t, unsigned char **clef);
-*/
+
 #endif

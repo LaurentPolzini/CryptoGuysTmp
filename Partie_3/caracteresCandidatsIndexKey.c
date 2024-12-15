@@ -5,9 +5,6 @@
 #include <ctype.h>
 #include "caracteresCandidatsIndexKey.h"
 
-
-char ASCII_CHAR_VALIDES[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'\",?!;.:()\n ";
-
 char ACCENTED_CHAR_VALIDE[] = "éèêëàâîïùûœçô";
 
 char UTF8_CHAR_VALIDES[] = 
@@ -133,6 +130,18 @@ unsigned char *caracteresPossibles(unsigned char *charSet, unsigned char carChif
     return charClefPossibles;
 }
 
+
+void affiche_caracteres_candidats(unsigned char **carCand, int lenKey) {
+    for (int i = 0 ; i < lenKey ; ++i) {
+        printf("[");
+        fflush(stdout);
+        for (int j = 0 ; j < (int) strlen((char *) carCand[i]) ; ++j) {
+            printf("%c,", carCand[i][j]);
+            fflush(stdout);
+        }
+        printf("]\n");
+    }
+}
 
 
 

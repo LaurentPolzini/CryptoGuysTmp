@@ -20,7 +20,7 @@ typedef void(*FunctorC1)(unsigned char *, void *);
 // et les caractères spéciaux de ponctuation
 bool estCaractereValideASCII(unsigned char charDechiffre);
 
-char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage);
+unsigned long nbClefsTotal(unsigned char **carCandParIndice, int len_key);
 
 /*
     recoit un message codé du style "s!/ik" dans msgCode
@@ -28,20 +28,31 @@ char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage);
     retourne quelque chose du type 
     [[512], [612], [312]]
 */
-void clefsFinales(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, char *nameFileOut);
 
-void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 functor, char *logFile, bool c2c3);
+void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 functor, char *logFile, bool c2c3, unsigned long *nbOfKeys);
 
-void freeDoubleArray(unsigned char ***arr, unsigned long len);
+void appelCaracteresCandidats(char *file_in, int keyLength);
 
 /*
     Functors
 */
+void functorOnKey(unsigned char *key, FunctorC1 f, void *userData);
+// functors possible sur une clef
 void afficheClef(unsigned char *key, void *userData);
 void clefTrouve(unsigned char *curKey, void *actualKey);
 void ecritClef(unsigned char *clef, void *fileOutDescriptor);
 void doNothing(unsigned char *none, void *userData);
 void translateMsg(unsigned char *key, void *msg);
+
+
+/*
+    a partir d'un tableau de caracteres candidats
+    [1,2]
+    [3]
+    [4,5]
+    et d'un tableau d'indice, [1, 0, 1] sort une clef : 235
+*/
+unsigned char *getKeyFromTab(int *tableauInd, unsigned char **carCandidats, int len_key);
 
 
 void associeMaxTabs(struct stC2_C3 **array, struct stC2_C3 *toWhere, int nbThreads);

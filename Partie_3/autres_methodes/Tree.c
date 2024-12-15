@@ -5,8 +5,32 @@
 #include <string.h>
 #include <stdbool.h>
 #include "Tree.h"
-#include "Pile.h"
-#include "../utilitaire/utiL.h"
+#include "../Pile.h"
+#include "../../utilitaire/utiL.h"
+#include "../break_code_c1.h"
+#include "../caracteresCandidatsIndexKey.h"
+
+unsigned char **clefFinalesTree(char *msgCode, unsigned long tailleMsgCode, int len_key, unsigned long *nbClefs) {
+    unsigned char **carCandParIndice = caracteresCandidatsParIndice(msgCode, tailleMsgCode, len_key);
+
+    Tree *t = createTree();
+    for (int i = 0 ; i < len_key ; ++i) {
+        t = addTree(t, carCandParIndice[i], ((int) strlen((const char *) carCandParIndice[i])) );
+    }
+
+    *nbClefs = getNbClef(t);
+    printf("323 break code c1 Il y a %lu clefs\n", *nbClefs);
+
+    unsigned char **clefs = malloc((*nbClefs) * sizeof(unsigned char *));
+    pError(clefs, "Erreur création lot de clefs", 1);
+
+    getClefsCandidates(t, clefs);
+
+    freeDoubleArray(&carCandParIndice, len_key);
+    deleteTree(t);
+
+    return clefs;
+}
 
 // pour les threads
 void *threadClefsCandidates(void *threadInfo);
@@ -20,6 +44,11 @@ typedef struct {
     unsigned char **clefs;
     unsigned long *indice;
 } threadInfo;
+
+typedef struct {
+    unsigned char ***arr;
+    unsigned long debut, fin;
+} threadFreeInfo;
 
 // fonction privée
 Noeud *createNoeud(Noeud *pere, unsigned char *carCand, unsigned long nbCar);
@@ -209,3 +238,46 @@ void getClefsCandidates(Tree *t, unsigned char **clefs) {
     }
     return;
 }
+
+void *threadFreeSegment(void *info) {
+    threadFreeInfo ti = *((threadFreeInfo *) info);
+
+    for (unsigned long i = ti.debut ; i < ti.fin ; ++i) {
+        if ((*(ti.arr))[i]) {
+            free((void *) (*(ti.arr))[i]);
+            (*(ti.arr))[i] = NULL;
+        }
+    }
+
+    pthread_exit(NULL);
+}
+
+void freeDoubleArray(unsigned char ***arr, unsigned long len) {
+    if (!(arr && *arr)) {
+        return;
+    }
+    unsigned long nbSeg = (unsigned long) sqrt(len);
+    unsigned long tailleSeg = len / nbSeg + (len % nbSeg != 0 ? 1 : 0);
+
+    pthread_t *thid = malloc(nbSeg * sizeof(pthread_t));
+    pError(thid, "Erreur creation tableau thread free", 1);
+    threadFreeInfo *ti = malloc(nbSeg * sizeof(threadFreeInfo));
+    pError(ti, "Erreur creation tableau informations pour threads free", 1);
+    
+    for (unsigned long i = 0 ; i < nbSeg ; ++i) {
+        ti[i].arr = arr;
+        ti[i].debut = i * tailleSeg;
+        ti[i].fin = (i + 1) * tailleSeg > len ? len : (i + 1) * tailleSeg;
+        pthread_create(&thid[i], NULL, threadFreeSegment, &ti[i]);
+    }
+    for (unsigned long i = 0 ; i < nbSeg ; ++i) {
+        pthread_join(thid[i], NULL);
+    }
+    
+    free((void *) *arr);
+    *arr = NULL;
+
+    free(thid);
+    free(ti);
+}
+

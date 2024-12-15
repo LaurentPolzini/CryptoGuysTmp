@@ -5,8 +5,9 @@
 #include <string.h>
 #include <math.h>
 #include <pthread.h>
-#include "./Pile.h"
+#include "../Pile.h"
 #include "NTree.h"
+#include "../../utilitaire/utiL.h"
 
 /*
 Code erreurs:
@@ -14,7 +15,6 @@ Code erreurs:
     Erreurs allocation mem = 1
 
 */
-
 
 typedef struct {
     int debut;
@@ -35,11 +35,10 @@ typedef struct {
 } threadAddValuesInfo;
 
 pthread_mutex_t mutexEcritureClef;
-void *threadClefsCandidates(void *ti);
+void *threadClefsCandidatesNT(void *ti);
 void *threadAddValues(void *info);
-void pError(char *msg, int es);
 
-void clefsCandidates(TreeNaire *t, unsigned char **clef, int *indice, Pile *p);
+void clefsCandidatesNT(TreeNaire *t, unsigned char **clef, int *indice, Pile *p);
 void FunctorDelete(TreeNaire *tree);
 void FunctorPrint(TreeNaire *tree);
 void NTreeDelete(TreeNaire *tree);
@@ -81,7 +80,7 @@ Arbre *NTreeCreate(void) {
 // Ajoute une valeur à l'arbre Naire
 // étant donné pue je cherche toutes les possibilités de clefs
 // je met les valeurs dans chapue sous arbre
-Arbre *NTreeAdd(Arbre *tree, unsigned char *value, int tailleValue) {
+Arbre *ArbreAdd(Arbre *tree, unsigned char *value, int tailleValue) {
     if (arbreEmpty(tree)) {
         tree = treeEmptyAddValues(tree, value, tailleValue);
     } else {
@@ -233,9 +232,7 @@ Arbre *treeAddValues(Arbre *tree, unsigned char *value, int tailleValue) {
     for (int i = 0 ; i < tree -> nbClefsTotal ; ++i) {
         // TODO THREADS ICI
         tabTreesFils[i] = malloc(tailleValue * sizeof(TreeNaire *));
-        if (!tabTreesFils[i]) {
-            pError("Erreur allocation mémoire pour le tableau de fils", 1);
-        }
+        pError(tabTreesFils[i], "Erreur allocation mémoire pour le tableau de fils", 1);
         for (int j = 0 ; j < tailleValue ; ++j) {
             tabTreesFils[i][j] = NTreeCons((tree -> dernierFils)[i], NULL, value[j]);
             indTmp = (i * tailleValue) + j;
@@ -401,17 +398,17 @@ int tailleClefs(Arbre *tree) {
 
 void clefsCandidatesTHREAD(TreeNaire *t, unsigned char **clef, int *indice, Pile *p) {
     if (t -> value != '\0') { // le noeud parent ultime : celui tout en haut
-        pilePush(p, t -> value);
+        pilePush(p, (void *) &(t -> value));
     }
 
     if (t -> nbFils == 0) {
         if (pthread_mutex_lock(&mutexEcritureClef) != 0) {
-            pError("Erreur prendre jeton mutex", 3);
+            pError(NULL, "Erreur prendre jeton mutex", 3);
         }
-        pileCopyValue(p, &(clef[*indice]));
+        pileCopyValueCHAR(p, &(clef[*indice]));
         ++(*indice);
         if (pthread_mutex_unlock(&mutexEcritureClef) != 0) {
-            pError("Erreur don jeton mutex", 3);
+            pError(NULL, "Erreur don jeton mutex", 3);
         }
     } else {
         int nbSegment = (int) (t -> nbFils) / 8; // nb thread
@@ -431,7 +428,7 @@ void clefsCandidatesTHREAD(TreeNaire *t, unsigned char **clef, int *indice, Pile
             ti[i].clef = clef;
             ti[i].indice = indice;
             
-            pthread_create(&thid[i], NULL, threadClefsCandidates, (void *) &ti[i]);
+            pthread_create(&thid[i], NULL, threadClefsCandidatesNT, (void *) &ti[i]);
         }
         for (int i = 0 ; i < nbSegment ; ++i) {
             pthread_join(thid[i], NULL); // TODO ici ??
@@ -444,9 +441,9 @@ void clefsCandidatesTHREAD(TreeNaire *t, unsigned char **clef, int *indice, Pile
 }
 
 
-void *threadClefsCandidates(void *ti) {
+void *threadClefsCandidatesNT(void *ti) {
     threadClefCandInfo tinfo = *((threadClefCandInfo *) ti);
-    Pile *newPile = pileCopy(tinfo.pile);
+    Pile *newPile = pileCopyCHAR(tinfo.pile);
     for (int i = tinfo.debut ; i < tinfo.fin ; ++i) {
         clefsCandidatesTHREAD((tinfo.tree->fils)[i], tinfo.clef, tinfo.indice, newPile);
     }
@@ -454,27 +451,26 @@ void *threadClefsCandidates(void *ti) {
     pileDelete(newPile); // TODO ca marche ??
     pthread_exit(NULL);
 }
-*/
+
 // t l'arbre possédant toutes les clefs
 // clef un pointeur vers un tableau de chaine de caractères (est modifé)
 // la taille de clef doit être egal à nombreClefsCandidates * tailleClefs
 // pile doit avoir pour taille max tailleClefs
 // indice doit être initialisé a 0
 // indice est l'indice d'insertion dans *clef[indice] = pile->values
-/*
-void clefsCandidates(TreeNaire *t, unsigned char **clef, int *indice, Pile *p) {
+void clefsCandidatesNT(TreeNaire *t, unsigned char **clef, int *indice, Pile *p) {
     if (t -> value != '\0') { // le noeud parent ultime : celui tout en haut
-        pilePush(p, t -> value);
+        pilePush(p, (void *) &(t -> value));
     }
 
     if (t -> nbFils == 0) {
-        pileCopyValue(p, &(clef[*indice]));
+        pileCopyValueCHAR(p, &(clef[*indice]));
         ++(*indice);
     } else {
         int indFils = 0;
 
         while (indFils < (t -> nbFils)) {
-            clefsCandidates((t -> fils)[indFils], clef, indice, p);
+            clefsCandidatesNT((t -> fils)[indFils], clef, indice, p);
             ++indFils;
         }
     }
@@ -487,7 +483,7 @@ void clefsCandidates(TreeNaire *t, unsigned char **clef, int *indice, Pile *p) {
 
 void getClefsCandidatesTHREAD(Arbre *t, unsigned char **clef) {
     if (pthread_mutex_init(&mutexEcritureClef, NULL) != 0) {
-        pError("Erreur creation mutex", 3);
+        pError(NULL, "Erreur creation mutex", 3);
     }
 
     Pile *p = pileCreate(tailleClefs(t)); // faut la copier mister
@@ -496,7 +492,7 @@ void getClefsCandidatesTHREAD(Arbre *t, unsigned char **clef) {
     pileDelete(p);
 
     if (pthread_mutex_destroy(&mutexEcritureClef) != 0) {
-        pError("Erreur destruction mutex", 3);
+        pError(NULL, "Erreur destruction mutex", 3);
     }
 }
 
@@ -505,10 +501,10 @@ void getClefsCandidatesTHREAD(Arbre *t, unsigned char **clef) {
 // clef un tableau de chaine de caractères (est modifé)
 // input (par arbre): [[568], [1], [23]]
 // output (dans clef): [[512], [513], [612], [513], [812], [813]]
-void getClefsCandidates(Arbre *t, unsigned char **clef) {
+void getClefsCandidatesNT(Arbre *t, unsigned char **clef) {
     Pile *p = pileCreate(tailleClefs(t));
     int ind = 0;
-    clefsCandidates(t->premiersFils, clef, &ind, p);
+    clefsCandidatesNT(t->premiersFils, clef, &ind, p);
     pileDelete(p);
 }
 
