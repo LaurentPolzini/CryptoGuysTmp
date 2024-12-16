@@ -6,6 +6,8 @@
 #include "../utilitaire/utiL.h"
 #include "Pile.h"
 
+void init_first_pile(sPileIndCourFin *pile0, nbEtTailleSegment nts, int nbLignesATraiter, unsigned char **carCand);
+
 /*
     on a les caracteres candidats
     1234
@@ -26,26 +28,37 @@
 
     le nombre de threads diminue en fonction de segmenteUntilI (1 : jusque ligne 0 ; 5 : jusque ligne 4)
 */
-nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel) {
+nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel, int *nbLigne_non_traitee) {
     nbEtTailleSegment infoSeg;
     infoSeg.nbSegment = malloc(sizeof(int) * tailleClef);
     pError(infoSeg.nbSegment, "Erreur création tableau du nombre de segments des caractères candidats", 1);
     infoSeg.tailleSegment = malloc(sizeof(int) * tailleClef);
     pError(infoSeg.tailleSegment, "Erreur création tableau de la taille des segments des caractères candidats", 1);
     int indSeg = 0;
+    infoSeg.nbElem = tailleClef;
 
+    int curTailleCarCand;
+
+    *nbThreadsReel = 1;
     while (*nbThreadsReel < *nbThreadsMax && indSeg < tailleClef) {
-        infoSeg.nbSegment[indSeg] = 2;
-        infoSeg.tailleSegment[indSeg] = strlen((const char *) carCand[indSeg]) / infoSeg.nbSegment[indSeg];
-        *nbThreadsReel *= infoSeg.nbSegment[indSeg++];
+        curTailleCarCand = strlen((const char *) carCand[indSeg]);
+        (infoSeg.nbSegment)[indSeg] = 1;
+        if (curTailleCarCand > 1) {
+            (infoSeg.nbSegment)[indSeg] = 2;
+        }
+        
+        (infoSeg.tailleSegment)[indSeg] = (curTailleCarCand / (infoSeg.nbSegment)[indSeg]);
+        *nbThreadsReel *= (infoSeg.nbSegment)[indSeg++];
+    }
+    for (int i = indSeg ; i < tailleClef ; ++i) {
+        (infoSeg.nbSegment)[i] = 1;
+        (infoSeg.tailleSegment)[i] = strlen((const char *) carCand[i]);
     }
     if (*nbThreadsReel > *nbThreadsMax) {
         *nbThreadsReel = *nbThreadsMax;
     }
-    for (int i = indSeg ; i < tailleClef ; ++i) {
-        infoSeg.nbSegment[i] = 1;
-        infoSeg.tailleSegment[i] = strlen((const char *) carCand[i]);
-    }
+
+    *nbLigne_non_traitee = tailleClef - indSeg;
    
     return infoSeg;
 }
@@ -55,18 +68,36 @@ void freeNBetTailleSeg(nbEtTailleSegment *s) {
     free(s->tailleSegment);
 }
 
-void freeSPiles(sPileIndCourFin **sPiles, int nbPiles) {
-    for (int i = 0 ; i < nbPiles ; ++i) {
-        freeSPile(sPiles[i]);
+void freeSPiles(sPileIndCourFin ***sPiles, int nbPiles) {
+    if (!sPiles || !(*sPiles)) {
+        fprintf(stderr, "Error: sPiles is already NULL in freeSPiles.\n");
+        return;
     }
+
+    for (int i = 0; i < nbPiles; ++i) {
+        if ((*sPiles)[i]) {
+            freeSPile(&((*sPiles)[i]));
+        }
+    }
+
     free((void *) *sPiles);
+    *sPiles = NULL;
 }
 
-void freeSPile(sPileIndCourFin *sPiles) {
-    pileDelete(sPiles -> pileOrigin);
-    pileDelete(sPiles -> pileIndCour);
-    pileDelete(sPiles -> pileIndMax);
+void freeSPile(sPileIndCourFin **sPile) {
+    if (!sPile || !(*sPile)) {
+        fprintf(stderr, "Warning: sPile is already NULL in freeSPile.\n");
+        return;
+    }
+
+    pileDelete(&((*sPile)->pileOrigin));
+    pileDelete(&((*sPile)->pileIndCour));
+    pileDelete(&((*sPile)->pileIndMax));
+
+    free((void *) *sPile);
+    *sPile = NULL;
 }
+
 
 
 /*
@@ -86,26 +117,61 @@ void freeSPile(sPileIndCourFin *sPiles) {
 */
 
 sPileIndCourFin **initialisePilesIndiceThreads(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel) {
-    nbEtTailleSegment nts = setNbAndTailleSegment(tailleClef, carCand, nbThreadsMax, nbThreadsReel);
+    int nbLigneNonTraitee = tailleClef; // uniquement pour la premiere pile
+    nbEtTailleSegment nts = setNbAndTailleSegment(tailleClef, carCand, nbThreadsMax, nbThreadsReel, &nbLigneNonTraitee);
+    int nbLignesATraiter = nts.nbElem - 1 - nbLigneNonTraitee;
+    // toutes les lignes non segmentées sont mises dans la pile 0
+    // ensuite pour les lignes du haut (qu'il reste a traiter)
+    // il faudra copier les piles deja initialiser puis ajouter
+    // les nouvelles segmentations
+
     // autant de tableaux que de threads
     sPileIndCourFin **piles = malloc(sizeof(sPileIndCourFin) * (*nbThreadsReel));
     pError(piles, "Erreur allocation tableau d'indice pour les threads", 1);
     for (long i = 0 ; i < *nbThreadsReel ; ++i) {
         piles[i] = malloc(sizeof(sPileIndCourFin));
         pError(piles[i], "Erreur allocation memoire piles threads", 1);
+
+        piles[i] -> pileOrigin = pileCreate(tailleClef);
+        piles[i] -> pileIndCour = pileCreate(tailleClef);
+        piles[i] -> pileIndMax = pileCreate(tailleClef);
     }
-    piles[0] -> pileOrigin = pileCreate(tailleClef);
-    piles[0] -> pileIndCour = pileCreate(tailleClef);
-    piles[0] -> pileIndMax = pileCreate(tailleClef);
+    // permettra les copies suivantes
+    init_first_pile(piles[0], nts, nbLignesATraiter, carCand);
     
     int nbPileActuel = 1; // censé finir a nbThreads
-    for (int i = tailleClef - 1 ; i >= 0 ; --i) {
+    for (int i = nbLignesATraiter ; i >= 0 ; --i) {
         ajouteSegmentation(piles, &nbPileActuel, nts.nbSegment[i], nts.tailleSegment[i], carCand[i]);
     }
     
     freeNBetTailleSeg(&nts);
 
     return piles;
+}
+
+void init_first_pile(sPileIndCourFin *pile0, nbEtTailleSegment nts, int nbLignesATraiter, unsigned char **carCand) {
+    int *debut;
+    int *fin;
+    int *origin;
+    int lenCarCand;
+
+    for (int i = nts.nbElem - 1 ; i > nbLignesATraiter ; --i) {
+        lenCarCand = strlen((char *) carCand[i]);
+        debut = malloc(sizeof(int));
+        pError(debut, "Erreur allocation element pile", 2);
+        fin = malloc(sizeof(int));
+        pError(fin, "Erreur allocation element pile", 2);
+        origin = malloc(sizeof(int));
+        pError(origin, "Erreur allocation element pile", 2);
+            
+        *debut = 0;
+        *origin = *debut;
+        *fin = lenCarCand;
+
+        pilePush(pile0 -> pileOrigin, (void *) origin);
+        pilePush(pile0 -> pileIndCour, (void *) debut);
+        pilePush(pile0 -> pileIndMax, (void *) fin);
+    }
 }
 
 /*
@@ -211,7 +277,10 @@ void ajouteSegmentation(sPileIndCourFin **piles, int *nbPileCur, int nbSeg, int 
     int *fin;
     int lenCarCand = strlen((const char *) carCand);
 
+    // copie les piles actuellement chargée dans les
+    // (*nbPileCur * nbSeg) - *nbPileCur nouvelles piles
     initialisePilesSuivantes(piles, *nbPileCur, nbSeg);
+    // puis on ajoute les nouvelles segmentations
     for (int i = 0 ; i < nbSeg ; ++i) {
         for (int j = 0 ; j < *nbPileCur ; ++j) {
             indTabs = (i * (*nbPileCur)) + j;
@@ -243,7 +312,7 @@ void ajouteSegmentation(sPileIndCourFin **piles, int *nbPileCur, int nbSeg, int 
     [0 -> 1]
     et on veut ajouter [4,5,6] donc 2 segments : [45] [6]
     on aura les piles
-    [0 -> 2]     [0 -> 2]
+    [0 -> 2]     [2 -> 3]
     [0 -> 1]     [0 -> 1]
     (pour l'intéret complet de cette fonction voir fonction ajouteSegmentation)
 */

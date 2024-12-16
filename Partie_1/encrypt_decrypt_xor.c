@@ -116,8 +116,8 @@ char* gen_key(int length, char *key, bool mask) {
 char *gen_key_unique(int length, char *key) {
     dictionnary *dicoHash = NULL;
     // put the generated keys into the hashmap
-    char *absolutMaxKeyLenPath = "/Users/laurentpolzin/Documents/UT3/S5/Projet_Avance/crypto/Crypt_Temp/Partie_1/maxLenGeneratedKeys.txt";
-    char *absolutKeysListsPath = "/Users/laurentpolzin/Documents/UT3/S5/Projet_Avance/crypto/Crypt_Temp/keys.txt";
+    char *absolutMaxKeyLenPath = "./maxLenGeneratedKeys.txt";
+    char *absolutKeysListsPath = "../keys.txt";
 
     // the length of the longest key is needed for the hashmap
     off_t lenMsg;
@@ -131,7 +131,7 @@ char *gen_key_unique(int length, char *key) {
         char cMaxKey[20];
         snprintf(cMaxKey, sizeof(cMaxKey), "%d", tailleKeyMax);
         remove(absolutMaxKeyLenPath);
-        ouvreEtEcritMsg(absolutMaxKeyLenPath, cMaxKey, strlen(cMaxKey));
+        ouvreEtEcritMsg(absolutMaxKeyLenPath, cMaxKey, strlen(cMaxKey), false);
     }
 
     read_and_insert_words(absolutKeysListsPath, &dicoHash, &tailleKeyMax);
@@ -140,7 +140,7 @@ char *gen_key_unique(int length, char *key) {
         key = gen_key(length, key, false);
     } while (find_word(dicoHash, key));
 
-    ouvreEtEcritMsg(absolutKeysListsPath, key, length);
+    ouvreEtEcritMsg(absolutKeysListsPath, key, length, false);
     clear_table(&dicoHash);
 
     return key;
@@ -234,14 +234,15 @@ void remove_padding(char *file_out) {
         if (valid_padding) {
             // Supprimer le padding en réduisant la taille du fichier
             int file_desc = fileno(file); 
-            ftruncate(file_desc, ftell(file) - padding_value); // Tronquer le fichier
+            if (ftruncate(file_desc, ftell(file) - padding_value) != 0) {
+                pError(NULL, "Erreur troncage du fichier (remove_padding)", 1);
+            }
         }
     }
 
     fclose(file);
 }
 
-// Chiffrement CBC
 int encrypt_cbc(char *file_in, char *file_key, char *file_out, char *v_init) {
     FILE *input = fopen(file_in, "rb");
     FILE *output = fopen(file_out, "wb");

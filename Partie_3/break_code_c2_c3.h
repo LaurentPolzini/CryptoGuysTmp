@@ -1,6 +1,7 @@
 #ifndef _BREAK_CODE_C2_C3_H_
 #define _BREAK_CODE_C2_C3_H_
 
+#include "mutex.h"
 #include <sys/types.h> // off_t
 #include <stdio.h> // FILE
 #include <pthread.h> // mutex
@@ -8,7 +9,6 @@
 #include "break_code_c3.h" // struct_c3
 
 #define TAILLE_TAB_SCORE 500
-pthread_mutex_t MUTEX_ECRITURE_SCORE;
 
 void init_params(char *score_out, int *fdScoreOut, char *logFileName, FILE **fileLog);
 

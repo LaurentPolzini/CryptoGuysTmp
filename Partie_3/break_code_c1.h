@@ -4,8 +4,10 @@
 #include <stdbool.h>
 #include <unistd.h>
 #include "break_code_c2_c3.h"
+#include "mutex.h"
 
 struct stC2_C3;
+
 
 typedef struct sMsgAndTaille {
     char *msg;
@@ -43,6 +45,7 @@ void clefTrouve(unsigned char *curKey, void *actualKey);
 void ecritClef(unsigned char *clef, void *fileOutDescriptor);
 void doNothing(unsigned char *none, void *userData);
 void translateMsg(unsigned char *key, void *msg);
+void stock_key(unsigned char *key, void *SstockKeys);
 
 
 /*

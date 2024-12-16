@@ -3,6 +3,7 @@
 
 #include <unistd.h> // off_t
 #include "../utilitaire/uthash.h" // dictionnary
+#include "break_code_c2.h"
 
 struct dictionnary;
 
@@ -23,11 +24,13 @@ void destruct_struct_c3(struct_c3 **s_c3);
 int *get_tab_nb_mots(struct_c3 *s_score);
 unsigned char **get_keys_c3(struct_c3 *s_score);
 
-int get_tailleTab(struct_c3 *s_score);
+int get_taille_tab_s_c3(struct_c3 *s_score);
 int get_tab_tailleActuelle(struct_c3 *s_score);
 
 int get_meilleur_score_c3(struct_c3 *s_c3);
 unsigned char *get_meilleur_clef_c3(struct_c3 *s_c3);
+
+int get_len_key_c3(struct_c3 *s_c3);
 
 /*
     Gestion d'ajout des scores
@@ -38,6 +41,10 @@ int getIndexInsertionValueC3(int *tab_score_c3, int tailleTab, int value);
 void ajouteScoreC3(struct_c3 *s_c3, unsigned char *key, int ind);
 
 void compile_structs_c3(struct_c3 *to, struct_c3 *from);
+
+
+// traite les clefs générées par c2 avec la technique c3 (nombre mots présents)
+void traite_clefs_generee_c2(struct_c3 *s_c3, struct_c2 *s_c2);
 
 /*
     ecrit ""clef : 1234  nombre de mots présents dans le dictionnaire : 100""

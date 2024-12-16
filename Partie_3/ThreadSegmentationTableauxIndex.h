@@ -8,6 +8,8 @@
 typedef struct {
     int *nbSegment;
     int *tailleSegment;
+
+    int nbElem;
 } nbEtTailleSegment;
 
 typedef struct s_sPileIndCourFin sPileIndCourFin;
@@ -21,8 +23,8 @@ struct s_sPileIndCourFin {
 // free the allocated memory of nbSegment and tailleSegment
 void freeNBetTailleSeg(nbEtTailleSegment *s);
 
-void freeSPiles(sPileIndCourFin **piles, int nbPiles);
-void freeSPile(sPileIndCourFin *pile);
+void freeSPiles(sPileIndCourFin ***piles, int nbPiles);
+void freeSPile(sPileIndCourFin **pile);
 
 /*
     On va maintenant mettre des threads sur les premieres lignes
@@ -61,7 +63,7 @@ unsigned char *clefActuelle(sPileIndCourFin *pile, unsigned char **carCandParInd
     met dans nbThreads le nombre de segments crées, donc le nombre de tableau nbEtTailleSegment
     utilisés par les threads
 */
-nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel);
+nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel, int *nbLigne_non_traitee);
 
 void ajouteSegmentation(sPileIndCourFin **piles, int *nbPileCur, int nbSeg, int tailleSeg, unsigned char *carCand);
 

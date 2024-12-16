@@ -40,10 +40,10 @@ int main(int argc, char* argv[]) {
             case 'k':
                 key = optarg;
                 creer_fichier_cle("key.txt", key);
-                key = ouvreEtLitfichier("key.txt", NULL);
+                key = ouvreEtLitFichier("key.txt", NULL);
                 break;
             case 'f':
-                key = ouvreEtLitfichier(optarg, NULL);
+                key = ouvreEtLitFichier(optarg, NULL);
                 break;
             case 'm':
                 methode = optarg;

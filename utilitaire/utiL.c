@@ -31,11 +31,13 @@ bool argContainsHelp(int argc, char* argv[]) {
     to use as perror but this way
         pError(NULL (or ptr), the message to show, the exit status)
 */
-void pError(void *ptr, char *msg, int exitStatus) {
+int pError(void *ptr, char *msg, int exitStatus) {
     if (!ptr) {
         perror(msg);
         exit(exitStatus);
+		return 1;
     }
+	return 0;
 }
 
 /*
@@ -76,10 +78,21 @@ char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage) {
     return msgLu;
 }
 
+void ouvreEtEcritMsg_noCut(char *file_in, char *text, off_t len_text);
+void ouvreEtEcritMsg_cut(char *file_in, char *text, off_t len_text);
+
+void ouvreEtEcritMsg(char *file_in, char *text, off_t len_text, bool cut) {
+    if (cut) {
+        ouvreEtEcritMsg_cut(file_in, text, len_text);
+    } else {
+        ouvreEtEcritMsg_noCut(file_in, text, len_text);
+    }
+}
+
 /*
     opens a file and put the text text into the file file_name
 */
-void ouvreEtEcritMsg(char *file_in, char *text, off_t len_text) {
+void ouvreEtEcritMsg_noCut(char *file_in, char *text, off_t len_text) {
     int fdFile_In = open(file_in, O_CREAT | O_WRONLY | O_APPEND, 0644);
     if (fdFile_In == -1) {
         pError(NULL, "Erreur ouverture fichier d'entrée", 1);
@@ -93,6 +106,23 @@ void ouvreEtEcritMsg(char *file_in, char *text, off_t len_text) {
     }
     close(fdFile_In);
 }
+
+void ouvreEtEcritMsg_cut(char *file_in, char *text, off_t len_text) {
+    int fdFile_In = open(file_in, O_CREAT | O_WRONLY | O_TRUNC, 0644);
+    if (fdFile_In == -1) {
+        pError(NULL, "Erreur ouverture fichier d'entrée", 1);
+    }
+    char tmpWord[len_text + 2];
+    memcpy(tmpWord, text, len_text);
+    tmpWord[len_text] = '\n';
+
+    if (write(fdFile_In, tmpWord, len_text + 1) == -1) {
+        pError(NULL, "Erreur ecriture fichier (ouvreEtEcritMsg)", 1);
+    }
+    close(fdFile_In);
+}
+
+
 
 /*
     true random number generator
@@ -125,11 +155,15 @@ uint32_t true_random(uint32_t value) {
 	#endif
 }
 
-void freeTabs(void **tabs, int nbElems) {
-    for (int i = 0 ; i < nbElems ; ++i) {
-        free(tabs[i]);
-    }
-    free(tabs);
+void freeTabs(void ***tabs, int nbElems) {
+	if (*tabs) {
+		for (int i = 0 ; i < nbElems ; ++i) {
+			if ((*tabs)[i]) {
+				free((*tabs)[i]);
+			}
+		}
+		free(*tabs);
+	}
 }
 
 /*
@@ -137,30 +171,30 @@ void freeTabs(void **tabs, int nbElems) {
     for readability for the number of keys
 */
 char *format_number_with_thousands_separator(unsigned long number) {
-    int nbElem = 20;
-    char *result = malloc(nbElem);
-    pError(result, "Erreur allocation memoire", 1);
-    int i = 0, j = 0;
-    int len = 0;
-    char temp[nbElem];
+    char temp[100];
+    int len = snprintf(temp, sizeof(temp), "%lu", number);
+    if (len < 0) {
+        pError(NULL, "Erreur snprintf format_number_with_thousands_separator", 1);
+    }
 
-    // Convertir le nombre en chaîne de caractères
-    snprintf(temp, sizeof(temp), "%lu", number);
+    int nbElem = len + (len - 1) / 3; 
+    char *result = malloc(nbElem + 1);  
+    if (!result) {
+        pError(result, "Erreur allocation memoire", 1);  
+    }
 
-    len = strlen(temp);
-
-    // Ajouter les séparateurs de milliers
-    for (i = len - 1; i >= 0; i--) {
+    int j = 0;
+    
+    for (int i = len - 1; i >= 0; i--) {
         result[j++] = temp[i];
-        // Insérer un séparateur tous les 3 chiffres
         if ((len - i) % 3 == 0 && i != 0) {
-            result[j++] = '\'';
+            result[j++] = '\'';  
         }
     }
 
-    result[j] = '\0';  // Terminer la chaîne
-    // Inverser la chaîne pour obtenir l'ordre correct
-    for (i = 0; i < j / 2; i++) {
+    result[j] = '\0';  
+
+    for (int i = 0; i < j / 2; i++) {
         char temp_char = result[i];
         result[i] = result[j - i - 1];
         result[j - i - 1] = temp_char;
@@ -168,6 +202,7 @@ char *format_number_with_thousands_separator(unsigned long number) {
 
     return result;
 }
+
 
 char *format_seconds_to_string(double timeInSeconds) {
     int hours = (int)(timeInSeconds / 3600);
@@ -195,7 +230,7 @@ char *format_seconds_to_string(double timeInSeconds) {
     -clear_table : destroys the hashtable pointed by *dicoHash
 */
 void read_and_insert_words(const char *filename, dictionnary **dicoHash, int *sizeOfWords) {
-    int siz = 50;
+    int siz = 100; // aucun risque
     if (sizeOfWords) {
         siz = *sizeOfWords;
     }
@@ -217,6 +252,15 @@ void read_and_insert_words(const char *filename, dictionnary **dicoHash, int *si
     fclose(file);
 }
 
+void clear_table(dictionnary **dicoHash) {
+    dictionnary *entry, *tmp;
+    HASH_ITER(hh, *dicoHash, entry, tmp) {
+		free(entry->word);
+        HASH_DEL(*dicoHash, entry);
+        free(entry);
+    }
+}
+
 void add_word(dictionnary **dicoHash, const char *word) {
     dictionnary *entry;
 
@@ -228,6 +272,8 @@ void add_word(dictionnary **dicoHash, const char *word) {
         pError(entry, "Erreur allocation memoire", 1);
         // Copy the word into the key field
         entry -> word = malloc(strlen(word) + 1);
+		pError(entry->word, "Erreur allocation memoire", 1);
+		
         strcpy(entry->word, word);
         // Add the entry to the hash table
         HASH_ADD_STR(*dicoHash, word, entry);
@@ -240,11 +286,5 @@ dictionnary *find_word(dictionnary *dicoHash, const char *word) {
     return dico;
 }
 
-void clear_table(dictionnary **dicoHash) {
-    dictionnary *entry, *tmp;
-    HASH_ITER(hh, *dicoHash, entry, tmp) {
-        HASH_DEL(*dicoHash, entry);
-        free(entry);
-    }
-}
+
 

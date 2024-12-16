@@ -51,6 +51,7 @@
 			"__tuple": "c",
 			"dh_prime.h": "c",
 			"complex": "c"
-		}
+		},
+		"makefile.configureOnOpen": false
 	}
 }

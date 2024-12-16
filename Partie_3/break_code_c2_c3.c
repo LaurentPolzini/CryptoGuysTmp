@@ -8,11 +8,9 @@
 #include "../utilitaire/utiL.h" // pError principalement
 
 void init_params(char *score_out, int *fdScoreOut, char *logFileName, FILE **fileLog) {
-    if (pthread_mutex_init(&MUTEX_ECRITURE_SCORE, NULL) != 0) {
-        pError(NULL, "Erreur creation mutex", 4);
-    }
     *fdScoreOut = -1;
     if (score_out) {
+        printf("Score out est fourni, le traitement des clefs prendra plus de temps !\n");
         *fdScoreOut = open(score_out, O_CREAT | O_TRUNC | O_WRONLY, 0644);
         if (*fdScoreOut == -1) {
             pError(NULL, "Erreur ouverture fichier score clefs", 4);

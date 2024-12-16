@@ -12,9 +12,11 @@
 #include "./break_code_c1.h"
 #include "./break_code_c2.h"
 #include "break_code_c2_c3.h"
+#include "mutex.h"
 
 extern float stat_thFr[26];
 extern float stat_thEn[26];
+
 
 /*
     msgAndTaille : le msg crypté, décrypté, sa taille
@@ -30,12 +32,12 @@ struct struct_c2 {
     int lenKey;
 
     int *ptr_tailleActuelleTab;
-    double *tab_meilleures_freq_lettres;
+    float *tab_meilleures_freq_lettres;
     unsigned char **tab_keys_correspondantes;
 
     float *stats;
 
-    double *distance;
+    float *distance;
 
     int fdScoreOut;
 };
@@ -75,6 +77,7 @@ int break_code_c2(char *file_in, float *stats, char *score_out, int keyLength, c
 
     destruct_stC2_C3(&sc2c3);
     destroy_params(&fdScoreOut, &logFile);
+	free(msgCrypted);
 
     return 0;
 }
@@ -102,11 +105,15 @@ void functorC2(unsigned char *key, void *argStruc) {
     assigne une distance a une clef 
     (par rapport aux fréquences de lettres d'une langue)
 */
-double traiteMsgClefC2(char *msg, double *distance, float *stats) {
+float traiteMsgClefC2(char *msg, float *distance, float *stats) {
     float *freqMsg = freq(msg, (int) strlen(msg));
-    *distance = distanceFreqs(stats, freqMsg);
-
-    return *distance;
+	float dist = distanceFreqs(stats, freqMsg);
+	if (distance) {
+		*distance = dist;
+	}
+    
+	free(freqMsg);
+    return dist;
 }
 
 
@@ -129,14 +136,14 @@ struct_c2 *init_struct_c2(char *msgCrypted, off_t tailleMsgCrypted, int tailleTa
 
     s_c2 -> tailleScoreTab = tailleTab;
 
-    s_c2 -> tab_meilleures_freq_lettres = malloc(sizeof(double) * tailleTab);
+    s_c2 -> tab_meilleures_freq_lettres = malloc(sizeof(float) * tailleTab);
     pError(s_c2 -> tab_meilleures_freq_lettres, "Erreur allocation memoire", 2);
 
     s_c2 -> tab_keys_correspondantes = malloc(sizeof(char *) * tailleTab);
     pError(s_c2 -> tab_keys_correspondantes, "Erreur allocation memoire", 2);
 
     for (int i = 0 ; i < tailleTab ; ++i) {
-        (s_c2 -> tab_meilleures_freq_lettres)[i] = DBL_MAX;
+        (s_c2 -> tab_meilleures_freq_lettres)[i] = FLT_MAX;
 
         (s_c2 -> tab_keys_correspondantes)[i] = malloc(keyLen + 1);
         pError((s_c2 -> tab_keys_correspondantes)[i], "Erreur allocation mémoire", 2);
@@ -144,7 +151,7 @@ struct_c2 *init_struct_c2(char *msgCrypted, off_t tailleMsgCrypted, int tailleTa
 
     s_c2 -> stats = stat;
 
-    s_c2 -> distance = malloc(sizeof(double));
+    s_c2 -> distance = malloc(sizeof(float));
     pError(s_c2 -> distance, "Erreur allocation memoire", 2);
     *(s_c2 -> distance) = DBL_MAX;
 
@@ -164,7 +171,7 @@ void destruct_struct_c2(struct_c2 **s_c2) {
         free(((*s_c2) -> msgAndTaille) -> msg);
         free((void *) ((*s_c2) -> msgAndTaille));
 
-        for (int i = 0 ; i < *((*s_c2) -> ptr_tailleActuelleTab) ; ++i) {
+        for (int i = 0 ; i < (*s_c2) -> tailleScoreTab ; ++i) {
             free((void *) ((*s_c2) -> tab_keys_correspondantes)[i]);
         }
         free((void *) (*s_c2) -> tab_meilleures_freq_lettres);
@@ -199,7 +206,7 @@ int get_taille_tab_s_c2(struct_c2 *s_c2) {
     return -1;
 }
 
-double get_meilleur_score_c2(struct_c2 *s_c2) {
+float get_meilleur_score_c2(struct_c2 *s_c2) {
     if (s_c2) {
         return (s_c2 -> tab_meilleures_freq_lettres)[0];
     }
@@ -217,11 +224,16 @@ int get_taille_actuelle_tab_s_c2(struct_c2 *s_c2) {
     return *(s_c2 -> ptr_tailleActuelleTab);
 }
 
-double *get_meilleur_scores_c2(struct_c2 *s_c2) {
+float *get_meilleur_scores_c2(struct_c2 *s_c2) {
     return s_c2 -> tab_meilleures_freq_lettres;
 }
+
 unsigned char **get_meilleur_clefs_c2(struct_c2 *s_c2) {
     return s_c2 -> tab_keys_correspondantes;
+}
+
+int get_len_key_c2(struct_c2 *s_c2) {
+    return s_c2 -> lenKey;
 }
 
 //---------------------------------------------------------------------------------------------------------------------
@@ -235,27 +247,24 @@ void compile_structs_c2(struct_c2 *to, struct_c2 *from) {
         indInser = getIndexInsertionC2_struc(to);
 
         ajouteScoreC2(to, (from -> tab_keys_correspondantes)[i], indInser);
-
-        if (*(to -> ptr_tailleActuelleTab) < to -> tailleScoreTab) {
-            *(to -> ptr_tailleActuelleTab) += 1;
-        }
     }
 }
 
 void ajouteScoreC2(struct_c2 *st, unsigned char *key, int ind) {
-    if (ind < st -> tailleScoreTab) {
+    if (ind < st -> tailleScoreTab && ind >= 0) {
         for (int i = *(st -> ptr_tailleActuelleTab) ; i > ind ; --i) {
             // décaler tout le tableau vers la droite
             // (copier tous les elements pour en inserer un nouveau)
-            if (i != st -> tailleScoreTab) { // indice inexistant
+            if (i < st -> tailleScoreTab && i != 0) { // indices inexistants
                 (st -> tab_meilleures_freq_lettres)[i] = (st -> tab_meilleures_freq_lettres)[i - 1];
-                strcpy((char *) (st -> tab_keys_correspondantes)[i], (const char *) (st -> tab_keys_correspondantes)[i - 1]);
+                strcpy((char *) (st -> tab_keys_correspondantes)[i], (char *) (st -> tab_keys_correspondantes)[i - 1]);
             }
         }
         // insertion du nouvel element
         (st -> tab_meilleures_freq_lettres)[ind] = *(st -> distance);
-        strcpy((char *) (st -> tab_keys_correspondantes)[ind], (const char *) key);
-        if (*(st -> ptr_tailleActuelleTab) != st -> tailleScoreTab) {
+		strcpy((char *) (st -> tab_keys_correspondantes)[ind], (char *) key);
+
+		if (*(st -> ptr_tailleActuelleTab) < st -> tailleScoreTab) {
             *(st -> ptr_tailleActuelleTab) += 1;
         }
     }
@@ -265,7 +274,7 @@ int getIndexInsertionC2_struc(struct_c2 *st) {
     return getIndexInsertionValueC2(st, *(st -> distance));
 }
 
-int getIndexInsertionValueC2(struct_c2 *st, double value) {
+int getIndexInsertionValueC2(struct_c2 *st, float value) {
     int ind = 0;
     while ((ind < *(st -> ptr_tailleActuelleTab)) && ((st -> tab_meilleures_freq_lettres)[ind] < value)) {
         ++ind;
@@ -280,16 +289,16 @@ int getIndexInsertionValueC2(struct_c2 *st, double value) {
 */
 void affiche_meilleures_clefs_c2(struct_c2 *sc2, char *msgCrypte, off_t lenMsg, int nbClefsAffichee) {
     if (sc2) {
-        printf("Voici les scores et la traduction des %d meilleurss clefs\n", nbClefsAffichee);
+        printf("Voici les scores et la traduction des %d meilleures clefs (de même score)\n", nbClefsAffichee);
 
         char *msgUncrypted;
         int indScore = 0; // afficher le premier score
 
         int tailleActuelle = get_taille_actuelle_tab_s_c2(sc2);
-        double bestScore = get_meilleur_score_c2(sc2);
+        float bestScore = get_meilleur_score_c2(sc2);
 
         char *bestKeyCur = (char *) get_meilleur_clefs_c2(sc2)[indScore];
-        double bestScoreCur = get_meilleur_score_c2(sc2);
+        float bestScoreCur = get_meilleur_score_c2(sc2);
 
         while ((indScore < tailleActuelle) && indScore < nbClefsAffichee && bestScoreCur == bestScore) {
             msgUncrypted = encrypt_decrypt_xorMSG(msgCrypte, bestKeyCur, lenMsg);
@@ -313,7 +322,7 @@ void affiche_meilleures_clefs_c2(struct_c2 *sc2, char *msgCrypte, off_t lenMsg, 
     une chaine de caracteres de cette forme
     "clef : 1234 distance des fréquences réelles et référentielles : 100"
 */
-void ecritClefScore_c2(int fdFile, unsigned char *key, double freq_lettres) {
+void ecritClefScore_c2(int fdFile, unsigned char *key, float freq_lettres) {
     if (fdFile != -1) {
         if (pthread_mutex_lock(&MUTEX_ECRITURE_SCORE) != 0) {
             pError(NULL, "Erreur prise token mutex ecriture file", 4);
@@ -345,7 +354,7 @@ void ecritClefScore_c2(int fdFile, unsigned char *key, double freq_lettres) {
     }
 }
 
-void ecritTab_c2(double *tab, int nbElems, unsigned char **keys, FILE *file) {
+void ecritTab_c2(float *tab, int nbElems, unsigned char **keys, FILE *file) {
     if (file) {
         fprintf(file, "\nscores c2 : \n");
         for (int i = 0 ; i < nbElems ; ++i) {
@@ -401,8 +410,8 @@ int indice_lettre(char lettre) {
 
     plus c'est proche de 0 plus on est proche de la fréquence théorique
 */
-double distanceFreqs(float *freqLanguage, float *decryptedFreq) {
-    double distance = 0;
+float distanceFreqs(float *freqLanguage, float *decryptedFreq) {
+    float distance = 0;
 
     for (int i = 0 ; i < 26 ; ++i) {
         distance += pow((freqLanguage[i] - decryptedFreq[i]), 2);

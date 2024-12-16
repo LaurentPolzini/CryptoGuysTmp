@@ -1,9 +1,6 @@
 #ifndef __CRACKAGE_H__
 #define __CRACKAGE_H__
 
-#include "break_code_c1.h"
-#include "break_code_c2.h"
-
 /* 
     method = freq / mask
     in : crypté

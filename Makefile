@@ -53,11 +53,12 @@ mrproper: clean
 ./Partie_2/Code_C/dh_prime.o : ./Partie_2/Code_C/dh_prime.h
 
 # part 3 links
+./Partie_3/mutex.o : ./Partie_3/mutex.h
 ./Partie_3/Pile.o : ./Partie_3/Pile.h ./utilitaire/utiL.h
-./Partie_3/break_code_c1.o : ./Partie_3/Pile.h ./Partie_3/crackage.h ./Partie_3/break_code_c1.h ./utilitaire/utiL.h ./Partie_1/chiffrement.h
-./Partie_3/break_code_c2.o : ./Partie_3/crackage.h ./utilitaire/utiL.h ./Partie_3/break_code_c1.h ./Partie_3/break_code_c2.h ./Partie_3/break_code_c2_c3.h
-./Partie_3/break_code_c3.o : ./Partie_3/crackage.h ./Partie_3/break_code_c3.h ./utilitaire/utiL.h ./Partie_3/break_code_c2_c3.h
-./Partie_3/break_code_c2_c3.o : ./Partie_3/break_code_c2_c3.h ./Partie_3/break_code_c1.h ./Partie_3/break_code_c2.h ./Partie_3/break_code_c3.h 
+./Partie_3/break_code_c1.o : ./Partie_3/Pile.h ./Partie_3/crackage.h ./Partie_3/break_code_c1.h ./utilitaire/utiL.h ./Partie_1/chiffrement.h ./Partie_3/ThreadSegmentationTableauxIndex.h ./Partie_3/caracteresCandidatsIndexKey.h ./Partie_3/tests_crackage.h ./Partie_3/mutex.h
+./Partie_3/break_code_c2.o : ./Partie_3/crackage.h ./utilitaire/utiL.h ./Partie_3/break_code_c1.h ./Partie_3/break_code_c2.h ./Partie_3/break_code_c2_c3.h ./Partie_3/mutex.h
+./Partie_3/break_code_c3.o : ./Partie_3/crackage.h ./Partie_3/break_code_c3.h ./utilitaire/utiL.h ./Partie_3/break_code_c2_c3.h ./Partie_3/mutex.h
+./Partie_3/break_code_c2_c3.o : ./Partie_3/break_code_c2_c3.h ./Partie_3/break_code_c1.h ./Partie_3/break_code_c2.h ./Partie_3/break_code_c3.h ./Partie_3/mutex.h
 ./Partie_3/crack_mask.o : ./Partie_1/chiffrement.h
 ./Partie_3/c1_stockingKeys.o : ./Partie_3/c1_stockingKeys.h ./Partie_3/break_code_c1.h ./utilitaire/utiL.h
 

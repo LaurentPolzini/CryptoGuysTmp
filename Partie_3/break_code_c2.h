@@ -4,7 +4,7 @@
 int break_code_c2(char *file_in, float *stats, char *score_out, int keyLength, char *logFileName);
 
 void functorC2(unsigned char *key, void *argStruc);
-double traiteMsgClefC2(char *msg, double *distance, float *stats);
+float traiteMsgClefC2(char *msg, float *distance, float *stats);
 
 /*
     creation / destruction / getters struct_c2
@@ -19,18 +19,20 @@ unsigned char **get_keys_s_c2(struct_c2 *s_c2);
 int get_taille_tab_s_c2(struct_c2 *s_c2);
 int get_taille_actuelle_tab_s_c2(struct_c2 *s_c2);
 
-double get_meilleur_score_c2(struct_c2 *s_c2);
+float get_meilleur_score_c2(struct_c2 *s_c2);
 unsigned char *get_meilleur_clef_c2(struct_c2 *s_c2);
 
-double *get_meilleur_scores_c2(struct_c2 *s_c2);
+float *get_meilleur_scores_c2(struct_c2 *s_c2);
 unsigned char **get_meilleur_clefs_c2(struct_c2 *s_c2);
+
+int get_len_key_c2(struct_c2 *s_c2);
 
 //--------------------------------------------------------------------------------------------------------
 /*
     gestion des scores de struct_c2
 */
 int getIndexInsertionC2_struc(struct_c2 *st);
-int getIndexInsertionValueC2(struct_c2 *st, double value);
+int getIndexInsertionValueC2(struct_c2 *st, float value);
 void ajouteScoreC2(struct_c2 *st, unsigned char *key, int ind);
 
 // met dans to les meilleurs scores de from
@@ -44,10 +46,10 @@ void affiche_meilleures_clefs_c2(struct_c2 *sc2, char *msgCrypte, off_t lenMsg, 
     dans fdFile
 */
 // pour les threads
-void ecritClefScore_c2(int fdFile, unsigned char *key, double freq_lettres);
+void ecritClefScore_c2(int fdFile, unsigned char *key, float freq_lettres);
 
 // pas pour les threads
-void ecritTab_c2(double *tab, int nbElems, unsigned char **keys, FILE *file);
+void ecritTab_c2(float *tab, int nbElems, unsigned char **keys, FILE *file);
 
 //--------------------------------------------------------------------------------------------------------
 /*
@@ -61,7 +63,7 @@ float *freq(char *msg, int msgLen);
 
     plus c'est proche de 0 plus on est proche de la fréquence théorique
 */
-double distanceFreqs(float *freqLanguage, float *decryptedFreq);
+float distanceFreqs(float *freqLanguage, float *decryptedFreq);
 
 
 // retourne l'indice d'une lettre (0 -> 26)

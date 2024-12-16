@@ -144,6 +144,10 @@ int main(int argc, char *argv[]) {
                 char generated_key[256] = {0};
                 genkey(key_length, generated_key);
                 printf("Clé générée : %s\n", generated_key);
+                if (file_out) {
+                    ouvreEtEcritMsg(file_out, generated_key, key_length, false);
+                }
+
             } else {
                 fprintf(stderr, "Erreur : spécifiez une longueur de clé avec --length (-l).\n");
             }
@@ -161,7 +165,6 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Commande inconnue : %s\n", commande);
             afficher_aidePR();
         }
-    
 
     return 0;
 }
@@ -269,31 +272,32 @@ void afficher_aidePR(void) {
     printf("\t  --method (-m) <m> : Une methode de crackage (freq ou mask)\n\n");
 
     printf("\tObligatoires : \n");
-    printf("\t  --in (-i) <file> : Fichier à cracker\n");
+    printf("\t  --in (-i) <file> : Fichier à cracker (ou le premier fichier crypté pour mask)\n");
     printf("\t  --length (-l) <n> : Longueur de clé maximale suspectée\n\n");
+    printf("\t  --out (-o) <file> : Fichier ou sera écrit le deuxieme message clair\n\n");
 
     printf("\tPour freq : \n");
     printf("\t  --dico (-d) <file> : Un dictionnaire de mots d'une langue cible\n");
 
     printf("\tPour mask : \n");
     printf("\t  --crypte (-r) <file> : 2ème fichier crypté (crack mask)\n");
-    printf("\t  --clair (-e) <file> : 1er message en clair (crack mask)\n\n");
+    printf("\t  --clair (-e) <file> : 1er message en clair (crack mask)\n");
+    printf("\t Voir le dernier exemple\n\n");
 
     printf("\tOptionnelles : \n");
     printf("\t  --scores (-s) <file> : Le fichier des scores des clefs (crack)\n");
     printf("\t  --log (-l) <file> : Le fichier de log\n");
     
     
-    printf("  --help (-h) : Affiche cette aide\n");
-    printf("  --quit (-q) : Quitte le logiciel\n");
+    printf("\n  --help (-h) : Affiche cette aide\n");
+    //printf("  --quit (-q) : Quitte le logiciel\n");
 
-    printf("\nExemples : ./crypto -c chiffrement -m xor -i clair.txt -o crypte.txt -k clef (clair.txt s'encrypte dans crypte.txt avec la clef clef (ou l'inverse selon -i -o))\n");
+    printf("\nExemples : ./crypto -c chiffrement -m xor -i clair.txt -o crypte.txt -k clef (clair.txt s'encrypte dans crypte.txt avec la clef clef)\n");
     printf("./crypto -c gen-key -l taille_souhaitée (genere une clef de la longueur souhaitée)\n");
     printf("./crypto -c list-keys (liste les clefs dans keys.txt)\n");
     printf("./crypto -c del-key -k clef (retire du fichier keys.txt la clef clef)\n");
     printf("./crypto -c chiffrement -m mask-crypt -i clair.txt -o crypte.txt (clair.txt est encrypté dans crypte.txt si la clef n'est pas fournie ou trop courte elle est générée)\n");
     printf("./crypto -c chiffrement -m mask-uncrypt -i crypte.txt -o clair.txt -k clef (la clef est obligatoire !)\n");
-    printf("./crypto -c chiffrement -m cbc-crypt -i clair.txt -o crypte.txt -v vecteur_init\n");
     printf("./crypto -c crack -m freq -i crypte.txt -d dictionnaire_langue_cible -l longueur_maximum_suspecté -g log_file -s scores_out (-g et -s pas obligatoires)\n");
     printf("./crypto -c crack -m mask -i crypte1.txt -r crypte2.txt -e clair1.txt -o clair2.txt\n");
 }

@@ -7,6 +7,7 @@
 #include <math.h>
 #include <sys/resource.h>
 #include "./crackage.h"
+#include "mutex.h"
 
 #include "./Pile.h" // pour les indices de debut et fin de segments
 #include "caracteresCandidatsIndexKey.h" // trouve les caracteres candidats
@@ -20,7 +21,13 @@
 
 #include "autres_methodes/c1_stockingKeys.h"
 
+#include "tests_crackage.h"
+
 double keysPerSec = 1e9 / 1200; // aux dernieres nouvelles le programme fait 1 milliard de clef en 20 minutes
+// la traduction de l'entiereté du message par chaque clef est tres long
+// il faudrait changer dans le message uniquement les caracteres modifiés
+// par la nouvelle clef (généralement a un caractere de difference avec la precedente)
+// la recherche de mot dans le dictionnaire doit aussi etre bien long
 
 // besoin d'un mutex si on doit ecrire une clef dans un fichier
 pthread_mutex_t *mutexEcritureClefsFichier;
@@ -67,7 +74,11 @@ typedef struct {
 int break_code_c1(char *file_in, int keyLength, char *logFile) {
 
     appelClefsFinales(file_in, keyLength, NULL, doNothing, logFile, false, NULL);
+
+    // génération des clefs par un tableau de stockage
+    // montre vite les limites : ram explose
     //appelClefsParCombo(file_in, keyLength, logFile);
+
     return 0;
 }
 
@@ -108,6 +119,7 @@ void appelCaracteresCandidats(char *file_in, int keyLength) {
     }
 
     free((void *) msgLu);
+	freeTabs((void ***) &carCandParIndice, keyLength);
     return;
 }
 
@@ -117,9 +129,11 @@ void appelCaracteresCandidats(char *file_in, int keyLength) {
 */
 void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 functor, char *logFile, bool c2c3, unsigned long *nbOfKeys) {
     off_t tailleMsg;
-
     char *msg = ouvreEtLitFichier(file_in, &tailleMsg);
+
     unsigned long nbKeys = 0;
+
+    printf("Début de C1...\n");
 
     time_t tpsDepart = time(NULL);
     clefsByThreads(msg, tailleMsg, keyLength, &nbKeys, userData, functor, c2c3);
@@ -127,8 +141,6 @@ void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 f
 
     char *SlenKey = format_number_with_thousands_separator(nbKeys);
     char *StimeDiff = format_seconds_to_string(difftime(tpsFin, tpsDepart));
-
-    printf("Début de C1...\n");
 
     size_t tailleAllouee = strlen("text from : ; number of keys : ; time : \n") + strlen(file_in) + strlen(SlenKey) + strlen(StimeDiff) + 1;
     char *textLog = malloc(tailleAllouee);
@@ -163,23 +175,30 @@ void appelClefsFinales(char *file_in, int keyLength, void *userData, FunctorC1 f
     gere les threads
 */
 void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned long *nbClefs, void *uD, FunctorC1 functor, bool c2c3) {
+    
     unsigned char **carCandParIndice = caracteresCandidatsParIndice(msgCode, tailleMsgCode, len_key);
+    
     affiche_caracteres_candidats(carCandParIndice, len_key);
+    
     unsigned long nbClef = nbClefsTotal(carCandParIndice, len_key);
 
-    char *nbKeysToString = format_number_with_thousands_separator(nbClef);
-
     if (nbClef == 0) {
+        freeTabs((void ***) &carCandParIndice, len_key);
+        printf("Il n'y a pas de clef : sortie du programme.\n");
         return;
     } else if (nbClefs) {
         *nbClefs = nbClef;
     }
+
+    char *nbKeysToString = format_number_with_thousands_separator(nbClef);
+
     // nombre de threads selon la machine
     long nbThreadsMax = sysconf(_SC_NPROCESSORS_CONF);
 
     long nbThreadReel = 1;
     sPileIndCourFin **piles = initialisePilesIndiceThreads(len_key, carCandParIndice, &nbThreadsMax, &nbThreadReel);
-
+    
+    
     unsigned long *nbClefTraiteeByThreads[nbThreadReel];
     unsigned long nbTotalClefsTraitees = 0;
     int pourcentage = 0;
@@ -203,17 +222,31 @@ void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned lo
 
         pthread_create(&(thid[i]), NULL, clefsThreadPiles, &(tinfos[i]));
     }
-    
+    static int previous_length = 0;
+    int current_length;
+
     for (int i = 0 ; i < nbThreadReel ; ++i) {
-        pthread_join(thid[i], (void *) &(nbClefTraiteeByThreads[i]));
+        pthread_join(thid[i], (void **) &(nbClefTraiteeByThreads[i]));
 
         nbTotalClefsTraitees += *(nbClefTraiteeByThreads[i]);
         pourcentage = (int) ((nbTotalClefsTraitees / nbClef) * 100);
         if (pourcentage != 100) {
             tempsRestant = estimation_temps(nbClef - nbTotalClefsTraitees);
-            printf("\r%d%% des %s clefs traitées. Il reste %s", pourcentage, nbKeysToString, tempsRestant);
+            
+            current_length = snprintf(NULL, 0, "%d%% des %s clefs traitées. Il reste %s", pourcentage, nbKeysToString, tempsRestant);
+            
+            // d'un coup le \r a arreté de fonctionné
+            // je dois passé par cette statégie
+            // il faut aussi que le shell soit assez grand 
+            // pour afficher la phrase en entiere
+            // sinon ca ne marche pas...
+            printf("\r%*s\r", previous_length, "");
+            printf("%d%% des %s clefs traitées. Il reste %s", pourcentage, nbKeysToString, tempsRestant);
+
+            previous_length = current_length;
             free(tempsRestant);
         } else {
+            printf("\r%*s\r", previous_length, "");
             printf("\r%d%% des %s clefs traitées !", pourcentage, nbKeysToString);
         }
         
@@ -221,6 +254,7 @@ void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned lo
 
         free(nbClefTraiteeByThreads[i]);
     }
+	free(nbKeysToString);
     printf("\n");
 
     if (c2c3) {
@@ -228,10 +262,8 @@ void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned lo
         destroysInitedStC2C3(&c2c3_UD, nbThreadReel);
     }
     
-    free(piles); // dedans tout est déjà free
-    // des que ce n'est plus utile (a la fin du traitement)
-    // ca free le tableau
-    free(nbKeysToString);
+    freeSPiles(&piles, nbThreadReel);
+	freeTabs((void ***) &carCandParIndice, len_key);
     
     return;   
 }
@@ -260,7 +292,6 @@ void *clefsThreadPiles(void *arg) {
         tmp = prochaineClefSelonPile(ti.piles, ti.len_key);
         *nbClefTraitee += 1;
     }
-    freeSPiles(&(ti.piles), 1);
 
     pthread_exit((void *) nbClefTraitee);
 }
@@ -333,6 +364,20 @@ void ecritClef(unsigned char *clef, void *fileOutDescriptor) {
     }
 }
 
+/*
+    stocke les clefs créées pour voir leur unicité
+*/
+void stock_key(unsigned char *key, void *SstockKeys) {
+    if (pthread_mutex_lock(&MUTEX_TEST) != 0) {
+        pError(NULL, "Erreur prendre jeton tests crackages", 1);
+    }
+
+    insert_key((sstock_key *) SstockKeys, key);
+
+    if (pthread_mutex_unlock(&MUTEX_TEST) != 0) {
+        pError(NULL, "Erreur don jeton tests crackages", 1);
+    }
+}
 
 // ------------------------------------------------------------------------------------
 /*

@@ -25,7 +25,7 @@ Pile *pilePush(Pile *p, void *e);
 Pile *pilePop(Pile *p);
 
 // delete la Pile p
-void pileDelete(Pile *p);
+void pileDelete(Pile **p);
 
 // retourne si la Pile est vide (0 element)
 bool pileEmpty(Pile *p);

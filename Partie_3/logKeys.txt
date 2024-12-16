@@ -1051,3 +1051,2537 @@ ysq0 : nombres de mots existants : 5
 ytf0 : nombres de mots existants : 5
 yuf0 : nombres de mots existants : 5
 yvf0 : nombres de mots existants : 5
+text from : ../msgsTests/1234-ring.txt ; number of keys : 87'000 ; time : 0 heures 0 minutes et 0 seconde
+
+scores c2 : 
+04v4 : fréquences des lettres : 85.814266
+13n4 : fréquences des lettres : 91.169789
+t434 : fréquences des lettres : 92.473609
+13m4 : fréquences des lettres : 95.584357
+13o4 : fréquences des lettres : 95.627853
+13r4 : fréquences des lettres : 96.061284
+13h4 : fréquences des lettres : 98.476240
+t43h : fréquences des lettres : 102.202997
+13s4 : fréquences des lettres : 103.492057
+t43i : fréquences des lettres : 104.010997
+t43o : fréquences des lettres : 104.010997
+t424 : fréquences des lettres : 104.055400
+1424 : fréquences des lettres : 104.351539
+753q : fréquences des lettres : 105.200604
+02r4 : fréquences des lettres : 107.420946
+0434 : fréquences des lettres : 108.334653
+t43j : fréquences des lettres : 109.658998
+7334 : fréquences des lettres : 110.893697
+1334 : fréquences des lettres : 111.690681
+1324 : fréquences des lettres : 112.705234
+723q : fréquences des lettres : 113.195028
+743q : fréquences des lettres : 113.437753
+1344 : fréquences des lettres : 115.856584
+03r4 : fréquences des lettres : 116.605796
+t53u : fréquences des lettres : 116.861915
+14v4 : fréquences des lettres : 117.044670
+7324 : fréquences des lettres : 117.214393
+1534 : fréquences des lettres : 117.234492
+0534 : fréquences des lettres : 117.553071
+04m4 : fréquences des lettres : 117.713773
+733q : fréquences des lettres : 118.048659
+04n4 : fréquences des lettres : 118.168274
+1434 : fréquences des lettres : 118.714894
+14n4 : fréquences des lettres : 118.860423
+13j4 : fréquences des lettres : 119.807125
+0234 : fréquences des lettres : 120.010345
+1524 : fréquences des lettres : 120.273992
+t43t : fréquences des lettres : 121.118997
+0w5u : fréquences des lettres : 122.113993
+04o4 : fréquences des lettres : 122.699421
+14mq : fréquences des lettres : 123.236436
+14m4 : fréquences des lettres : 123.274990
+14o4 : fréquences des lettres : 123.318487
+13d4 : fréquences des lettres : 123.530730
+02n4 : fréquences des lettres : 123.983969
+11m4 : fréquences des lettres : 124.130875
+1354 : fréquences des lettres : 124.667648
+04gq : fréquences des lettres : 125.279434
+143q : fréquences des lettres : 125.581187
+04h4 : fréquences des lettres : 125.594503
+14h4 : fréquences des lettres : 126.166874
+7534 : fréquences des lettres : 127.316993
+742q : fréquences des lettres : 127.707327
+1244 : fréquences des lettres : 127.840992
+14gq : fréquences des lettres : 127.872943
+02o4 : fréquences des lettres : 128.515116
+7234 : fréquences des lettres : 128.826953
+0334 : fréquences des lettres : 128.881610
+7w3u : fréquences des lettres : 128.890992
+02m4 : fréquences des lettres : 128.904366
+043q : fréquences des lettres : 128.941512
+7224 : fréquences des lettres : 129.681332
+02rq : fréquences des lettres : 129.882979
+02vu : fréquences des lettres : 129.977318
+7424 : fréquences des lettres : 130.198912
+13c4 : fréquences des lettres : 130.341901
+t43m : fréquences des lettres : 130.461537
+1124 : fréquences des lettres : 130.474852
+15n4 : fréquences des lettres : 130.648110
+04s4 : fréquences des lettres : 130.779239
+14s4 : fréquences des lettres : 131.182691
+02s4 : fréquences des lettres : 131.220034
+02h4 : fréquences des lettres : 131.410198
+t534 : fréquences des lettres : 131.731528
+13rq : fréquences des lettres : 131.775103
+643q : fréquences des lettres : 131.798484
+t42j : fréquences des lettres : 131.963161
+11v4 : fréquences des lettres : 132.196060
+142q : fréquences des lettres : 132.431725
+11gq : fréquences des lettres : 132.548987
+713q : fréquences des lettres : 132.914399
+1134 : fréquences des lettres : 133.466513
+14nq : fréquences des lettres : 133.775321
+153q : fréquences des lettres : 134.186927
+7w2u : fréquences des lettres : 134.189230
+1224 : fréquences des lettres : 134.317110
+72vu : fréquences des lettres : 134.469478
+11o4 : fréquences des lettres : 134.580200
+1144 : fréquences des lettres : 134.657998
+15o4 : fréquences des lettres : 135.254776
+11n4 : fréquences des lettres : 135.325049
+01v4 : fréquences des lettres : 135.327516
+05r4 : fréquences des lettres : 135.594919
+15m4 : fréquences des lettres : 136.105889
+124q : fréquences des lettres : 136.164218
+7524 : fréquences des lettres : 136.212359
+w424 : fréquences des lettres : 136.420107
+11s4 : fréquences des lettres : 137.241490
+13g4 : fréquences des lettres : 137.262415
+71v4 : fréquences des lettres : 137.353680
+11h4 : fréquences des lettres : 137.428586
+t53h : fréquences des lettres : 137.580887
+15s4 : fréquences des lettres : 138.004776
+03m4 : fréquences des lettres : 138.029979
+15h4 : fréquences des lettres : 138.198110
+03n4 : fréquences des lettres : 138.484481
+1234 : fréquences des lettres : 138.547172
+7434 : fréquences des lettres : 138.738848
+12r4 : fréquences des lettres : 138.785510
+15r4 : fréquences des lettres : 138.858728
+t53j : fréquences des lettres : 139.097557
+12n4 : fréquences des lettres : 139.252824
+t53i : fréquences des lettres : 139.464221
+t53o : fréquences des lettres : 139.464221
+74v4 : fréquences des lettres : 139.503331
+14oq : fréquences des lettres : 139.533655
+02v4 : fréquences des lettres : 139.752652
+73v4 : fréquences des lettres : 139.788974
+13x4 : fréquences des lettres : 139.932379
+15w4 : fréquences des lettres : 141.405195
+73n4 : fréquences des lettres : 141.510386
+722q : fréquences des lettres : 141.547700
+7134 : fréquences des lettres : 141.592806
+03o4 : fréquences des lettres : 143.015628
+73vu : fréquences des lettres : 143.203907
+14hq : fréquences des lettres : 143.212821
+t43c : fréquences des lettres : 143.364869
+15rq : fréquences des lettres : 143.548365
+0354 : fréquences des lettres : 143.601990
+15vu : fréquences des lettres : 143.644521
+12o4 : fréquences des lettres : 143.710888
+02a4 : fréquences des lettres : 143.867099
+04g4 : fréquences des lettres : 143.890057
+0254 : fréquences des lettres : 144.071985
+7124 : fréquences des lettres : 144.128951
+13mu : fréquences des lettres : 144.165602
+623u : fréquences des lettres : 144.569135
+05v4 : fréquences des lettres : 144.758233
+04vj : fréquences des lettres : 144.837825
+7w3m : fréquences des lettres : 144.887668
+0424 : fréquences des lettres : 145.176986
+153u : fréquences des lettres : 145.298947
+0w54 : fréquences des lettres : 145.324092
+14j4 : fréquences des lettres : 145.473041
+623q : fréquences des lettres : 145.638850
+03h4 : fréquences des lettres : 145.910709
+73o4 : fréquences des lettres : 145.968450
+7w3h : fréquences des lettres : 146.167687
+12s4 : fréquences des lettres : 146.372178
+12h4 : fréquences des lettres : 146.559275
+0134 : fréquences des lettres : 146.651222
+13p4 : fréquences des lettres : 146.921492
+t334 : fréquences des lettres : 146.933041
+752q : fréquences des lettres : 146.961783
+1304 : fréquences des lettres : 147.052884
+114q : fréquences des lettres : 147.233077
+r234 : fréquences des lettres : 147.486915
+13v4 : fréquences des lettres : 147.607141
+14u4 : fréquences des lettres : 147.761280
+7w3i : fréquences des lettres : 147.841762
+7w3o : fréquences des lettres : 147.841762
+7w33 : fréquences des lettres : 148.042612
+72rq : fréquences des lettres : 148.094305
+13e4 : fréquences des lettres : 148.282962
+14vh : fréquences des lettres : 148.442126
+73r4 : fréquences des lettres : 148.796763
+73h4 : fréquences des lettres : 148.816836
+12m4 : fréquences des lettres : 148.870306
+t4n4 : fréquences des lettres : 149.113684
+14d4 : fréquences des lettres : 149.514198
+134q : fréquences des lettres : 149.668377
+t404 : fréquences des lettres : 149.867059
+73rq : fréquences des lettres : 149.970024
+152u : fréquences des lettres : 150.022370
+14vi : fréquences des lettres : 150.287024
+14vo : fréquences des lettres : 150.287024
+11g4 : fréquences des lettres : 150.384461
+6334 : fréquences des lettres : 150.444622
+12rq : fréquences des lettres : 150.475512
+05n4 : fréquences des lettres : 150.514528
+6234 : fréquences des lettres : 150.718294
+05m4 : fréquences des lettres : 150.798125
+t134 : fréquences des lettres : 150.834250
+t43d : fréquences des lettres : 150.840657
+04mq : fréquences des lettres : 151.048832
+03s4 : fréquences des lettres : 151.095445
+1404 : fréquences des lettres : 151.102666
+6434 : fréquences des lettres : 151.235872
+135q : fréquences des lettres : 151.602596
+6w3u : fréquences des lettres : 151.604444
+14sq : fréquences des lettres : 151.651712
+t43u : fréquences des lettres : 151.738226
+t23u : fréquences des lettres : 152.118740
+7304 : fréquences des lettres : 152.204766
+133u : fréquences des lettres : 152.249179
+13vu : fréquences des lettres : 152.443822
+723u : fréquences des lettres : 152.553159
+1444 : fréquences des lettres : 152.624994
+733u : fréquences des lettres : 153.081531
+13gu : fréquences des lettres : 153.502636
+722u : fréquences des lettres : 153.843984
+132u : fréquences des lettres : 154.387211
+05vu : fréquences des lettres : 154.562078
+1154 : fréquences des lettres : 154.630517
+053q : fréquences des lettres : 154.663325
+13nu : fréquences des lettres : 154.704487
+t4o4 : fréquences des lettres : 154.754500
+t4m4 : fréquences des lettres : 155.102522
+732q : fréquences des lettres : 155.187895
+05o4 : fréquences des lettres : 155.199273
+11mq : fréquences des lettres : 155.423927
+04d4 : fréquences des lettres : 155.442664
+w434 : fréquences des lettres : 155.875242
+14w4 : fréquences des lettres : 155.917346
+04r4 : fréquences des lettres : 155.955282
+14c4 : fréquences des lettres : 156.007817
+7w3j : fréquences des lettres : 156.089227
+13w4 : fréquences des lettres : 156.202980
+11f4 : fréquences des lettres : 156.256416
+11j4 : fréquences des lettres : 156.299171
+0244 : fréquences des lettres : 156.309343
+73m4 : fréquences des lettres : 156.330776
+t42h : fréquences des lettres : 156.508266
+02d4 : fréquences des lettres : 156.678016
+14vj : fréquences des lettres : 157.216470
+7w34 : fréquences des lettres : 157.419793
+11p4 : fréquences des lettres : 157.461972
+03a4 : fréquences des lettres : 157.507284
+13i4 : fréquences des lettres : 157.621305
+03v4 : fréquences des lettres : 157.848190
+u534 : fréquences des lettres : 157.962624
+05s4 : fréquences des lettres : 157.995883
+t354 : fréquences des lettres : 157.998310
+144q : fréquences des lettres : 158.033250
+05h4 : fréquences des lettres : 158.192493
+12j4 : fréquences des lettres : 158.206092
+t53t : fréquences des lettres : 158.326726
+t42i : fréquences des lettres : 158.353164
+t42o : fréquences des lettres : 158.353164
+t4h4 : fréquences des lettres : 158.358581
+122u : fréquences des lettres : 158.568374
+02p4 : fréquences des lettres : 158.647139
+t433 : fréquences des lettres : 158.710066
+73a4 : fréquences des lettres : 158.819939
+03g4 : fréquences des lettres : 158.903738
+73s4 : fréquences des lettres : 159.035566
+12p4 : fréquences des lettres : 159.368896
+01m4 : fréquences des lettres : 159.502271
+75vu : fréquences des lettres : 159.525879
+023u : fréquences des lettres : 159.533488
+t444 : fréquences des lettres : 159.667930
+1504 : fréquences des lettres : 159.806985
+14vt : fréquences des lettres : 159.914096
+62vu : fréquences des lettres : 159.943502
+15v4 : fréquences des lettres : 159.962039
+13ou : fréquences des lettres : 160.462821
+133q : fréquences des lettres : 160.468910
+13gq : fréquences des lettres : 160.593422
+023q : fréquences des lettres : 160.603226
+04vh : fréquences des lettres : 160.682267
+r334 : fréquences des lettres : 160.857130
+72v4 : fréquences des lettres : 160.886893
+0404 : fréquences des lettres : 160.936356
+15d4 : fréquences des lettres : 161.102614
+15j4 : fréquences des lettres : 161.163495
+04j4 : fréquences des lettres : 161.185890
+1254 : fréquences des lettres : 161.521115
+6w32 : fréquences des lettres : 161.542000
+13k4 : fréquences des lettres : 161.645886
+02j4 : fréquences des lettres : 161.660246
+153h : fréquences des lettres : 161.826488
+13mh : fréquences des lettres : 161.935198
+7w3t : fréquences des lettres : 162.036411
+13rh : fréquences des lettres : 162.074124
+6134 : fréquences des lettres : 162.117612
+753u : fréquences des lettres : 162.226324
+7w24 : fréquences des lettres : 162.237687
+13a4 : fréquences des lettres : 162.312857
+w534 : fréquences des lettres : 162.351633
+113q : fréquences des lettres : 162.358862
+13rj : fréquences des lettres : 162.518606
+04vi : fréquences des lettres : 162.565601
+04vo : fréquences des lettres : 162.565601
+t43a : fréquences des lettres : 162.745323
+04c4 : fréquences des lettres : 162.836192
+04vu : fréquences des lettres : 162.852152
+t234 : fréquences des lettres : 162.968406
+732u : fréquences des lettres : 163.028838
+t532 : fréquences des lettres : 163.216134
+14g4 : fréquences des lettres : 163.245883
+153i : fréquences des lettres : 163.308456
+153o : fréquences des lettres : 163.308456
+02c4 : fréquences des lettres : 163.310548
+12d4 : fréquences des lettres : 163.354577
+7w2j : fréquences des lettres : 163.444984
+613q : fréquences des lettres : 163.490406
+15u4 : fréquences des lettres : 163.521075
+13q4 : fréquences des lettres : 163.600393
+t232 : fréquences des lettres : 163.821343
+712q : fréquences des lettres : 163.854586
+73j4 : fréquences des lettres : 163.892085
+135u : fréquences des lettres : 163.898880
+13ri : fréquences des lettres : 163.919022
+13ro : fréquences des lettres : 163.919022
+13mi : fréquences des lettres : 164.037523
+13mo : fréquences des lettres : 164.037523
+13b4 : fréquences des lettres : 164.097885
+13hu : fréquences des lettres : 164.141988
+12vu : fréquences des lettres : 164.285519
+s334 : fréquences des lettres : 164.323513
+t43s : fréquences des lettres : 164.419214
+123u : fréquences des lettres : 164.696587
+115q : fréquences des lettres : 164.724624
+12u4 : fréquences des lettres : 164.819590
+1544 : fréquences des lettres : 165.406988
+01g4 : fréquences des lettres : 165.577375
+01a4 : fréquences des lettres : 166.173988
+15mq : fréquences des lettres : 166.265469
+t454 : fréquences des lettres : 166.363195
+t4s4 : fréquences des lettres : 166.451710
+w224 : fréquences des lettres : 166.454190
+025q : fréquences des lettres : 166.946785
+0224 : fréquences des lettres : 167.029494
+t244 : fréquences des lettres : 167.150777
+11r4 : fréquences des lettres : 167.155413
+15c4 : fréquences des lettres : 167.156058
+7204 : fréquences des lettres : 167.163587
+15v5 : fréquences des lettres : 167.321680
+7w2f : fréquences des lettres : 167.342677
+r224 : fréquences des lettres : 167.525291
+t33u : fréquences des lettres : 167.550798
+13mq : fréquences des lettres : 167.554495
+0w34 : fréquences des lettres : 167.647248
+t535 : fréquences des lettres : 167.664509
+75v4 : fréquences des lettres : 167.706677
+15gq : fréquences des lettres : 167.829220
+w524 : fréquences des lettres : 167.906022
+t43b : fréquences des lettres : 168.451771
+152q : fréquences des lettres : 168.576222
+123q : fréquences des lettres : 168.591059
+t53m : fréquences des lettres : 168.700577
+12c4 : fréquences des lettres : 168.740868
+733h : fréquences des lettres : 168.751621
+t432 : fréquences des lettres : 168.940898
+0w3u : fréquences des lettres : 168.979597
+0454 : fréquences des lettres : 169.094487
+7w3c : fréquences des lettres : 169.101933
+14f4 : fréquences des lettres : 169.117851
+053u : fréquences des lettres : 169.245566
+720q : fréquences des lettres : 169.551938
+0154 : fréquences des lettres : 169.656991
+723h : fréquences des lettres : 169.663392
+740q : fréquences des lettres : 169.794675
+05rq : fréquences des lettres : 169.842734
+13f4 : fréquences des lettres : 169.866391
+04a4 : fréquences des lettres : 170.124772
+733i : fréquences des lettres : 170.186542
+733o : fréquences des lettres : 170.186542
+653q : fréquences des lettres : 170.255041
+7w37 : fréquences des lettres : 170.318059
+03d4 : fréquences des lettres : 170.456346
+7w32 : fréquences des lettres : 170.464203
+04nq : fréquences des lettres : 170.488575
+1w44 : fréquences des lettres : 170.592165
+1204 : fréquences des lettres : 170.934988
+723i : fréquences des lettres : 171.098313
+723o : fréquences des lettres : 171.098313
+6534 : fréquences des lettres : 171.154264
+124u : fréquences des lettres : 171.197093
+t524 : fréquences des lettres : 171.291518
+72nq : fréquences des lettres : 171.375327
+13nh : fréquences des lettres : 171.446071
+633u : fréquences des lettres : 171.575327
+t42u : fréquences des lettres : 171.634625
+w234 : fréquences des lettres : 171.759672
+t144 : fréquences des lettres : 171.819793
+t344 : fréquences des lettres : 172.119395
+73d4 : fréquences des lettres : 172.270373
+t35u : fréquences des lettres : 172.387712
+13su : fréquences des lettres : 172.580879
+0204 : fréquences des lettres : 172.612049
+02g4 : fréquences des lettres : 172.673630
+04vt : fréquences des lettres : 172.747548
+t154 : fréquences des lettres : 172.864056
+05a4 : fréquences des lettres : 173.021187
+14v5 : fréquences des lettres : 173.107313
+7w3d : fréquences des lettres : 173.181381
+14vm : fréquences des lettres : 173.278514
+140q : fréquences des lettres : 173.287578
+13rt : fréquences des lettres : 173.546094
+125q : fréquences des lettres : 173.605080
+14r4 : fréquences des lettres : 173.630331
+72n4 : fréquences des lettres : 173.984670
+13u4 : fréquences des lettres : 173.998478
+t435 : fréquences des lettres : 174.112827
+133h : fréquences des lettres : 174.152037
+14x4 : fréquences des lettres : 174.248815
+t43n : fréquences des lettres : 174.249301
+14e4 : fréquences des lettres : 174.266430
+753h : fréquences des lettres : 174.847875
+t43l : fréquences des lettres : 175.017581
+0524 : fréquences des lettres : 175.199809
+01o4 : fréquences des lettres : 175.237717
+03j4 : fréquences des lettres : 175.300430
+153m : fréquences des lettres : 175.318599
+133i : fréquences des lettres : 175.586958
+133o : fréquences des lettres : 175.586958
+1w4u : fréquences des lettres : 175.726611
+752u : fréquences des lettres : 175.745208
+153j : fréquences des lettres : 175.785316
+1w5u : fréquences des lettres : 176.012770
+01n4 : fréquences des lettres : 176.081469
+7504 : fréquences des lettres : 176.139484
+t42t : fréquences des lettres : 176.310099
+753i : fréquences des lettres : 176.329843
+753o : fréquences des lettres : 176.329843
+1w4j : fréquences des lettres : 176.339143
+04oq : fréquences des lettres : 176.369426
+15nq : fréquences des lettres : 176.474921
+14vu : fréquences des lettres : 176.493059
+05g4 : fréquences des lettres : 176.549802
+1wg5 : fréquences des lettres : 176.795073
+72vh : fréquences des lettres : 176.944917
+03c4 : fréquences des lettres : 176.950732
+7404 : fréquences des lettres : 177.075491
+14vx : fréquences des lettres : 177.078428
+633q : fréquences des lettres : 177.100383
+72oq : fréquences des lettres : 177.133660
+11a4 : fréquences des lettres : 177.178588
+0w44 : fréquences des lettres : 177.190774
+04x4 : fréquences des lettres : 177.221706
+1454 : fréquences des lettres : 177.280266
+t25u : fréquences des lettres : 177.370691
+750q : fréquences des lettres : 177.579567
+13mt : fréquences des lettres : 177.656885
+t53c : fréquences des lettres : 177.835204
+01s4 : fréquences des lettres : 177.942636
+13nq : fréquences des lettres : 178.093380
+01h4 : fréquences des lettres : 178.132799
+72o4 : fréquences des lettres : 178.442734
+72r4 : fréquences des lettres : 178.545201
+723m : fréquences des lettres : 178.675306
+730q : fréquences des lettres : 178.730832
+73c4 : fréquences des lettres : 178.752121
+72vi : fréquences des lettres : 178.789815
+72vo : fréquences des lettres : 178.789815
+t52u : fréquences des lettres : 178.868784
+153t : fréquences des lettres : 179.158871
+1554 : fréquences des lettres : 179.184184
+73nq : fréquences des lettres : 179.272554
+t43x : fréquences des lettres : 179.493889
+15g4 : fréquences des lettres : 179.495984
+12mu : fréquences des lettres : 179.671148
+t124 : fréquences des lettres : 179.760419
+14vr : fréquences des lettres : 179.890178
+13nj : fréquences des lettres : 179.899514
+74vx : fréquences des lettres : 179.926338
+13oi : fréquences des lettres : 179.976303
+13oo : fréquences des lettres : 179.976303
+04hq : fréquences des lettres : 180.126872
+134u : fréquences des lettres : 180.375990
+u434 : fréquences des lettres : 180.392057
+0344 : fréquences des lettres : 180.422199
+04e4 : fréquences des lettres : 180.569936
+733j : fréquences des lettres : 180.615167
+7w2h : fréquences des lettres : 180.761320
+153c : fréquences des lettres : 180.765429
+142j : fréquences des lettres : 180.801311
+72hq : fréquences des lettres : 180.812827
+623h : fréquences des lettres : 181.027958
+13mj : fréquences des lettres : 181.205304
+72h4 : fréquences des lettres : 181.291120
+04u4 : fréquences des lettres : 181.329628
+24v4 : fréquences des lettres : 181.391049
+12nu : fréquences des lettres : 181.529481
+0504 : fréquences des lettres : 181.614635
+15mu : fréquences des lettres : 181.635979
+12v4 : fréquences des lettres : 181.680848
+02e4 : fréquences des lettres : 181.805289
+13hh : fréquences des lettres : 181.980954
+145q : fréquences des lettres : 182.041400
+7w3a : fréquences des lettres : 182.063075
+124j : fréquences des lettres : 182.087167
+0554 : fréquences des lettres : 182.143460
+15f4 : fréquences des lettres : 182.157280
+0324 : fréquences des lettres : 182.184495
+t324 : fréquences des lettres : 182.195728
+64v4 : fréquences des lettres : 182.233289
+152j : fréquences des lettres : 182.288104
+6424 : fréquences des lettres : 182.364490
+03x4 : fréquences des lettres : 182.425575
+7w2i : fréquences des lettres : 182.466981
+7w2o : fréquences des lettres : 182.466981
+15oq : fréquences des lettres : 182.483616
+623i : fréquences des lettres : 182.486023
+623o : fréquences des lettres : 182.486023
+133m : fréquences des lettres : 182.696583
+12f4 : fréquences des lettres : 182.958230
+11vj : fréquences des lettres : 183.020302
+7w27 : fréquences des lettres : 183.083983
+
+
+text from : ../msgsTests/1234-ring.txt ; number of keys : 87'000 ; time : 0 heures 0 minutes et 0 seconde
+
+scores c3 : 
+1234 : nombres de mots existants : 23
+12s4 : nombres de mots existants : 13
+12h4 : nombres de mots existants : 13
+12m4 : nombres de mots existants : 13
+12n4 : nombres de mots existants : 13
+12o4 : nombres de mots existants : 13
+02s5 : nombres de mots existants : 12
+02h5 : nombres de mots existants : 12
+02m5 : nombres de mots existants : 12
+02n5 : nombres de mots existants : 12
+02o5 : nombres de mots existants : 12
+t4vx : nombres de mots existants : 11
+01s5 : nombres de mots existants : 10
+03s5 : nombres de mots existants : 10
+0325 : nombres de mots existants : 10
+04s3 : nombres de mots existants : 10
+01h5 : nombres de mots existants : 10
+01m5 : nombres de mots existants : 10
+01n5 : nombres de mots existants : 10
+01o5 : nombres de mots existants : 10
+03h5 : nombres de mots existants : 10
+03mu : nombres de mots existants : 10
+03m5 : nombres de mots existants : 10
+03n5 : nombres de mots existants : 10
+03o5 : nombres de mots existants : 10
+04h3 : nombres de mots existants : 10
+04m3 : nombres de mots existants : 10
+04n3 : nombres de mots existants : 10
+04o3 : nombres de mots existants : 10
+1ws4 : nombres de mots existants : 10
+1wh4 : nombres de mots existants : 10
+1wm4 : nombres de mots existants : 10
+1wn4 : nombres de mots existants : 10
+1wo4 : nombres de mots existants : 10
+t4rs : nombres de mots existants : 10
+t4rx : nombres de mots existants : 10
+t4vc : nombres de mots existants : 10
+t4vd : nombres de mots existants : 10
+t4vf : nombres de mots existants : 10
+t4vp : nombres de mots existants : 10
+t4vs : nombres de mots existants : 10
+t4vv : nombres de mots existants : 10
+t4vz : nombres de mots existants : 10
+t4zq : nombres de mots existants : 10
+t4zs : nombres de mots existants : 10
+t4zx : nombres de mots existants : 10
+t4jq : nombres de mots existants : 10
+t4js : nombres de mots existants : 10
+t4jx : nombres de mots existants : 10
+sw3q : nombres de mots existants : 10
+uw3q : nombres de mots existants : 10
+uw3y : nombres de mots existants : 10
+wwr4 : nombres de mots existants : 10
+ww3q : nombres de mots existants : 10
+02s3 : nombres de mots existants : 9
+03sd : nombres de mots existants : 9
+03sh : nombres de mots existants : 9
+03si : nombres de mots existants : 9
+03sj : nombres de mots existants : 9
+03so : nombres de mots existants : 9
+03sp : nombres de mots existants : 9
+03st : nombres de mots existants : 9
+03su : nombres de mots existants : 9
+032h : nombres de mots existants : 9
+032i : nombres de mots existants : 9
+032j : nombres de mots existants : 9
+032o : nombres de mots existants : 9
+032t : nombres de mots existants : 9
+04s5 : nombres de mots existants : 9
+05s5 : nombres de mots existants : 9
+13s4 : nombres de mots existants : 9
+1334 : nombres de mots existants : 9
+15s4 : nombres de mots existants : 9
+25s5 : nombres de mots existants : 9
+25t5 : nombres de mots existants : 9
+63sh : nombres de mots existants : 9
+63si : nombres de mots existants : 9
+63sj : nombres de mots existants : 9
+63so : nombres de mots existants : 9
+63st : nombres de mots existants : 9
+63uh : nombres de mots existants : 9
+63ui : nombres de mots existants : 9
+63uj : nombres de mots existants : 9
+63uo : nombres de mots existants : 9
+63ut : nombres de mots existants : 9
+65s2 : nombres de mots existants : 9
+02h3 : nombres de mots existants : 9
+02m3 : nombres de mots existants : 9
+02n3 : nombres de mots existants : 9
+02o3 : nombres de mots existants : 9
+03hd : nombres de mots existants : 9
+03hh : nombres de mots existants : 9
+03hi : nombres de mots existants : 9
+03hj : nombres de mots existants : 9
+03ho : nombres de mots existants : 9
+03hp : nombres de mots existants : 9
+03ht : nombres de mots existants : 9
+03hu : nombres de mots existants : 9
+03md : nombres de mots existants : 9
+03mh : nombres de mots existants : 9
+03mi : nombres de mots existants : 9
+03mj : nombres de mots existants : 9
+03mo : nombres de mots existants : 9
+03mp : nombres de mots existants : 9
+03mt : nombres de mots existants : 9
+03nd : nombres de mots existants : 9
+03nh : nombres de mots existants : 9
+03ni : nombres de mots existants : 9
+03nj : nombres de mots existants : 9
+03no : nombres de mots existants : 9
+03np : nombres de mots existants : 9
+03nq : nombres de mots existants : 9
+03nt : nombres de mots existants : 9
+03nu : nombres de mots existants : 9
+03od : nombres de mots existants : 9
+03oh : nombres de mots existants : 9
+03oi : nombres de mots existants : 9
+03oj : nombres de mots existants : 9
+03oo : nombres de mots existants : 9
+03op : nombres de mots existants : 9
+03ot : nombres de mots existants : 9
+03ou : nombres de mots existants : 9
+04h5 : nombres de mots existants : 9
+04m5 : nombres de mots existants : 9
+04n5 : nombres de mots existants : 9
+04o5 : nombres de mots existants : 9
+05h5 : nombres de mots existants : 9
+05m5 : nombres de mots existants : 9
+05n5 : nombres de mots existants : 9
+05o5 : nombres de mots existants : 9
+13h4 : nombres de mots existants : 9
+13m4 : nombres de mots existants : 9
+13n4 : nombres de mots existants : 9
+13o4 : nombres de mots existants : 9
+15h4 : nombres de mots existants : 9
+15m4 : nombres de mots existants : 9
+15n4 : nombres de mots existants : 9
+15o4 : nombres de mots existants : 9
+25c5 : nombres de mots existants : 9
+25h5 : nombres de mots existants : 9
+25m5 : nombres de mots existants : 9
+25n5 : nombres de mots existants : 9
+25o5 : nombres de mots existants : 9
+63hh : nombres de mots existants : 9
+63hi : nombres de mots existants : 9
+63hj : nombres de mots existants : 9
+63ho : nombres de mots existants : 9
+63ht : nombres de mots existants : 9
+63mh : nombres de mots existants : 9
+63mi : nombres de mots existants : 9
+63mj : nombres de mots existants : 9
+63mo : nombres de mots existants : 9
+63mt : nombres de mots existants : 9
+63nh : nombres de mots existants : 9
+63ni : nombres de mots existants : 9
+63nj : nombres de mots existants : 9
+63no : nombres de mots existants : 9
+63nt : nombres de mots existants : 9
+63oh : nombres de mots existants : 9
+63oi : nombres de mots existants : 9
+63oj : nombres de mots existants : 9
+63oo : nombres de mots existants : 9
+63ot : nombres de mots existants : 9
+65h2 : nombres de mots existants : 9
+65m2 : nombres de mots existants : 9
+65n2 : nombres de mots existants : 9
+65o2 : nombres de mots existants : 9
+0wuq : nombres de mots existants : 9
+0wwq : nombres de mots existants : 9
+0wwu : nombres de mots existants : 9
+1pv4 : nombres de mots existants : 9
+1wv4 : nombres de mots existants : 9
+0wga : nombres de mots existants : 9
+0wgq : nombres de mots existants : 9
+0wgu : nombres de mots existants : 9
+0wkq : nombres de mots existants : 9
+1wgu : nombres de mots existants : 9
+1wku : nombres de mots existants : 9
+2wgu : nombres de mots existants : 9
+t4ra : nombres de mots existants : 9
+t4rc : nombres de mots existants : 9
+t4rd : nombres de mots existants : 9
+t4re : nombres de mots existants : 9
+t4rf : nombres de mots existants : 9
+t4rh : nombres de mots existants : 9
+t4ri : nombres de mots existants : 9
+t4rl : nombres de mots existants : 9
+t4rm : nombres de mots existants : 9
+t4rn : nombres de mots existants : 9
+t4rp : nombres de mots existants : 9
+t4rq : nombres de mots existants : 9
+t4ru : nombres de mots existants : 9
+t4rv : nombres de mots existants : 9
+t4rz : nombres de mots existants : 9
+t4ve : nombres de mots existants : 9
+t4vh : nombres de mots existants : 9
+t4vi : nombres de mots existants : 9
+t4vl : nombres de mots existants : 9
+t4vn : nombres de mots existants : 9
+t4vq : nombres de mots existants : 9
+t4za : nombres de mots existants : 9
+t4zc : nombres de mots existants : 9
+t4zd : nombres de mots existants : 9
+t4ze : nombres de mots existants : 9
+t4zf : nombres de mots existants : 9
+t4zh : nombres de mots existants : 9
+t4zi : nombres de mots existants : 9
+t4zl : nombres de mots existants : 9
+t4zn : nombres de mots existants : 9
+t4zp : nombres de mots existants : 9
+t4zv : nombres de mots existants : 9
+t4zz : nombres de mots existants : 9
+t4gc : nombres de mots existants : 9
+t4gd : nombres de mots existants : 9
+t4gf : nombres de mots existants : 9
+t4gp : nombres de mots existants : 9
+t4gs : nombres de mots existants : 9
+t4gv : nombres de mots existants : 9
+t4gx : nombres de mots existants : 9
+t4gz : nombres de mots existants : 9
+t4ja : nombres de mots existants : 9
+t4jc : nombres de mots existants : 9
+t4jd : nombres de mots existants : 9
+t4je : nombres de mots existants : 9
+t4jf : nombres de mots existants : 9
+t4jh : nombres de mots existants : 9
+t4ji : nombres de mots existants : 9
+t4jl : nombres de mots existants : 9
+t4jn : nombres de mots existants : 9
+t4jp : nombres de mots existants : 9
+t4ju : nombres de mots existants : 9
+t4jv : nombres de mots existants : 9
+t4jz : nombres de mots existants : 9
+rw3q : nombres de mots existants : 9
+rw3y : nombres de mots existants : 9
+sw3y : nombres de mots existants : 9
+ttr3 : nombres de mots existants : 9
+ttv3 : nombres de mots existants : 9
+tvr3 : nombres de mots existants : 9
+tvv3 : nombres de mots existants : 9
+tv25 : nombres de mots existants : 9
+uwr4 : nombres de mots existants : 9
+uw3m : nombres de mots existants : 9
+ww3y : nombres de mots existants : 9
+01ru : nombres de mots existants : 8
+01s3 : nombres de mots existants : 8
+01vm : nombres de mots existants : 8
+01wu : nombres de mots existants : 8
+03sa : nombres de mots existants : 8
+03sb : nombres de mots existants : 8
+03sc : nombres de mots existants : 8
+03se : nombres de mots existants : 8
+03sf : nombres de mots existants : 8
+03sl : nombres de mots existants : 8
+03sm : nombres de mots existants : 8
+03sn : nombres de mots existants : 8
+03sq : nombres de mots existants : 8
+03sr : nombres de mots existants : 8
+03ss : nombres de mots existants : 8
+03sv : nombres de mots existants : 8
+03sw : nombres de mots existants : 8
+03sx : nombres de mots existants : 8
+03sy : nombres de mots existants : 8
+03sz : nombres de mots existants : 8
+03s3 : nombres de mots existants : 8
+03uu : nombres de mots existants : 8
+032a : nombres de mots existants : 8
+0343 : nombres de mots existants : 8
+035h : nombres de mots existants : 8
+035i : nombres de mots existants : 8
+035j : nombres de mots existants : 8
+035o : nombres de mots existants : 8
+035t : nombres de mots existants : 8
+05s3 : nombres de mots existants : 8
+1134 : nombres de mots existants : 8
+1534 : nombres de mots existants : 8
+22s5 : nombres de mots existants : 8
+25q5 : nombres de mots existants : 8
+25r5 : nombres de mots existants : 8
+25u5 : nombres de mots existants : 8
+25v5 : nombres de mots existants : 8
+25w5 : nombres de mots existants : 8
+25x5 : nombres de mots existants : 8
+25y5 : nombres de mots existants : 8
+25z5 : nombres de mots existants : 8
+61tu : nombres de mots existants : 8
+63sd : nombres de mots existants : 8
+63s2 : nombres de mots existants : 8
+63s3 : nombres de mots existants : 8
+63ud : nombres de mots existants : 8
+65s5 : nombres de mots existants : 8
+01h3 : nombres de mots existants : 8
+01mu : nombres de mots existants : 8
+01m3 : nombres de mots existants : 8
+01n3 : nombres de mots existants : 8
+01o3 : nombres de mots existants : 8
+03ha : nombres de mots existants : 8
+03hb : nombres de mots existants : 8
+03hc : nombres de mots existants : 8
+03he : nombres de mots existants : 8
+03hf : nombres de mots existants : 8
+03hl : nombres de mots existants : 8
+03hm : nombres de mots existants : 8
+03hn : nombres de mots existants : 8
+03hq : nombres de mots existants : 8
+03hr : nombres de mots existants : 8
+03hs : nombres de mots existants : 8
+03hv : nombres de mots existants : 8
+03hw : nombres de mots existants : 8
+03hx : nombres de mots existants : 8
+03hy : nombres de mots existants : 8
+03hz : nombres de mots existants : 8
+03h3 : nombres de mots existants : 8
+03ma : nombres de mots existants : 8
+03mb : nombres de mots existants : 8
+03mc : nombres de mots existants : 8
+03me : nombres de mots existants : 8
+03mf : nombres de mots existants : 8
+03ml : nombres de mots existants : 8
+03mm : nombres de mots existants : 8
+03mn : nombres de mots existants : 8
+03mq : nombres de mots existants : 8
+03mr : nombres de mots existants : 8
+03ms : nombres de mots existants : 8
+03mv : nombres de mots existants : 8
+03mw : nombres de mots existants : 8
+03mx : nombres de mots existants : 8
+03my : nombres de mots existants : 8
+03mz : nombres de mots existants : 8
+03m3 : nombres de mots existants : 8
+03na : nombres de mots existants : 8
+03nb : nombres de mots existants : 8
+03nc : nombres de mots existants : 8
+03ne : nombres de mots existants : 8
+03nf : nombres de mots existants : 8
+03nl : nombres de mots existants : 8
+03nm : nombres de mots existants : 8
+03nn : nombres de mots existants : 8
+03nr : nombres de mots existants : 8
+03ns : nombres de mots existants : 8
+03nv : nombres de mots existants : 8
+03nw : nombres de mots existants : 8
+03nx : nombres de mots existants : 8
+03ny : nombres de mots existants : 8
+03nz : nombres de mots existants : 8
+03n3 : nombres de mots existants : 8
+03oa : nombres de mots existants : 8
+03ob : nombres de mots existants : 8
+03oc : nombres de mots existants : 8
+03oe : nombres de mots existants : 8
+03of : nombres de mots existants : 8
+03ol : nombres de mots existants : 8
+03om : nombres de mots existants : 8
+03on : nombres de mots existants : 8
+03oq : nombres de mots existants : 8
+03or : nombres de mots existants : 8
+03os : nombres de mots existants : 8
+03ov : nombres de mots existants : 8
+03ow : nombres de mots existants : 8
+03ox : nombres de mots existants : 8
+03oy : nombres de mots existants : 8
+03oz : nombres de mots existants : 8
+03o3 : nombres de mots existants : 8
+05h3 : nombres de mots existants : 8
+05m3 : nombres de mots existants : 8
+05n3 : nombres de mots existants : 8
+05o3 : nombres de mots existants : 8
+22h5 : nombres de mots existants : 8
+22m5 : nombres de mots existants : 8
+22n5 : nombres de mots existants : 8
+22o5 : nombres de mots existants : 8
+25a5 : nombres de mots existants : 8
+25b5 : nombres de mots existants : 8
+25d5 : nombres de mots existants : 8
+25e5 : nombres de mots existants : 8
+25f5 : nombres de mots existants : 8
+25g5 : nombres de mots existants : 8
+25i5 : nombres de mots existants : 8
+25j5 : nombres de mots existants : 8
+25k5 : nombres de mots existants : 8
+25p5 : nombres de mots existants : 8
+61mu : nombres de mots existants : 8
+63hd : nombres de mots existants : 8
+63h2 : nombres de mots existants : 8
+63h3 : nombres de mots existants : 8
+63jh : nombres de mots existants : 8
+63ji : nombres de mots existants : 8
+63jj : nombres de mots existants : 8
+63jo : nombres de mots existants : 8
+63jt : nombres de mots existants : 8
+63md : nombres de mots existants : 8
+63m2 : nombres de mots existants : 8
+63m3 : nombres de mots existants : 8
+63nd : nombres de mots existants : 8
+63n2 : nombres de mots existants : 8
+63n3 : nombres de mots existants : 8
+63od : nombres de mots existants : 8
+63o2 : nombres de mots existants : 8
+63o3 : nombres de mots existants : 8
+65h5 : nombres de mots existants : 8
+65m5 : nombres de mots existants : 8
+65n5 : nombres de mots existants : 8
+65o5 : nombres de mots existants : 8
+0vs3 : nombres de mots existants : 8
+0wrq : nombres de mots existants : 8
+0wtq : nombres de mots existants : 8
+0wua : nombres de mots existants : 8
+0wuu : nombres de mots existants : 8
+0wwa : nombres de mots existants : 8
+0wwl : nombres de mots existants : 8
+0ww5 : nombres de mots existants : 8
+0wya : nombres de mots existants : 8
+0wyq : nombres de mots existants : 8
+0wyu : nombres de mots existants : 8
+0wzq : nombres de mots existants : 8
+0wzu : nombres de mots existants : 8
+0w2w : nombres de mots existants : 8
+1ps4 : nombres de mots existants : 8
+1tru : nombres de mots existants : 8
+1tvu : nombres de mots existants : 8
+1vs4 : nombres de mots existants : 8
+1vvu : nombres de mots existants : 8
+1vv4 : nombres de mots existants : 8
+1wq4 : nombres de mots existants : 8
+1wtu : nombres de mots existants : 8
+1wuu : nombres de mots existants : 8
+1wu4 : nombres de mots existants : 8
+1wwq : nombres de mots existants : 8
+1wwu : nombres de mots existants : 8
+1ww4 : nombres de mots existants : 8
+1wx4 : nombres de mots existants : 8
+1wyu : nombres de mots existants : 8
+2tr5 : nombres de mots existants : 8
+2wuu : nombres de mots existants : 8
+2wwu : nombres de mots existants : 8
+2wyu : nombres de mots existants : 8
+2w0m : nombres de mots existants : 8
+2w0w : nombres de mots existants : 8
+2w2q : nombres de mots existants : 8
+2w2w : nombres de mots existants : 8
+6p27 : nombres de mots existants : 8
+6q27 : nombres de mots existants : 8
+6t27 : nombres de mots existants : 8
+6v27 : nombres de mots existants : 8
+6w27 : nombres de mots existants : 8
+6w5q : nombres de mots existants : 8
+0vh3 : nombres de mots existants : 8
+0vm3 : nombres de mots existants : 8
+0vn3 : nombres de mots existants : 8
+0vo3 : nombres de mots existants : 8
+0waa : nombres de mots existants : 8
+0waq : nombres de mots existants : 8
+0wau : nombres de mots existants : 8
+0wba : nombres de mots existants : 8
+0wbq : nombres de mots existants : 8
+0wbu : nombres de mots existants : 8
+0wda : nombres de mots existants : 8
+0wdq : nombres de mots existants : 8
+0wdu : nombres de mots existants : 8
+0wea : nombres de mots existants : 8
+0weq : nombres de mots existants : 8
+0weu : nombres de mots existants : 8
+0wfa : nombres de mots existants : 8
+0wfq : nombres de mots existants : 8
+0wfu : nombres de mots existants : 8
+0wgl : nombres de mots existants : 8
+0wgy : nombres de mots existants : 8
+0wgz : nombres de mots existants : 8
+0wg5 : nombres de mots existants : 8
+0wjq : nombres de mots existants : 8
+0wka : nombres de mots existants : 8
+0wku : nombres de mots existants : 8
+0wmq : nombres de mots existants : 8
+1ph4 : nombres de mots existants : 8
+1pm4 : nombres de mots existants : 8
+1pn4 : nombres de mots existants : 8
+1po4 : nombres de mots existants : 8
+1vh4 : nombres de mots existants : 8
+1vm4 : nombres de mots existants : 8
+1vn4 : nombres de mots existants : 8
+1vo4 : nombres de mots existants : 8
+1wau : nombres de mots existants : 8
+1wbu : nombres de mots existants : 8
+1wc4 : nombres de mots existants : 8
+1wdu : nombres de mots existants : 8
+1wd4 : nombres de mots existants : 8
+1weu : nombres de mots existants : 8
+1we4 : nombres de mots existants : 8
+1wfu : nombres de mots existants : 8
+1wgq : nombres de mots existants : 8
+1wg4 : nombres de mots existants : 8
+1wiu : nombres de mots existants : 8
+1wi4 : nombres de mots existants : 8
+1wkq : nombres de mots existants : 8
+1wp4 : nombres de mots existants : 8
+2wau : nombres de mots existants : 8
+2wbu : nombres de mots existants : 8
+2wdu : nombres de mots existants : 8
+2weu : nombres de mots existants : 8
+2wfu : nombres de mots existants : 8
+
+
+text from : ../msgsTests/1234-ring.txt ; number of keys : 3'061'240 ; time : 0 heures 0 minutes et 21 seconde
+
+scores c3 : 
+0vr2w : nombres de mots existants : 11
+0vz2w : nombres de mots existants : 11
+4wu3w : nombres de mots existants : 10
+9vr2k : nombres de mots existants : 10
+9vr2s : nombres de mots existants : 10
+9vz2k : nombres de mots existants : 10
+9vz2s : nombres de mots existants : 10
+9zr2k : nombres de mots existants : 10
+9zr2s : nombres de mots existants : 10
+t5225 : nombres de mots existants : 10
+0sr2w : nombres de mots existants : 10
+0su2w : nombres de mots existants : 10
+0sv2w : nombres de mots existants : 10
+0sz2w : nombres de mots existants : 10
+0vr2s : nombres de mots existants : 10
+0vz2s : nombres de mots existants : 10
+0vf2w : nombres de mots existants : 10
+3wu2g : nombres de mots existants : 9
+3wu2k : nombres de mots existants : 9
+3wu2s : nombres de mots existants : 9
+3wu2w : nombres de mots existants : 9
+3wu3w : nombres de mots existants : 9
+3wu3x : nombres de mots existants : 9
+4wq3w : nombres de mots existants : 9
+4wr3w : nombres de mots existants : 9
+4wu2g : nombres de mots existants : 9
+4wu2s : nombres de mots existants : 9
+4wu3s : nombres de mots existants : 9
+7tr2s : nombres de mots existants : 9
+7tu2s : nombres de mots existants : 9
+7tz2s : nombres de mots existants : 9
+7vr2s : nombres de mots existants : 9
+7vz2s : nombres de mots existants : 9
+9tr2k : nombres de mots existants : 9
+9tr2s : nombres de mots existants : 9
+9tu2k : nombres de mots existants : 9
+9tu2s : nombres de mots existants : 9
+9tz2k : nombres de mots existants : 9
+9tz2s : nombres de mots existants : 9
+9vr1k : nombres de mots existants : 9
+9vr1s : nombres de mots existants : 9
+9vr2g : nombres de mots existants : 9
+9vr2w : nombres de mots existants : 9
+9vr4s : nombres de mots existants : 9
+9vz2g : nombres de mots existants : 9
+9vz2w : nombres de mots existants : 9
+9xu2k : nombres de mots existants : 9
+9xu2s : nombres de mots existants : 9
+9xv2k : nombres de mots existants : 9
+9xv2s : nombres de mots existants : 9
+9xz2k : nombres de mots existants : 9
+9xz2s : nombres de mots existants : 9
+9zrqb : nombres de mots existants : 9
+9zrqe : nombres de mots existants : 9
+9zrqp : nombres de mots existants : 9
+9zrqs : nombres de mots existants : 9
+9zrqz : nombres de mots existants : 9
+9zr1k : nombres de mots existants : 9
+9zr1s : nombres de mots existants : 9
+9zr2g : nombres de mots existants : 9
+9zr2w : nombres de mots existants : 9
+9zr4s : nombres de mots existants : 9
+9zu2k : nombres de mots existants : 9
+9zu2s : nombres de mots existants : 9
+9zv2k : nombres de mots existants : 9
+9zv2s : nombres de mots existants : 9
+9zz2k : nombres de mots existants : 9
+9zz2s : nombres de mots existants : 9
+92zp2 : nombres de mots existants : 9
+3wa2g : nombres de mots existants : 9
+3wa2k : nombres de mots existants : 9
+3wa2s : nombres de mots existants : 9
+3wa2w : nombres de mots existants : 9
+4wa2g : nombres de mots existants : 9
+4wa2s : nombres de mots existants : 9
+4wa3w : nombres de mots existants : 9
+4wa5g : nombres de mots existants : 9
+4wd3w : nombres de mots existants : 9
+4wgqg : nombres de mots existants : 9
+4wgqs : nombres de mots existants : 9
+4wgqw : nombres de mots existants : 9
+7vf2s : nombres de mots existants : 9
+9vf2k : nombres de mots existants : 9
+9vf2s : nombres de mots existants : 9
+9wgq2 : nombres de mots existants : 9
+9zf2k : nombres de mots existants : 9
+9zf2s : nombres de mots existants : 9
+92dp2 : nombres de mots existants : 9
+92np2 : nombres de mots existants : 9
+9ar2k : nombres de mots existants : 9
+9ar2s : nombres de mots existants : 9
+9av2k : nombres de mots existants : 9
+9av2s : nombres de mots existants : 9
+9prqb : nombres de mots existants : 9
+9prqe : nombres de mots existants : 9
+9prqp : nombres de mots existants : 9
+9prqs : nombres de mots existants : 9
+9prqz : nombres de mots existants : 9
+9prq2 : nombres de mots existants : 9
+9pr2k : nombres de mots existants : 9
+9pr2s : nombres de mots existants : 9
+9pr4s : nombres de mots existants : 9
+9pz2k : nombres de mots existants : 9
+9pz2s : nombres de mots existants : 9
+r3225 : nombres de mots existants : 9
+r5225 : nombres de mots existants : 9
+s3225 : nombres de mots existants : 9
+s522a : nombres de mots existants : 9
+s522i : nombres de mots existants : 9
+s522l : nombres de mots existants : 9
+s522o : nombres de mots existants : 9
+s522r : nombres de mots existants : 9
+s5225 : nombres de mots existants : 9
+s5234 : nombres de mots existants : 9
+t3225 : nombres de mots existants : 9
+t522a : nombres de mots existants : 9
+t5234 : nombres de mots existants : 9
+u3225 : nombres de mots existants : 9
+u5225 : nombres de mots existants : 9
+w3225 : nombres de mots existants : 9
+w522a : nombres de mots existants : 9
+w522i : nombres de mots existants : 9
+w522l : nombres de mots existants : 9
+w522o : nombres de mots existants : 9
+w522r : nombres de mots existants : 9
+w5225 : nombres de mots existants : 9
+0sq2w : nombres de mots existants : 9
+0sq4w : nombres de mots existants : 9
+0srqs : nombres de mots existants : 9
+0sr2s : nombres de mots existants : 9
+0sr4w : nombres de mots existants : 9
+0ss2w : nombres de mots existants : 9
+0stqs : nombres de mots existants : 9
+0st2w : nombres de mots existants : 9
+0st4w : nombres de mots existants : 9
+0su2s : nombres de mots existants : 9
+0su3s : nombres de mots existants : 9
+0su3w : nombres de mots existants : 9
+0sv2s : nombres de mots existants : 9
+0swqs : nombres de mots existants : 9
+0sw2w : nombres de mots existants : 9
+0sx2w : nombres de mots existants : 9
+0sy2w : nombres de mots existants : 9
+0sz2s : nombres de mots existants : 9
+0ur2w : nombres de mots existants : 9
+0uu2w : nombres de mots existants : 9
+0uz2w : nombres de mots existants : 9
+0vq2w : nombres de mots existants : 9
+0vr1s : nombres de mots existants : 9
+0vr1w : nombres de mots existants : 9
+0vr4w : nombres de mots existants : 9
+0vu2w : nombres de mots existants : 9
+0vv2w : nombres de mots existants : 9
+0vy2w : nombres de mots existants : 9
+0xu2w : nombres de mots existants : 9
+0xv2w : nombres de mots existants : 9
+0xz2w : nombres de mots existants : 9
+0sa2w : nombres de mots existants : 9
+0sa3s : nombres de mots existants : 9
+0sa3w : nombres de mots existants : 9
+0sa5s : nombres de mots existants : 9
+0sa5w : nombres de mots existants : 9
+0sb2w : nombres de mots existants : 9
+0sc2w : nombres de mots existants : 9
+0sd2w : nombres de mots existants : 9
+0sd4w : nombres de mots existants : 9
+0se2w : nombres de mots existants : 9
+0se4w : nombres de mots existants : 9
+0sf2w : nombres de mots existants : 9
+0sgqs : nombres de mots existants : 9
+0sg2w : nombres de mots existants : 9
+0sh2w : nombres de mots existants : 9
+0si2w : nombres de mots existants : 9
+0sjps : nombres de mots existants : 9
+0sjvs : nombres de mots existants : 9
+0sj2w : nombres de mots existants : 9
+0sm2w : nombres de mots existants : 9
+0sn2w : nombres de mots existants : 9
+0so2w : nombres de mots existants : 9
+0sp2w : nombres de mots existants : 9
+0vc2w : nombres de mots existants : 9
+0vd2w : nombres de mots existants : 9
+0vf2s : nombres de mots existants : 9
+0vg2w : nombres de mots existants : 9
+0vm2w : nombres de mots existants : 9
+0vp2w : nombres de mots existants : 9
+0cu2w : nombres de mots existants : 9
+0fv2w : nombres de mots existants : 9
+0pr2w : nombres de mots existants : 9
+0pz2w : nombres de mots existants : 9
+3wu3u : nombres de mots existants : 8
+3wu3v : nombres de mots existants : 8
+3wu3z : nombres de mots existants : 8
+3wwqa : nombres de mots existants : 8
+3wwqe : nombres de mots existants : 8
+3wwqf : nombres de mots existants : 8
+3wwqg : nombres de mots existants : 8
+3wwqk : nombres de mots existants : 8
+3wwqp : nombres de mots existants : 8
+3wwqs : nombres de mots existants : 8
+3wwqu : nombres de mots existants : 8
+3wwqv : nombres de mots existants : 8
+3wwqw : nombres de mots existants : 8
+3wwqx : nombres de mots existants : 8
+3wwqz : nombres de mots existants : 8
+3wwwg : nombres de mots existants : 8
+3wwws : nombres de mots existants : 8
+3wwww : nombres de mots existants : 8
+33qq2 : nombres de mots existants : 8
+33qq5 : nombres de mots existants : 8
+33qw2 : nombres de mots existants : 8
+33rp2 : nombres de mots existants : 8
+33rp7 : nombres de mots existants : 8
+33rq2 : nombres de mots existants : 8
+33rt2 : nombres de mots existants : 8
+33sq2 : nombres de mots existants : 8
+33tq2 : nombres de mots existants : 8
+33tq5 : nombres de mots existants : 8
+33up2 : nombres de mots existants : 8
+33up7 : nombres de mots existants : 8
+33uq2 : nombres de mots existants : 8
+33ut2 : nombres de mots existants : 8
+33uv2 : nombres de mots existants : 8
+33vp2 : nombres de mots existants : 8
+33vp7 : nombres de mots existants : 8
+33vq2 : nombres de mots existants : 8
+33vt2 : nombres de mots existants : 8
+33wq2 : nombres de mots existants : 8
+33xp2 : nombres de mots existants : 8
+33xp7 : nombres de mots existants : 8
+33xq2 : nombres de mots existants : 8
+33yp2 : nombres de mots existants : 8
+33yp7 : nombres de mots existants : 8
+33yq2 : nombres de mots existants : 8
+33yt2 : nombres de mots existants : 8
+33zp2 : nombres de mots existants : 8
+33zp7 : nombres de mots existants : 8
+33zq2 : nombres de mots existants : 8
+33zt2 : nombres de mots existants : 8
+340q2 : nombres de mots existants : 8
+35tq2 : nombres de mots existants : 8
+356q2 : nombres de mots existants : 8
+4ur2g : nombres de mots existants : 8
+4ur2s : nombres de mots existants : 8
+4uu2g : nombres de mots existants : 8
+4uu2s : nombres de mots existants : 8
+4uu3w : nombres de mots existants : 8
+4uz2g : nombres de mots existants : 8
+4uz2s : nombres de mots existants : 8
+4vr2g : nombres de mots existants : 8
+4vr2s : nombres de mots existants : 8
+4vz2g : nombres de mots existants : 8
+4vz2s : nombres de mots existants : 8
+4wq1g : nombres de mots existants : 8
+4wq2g : nombres de mots existants : 8
+4wq2s : nombres de mots existants : 8
+4wq3s : nombres de mots existants : 8
+4wr2g : nombres de mots existants : 8
+4wr2s : nombres de mots existants : 8
+4wr3s : nombres de mots existants : 8
+4ws3w : nombres de mots existants : 8
+4wt2g : nombres de mots existants : 8
+4wt2s : nombres de mots existants : 8
+4wuqg : nombres de mots existants : 8
+4wuqs : nombres de mots existants : 8
+4wuqw : nombres de mots existants : 8
+4wu1g : nombres de mots existants : 8
+4wu2w : nombres de mots existants : 8
+4wu3a : nombres de mots existants : 8
+4wu3g : nombres de mots existants : 8
+4wu3p : nombres de mots existants : 8
+4wu3q : nombres de mots existants : 8
+4wu3x : nombres de mots existants : 8
+4wu5g : nombres de mots existants : 8
+4wv2g : nombres de mots existants : 8
+4wv2s : nombres de mots existants : 8
+4wwqg : nombres de mots existants : 8
+4wwqs : nombres de mots existants : 8
+4wwqw : nombres de mots existants : 8
+4ww3w : nombres de mots existants : 8
+4wz2g : nombres de mots existants : 8
+4wz2s : nombres de mots existants : 8
+4yr3w : nombres de mots existants : 8
+4yv2g : nombres de mots existants : 8
+4yv2s : nombres de mots existants : 8
+43q34 : nombres de mots existants : 8
+43r34 : nombres de mots existants : 8
+43s34 : nombres de mots existants : 8
+43t34 : nombres de mots existants : 8
+43u34 : nombres de mots existants : 8
+43v34 : nombres de mots existants : 8
+43w34 : nombres de mots existants : 8
+43x34 : nombres de mots existants : 8
+43y34 : nombres de mots existants : 8
+43z34 : nombres de mots existants : 8
+5trqs : nombres de mots existants : 8
+5tr2s : nombres de mots existants : 8
+5tu2s : nombres de mots existants : 8
+5tz2s : nombres de mots existants : 8
+7tq1d : nombres de mots existants : 8
+7tq1k : nombres de mots existants : 8
+7tq1p : nombres de mots existants : 8
+7tq1q : nombres de mots existants : 8
+7tq1s : nombres de mots existants : 8
+7tq1x : nombres de mots existants : 8
+7tq2s : nombres de mots existants : 8
+7tq3d : nombres de mots existants : 8
+7tq3p : nombres de mots existants : 8
+7tq3q : nombres de mots existants : 8
+7tq3s : nombres de mots existants : 8
+7tq3w : nombres de mots existants : 8
+7tq4w : nombres de mots existants : 8
+7trqg : nombres de mots existants : 8
+7trqp : nombres de mots existants : 8
+7trwg : nombres de mots existants : 8
+7trwp : nombres de mots existants : 8
+7tr1d : nombres de mots existants : 8
+7tr1k : nombres de mots existants : 8
+7tr1p : nombres de mots existants : 8
+7tr1q : nombres de mots existants : 8
+7tr1s : nombres de mots existants : 8
+7tr1x : nombres de mots existants : 8
+7tr2g : nombres de mots existants : 8
+7tr2k : nombres de mots existants : 8
+7tr2q : nombres de mots existants : 8
+7tr2v : nombres de mots existants : 8
+7tr2w : nombres de mots existants : 8
+7tr4w : nombres de mots existants : 8
+7tu1d : nombres de mots existants : 8
+7tu1k : nombres de mots existants : 8
+7tu1p : nombres de mots existants : 8
+7tu1q : nombres de mots existants : 8
+7tu1s : nombres de mots existants : 8
+7tu1x : nombres de mots existants : 8
+7tu2g : nombres de mots existants : 8
+7tu2k : nombres de mots existants : 8
+7tu2q : nombres de mots existants : 8
+7tu2v : nombres de mots existants : 8
+7tu2w : nombres de mots existants : 8
+7tu3d : nombres de mots existants : 8
+7tu3p : nombres de mots existants : 8
+7tu3q : nombres de mots existants : 8
+7tu3s : nombres de mots existants : 8
+7tu3w : nombres de mots existants : 8
+7tu4w : nombres de mots existants : 8
+7tvvg : nombres de mots existants : 8
+7tvvp : nombres de mots existants : 8
+7tv2s : nombres de mots existants : 8
+7twqg : nombres de mots existants : 8
+7twqp : nombres de mots existants : 8
+7twwg : nombres de mots existants : 8
+7twwp : nombres de mots existants : 8
+7ty2s : nombres de mots existants : 8
+7ty4w : nombres de mots existants : 8
+7tz2g : nombres de mots existants : 8
+7tz2k : nombres de mots existants : 8
+7tz2q : nombres de mots existants : 8
+7tz2v : nombres de mots existants : 8
+7tz2w : nombres de mots existants : 8
+7vr1d : nombres de mots existants : 8
+7vr1k : nombres de mots existants : 8
+7vr1p : nombres de mots existants : 8
+7vr1q : nombres de mots existants : 8
+7vr1s : nombres de mots existants : 8
+7vr1x : nombres de mots existants : 8
+7vr2g : nombres de mots existants : 8
+7vr2k : nombres de mots existants : 8
+7vr2q : nombres de mots existants : 8
+7vr2v : nombres de mots existants : 8
+7vr2w : nombres de mots existants : 8
+7vr4w : nombres de mots existants : 8
+7vz2g : nombres de mots existants : 8
+7vz2k : nombres de mots existants : 8
+7vz2q : nombres de mots existants : 8
+7vz2v : nombres de mots existants : 8
+7vz2w : nombres de mots existants : 8
+7wuq2 : nombres de mots existants : 8
+7wuv2 : nombres de mots existants : 8
+7wwq2 : nombres de mots existants : 8
+9tq1k : nombres de mots existants : 8
+9tq1s : nombres de mots existants : 8
+9tq2k : nombres de mots existants : 8
+9tq2s : nombres de mots existants : 8
+9tq3s : nombres de mots existants : 8
+9tq4s : nombres de mots existants : 8
+9trqb : nombres de mots existants : 8
+9trqe : nombres de mots existants : 8
+9trqp : nombres de mots existants : 8
+9trqs : nombres de mots existants : 8
+9trqz : nombres de mots existants : 8
+9tr1k : nombres de mots existants : 8
+9tr1s : nombres de mots existants : 8
+9tr2g : nombres de mots existants : 8
+9tr2w : nombres de mots existants : 8
+9tr4s : nombres de mots existants : 8
+9tu1k : nombres de mots existants : 8
+9tu1s : nombres de mots existants : 8
+9tu2g : nombres de mots existants : 8
+9tu2w : nombres de mots existants : 8
+9tu3s : nombres de mots existants : 8
+9tu4s : nombres de mots existants : 8
+9tv2k : nombres de mots existants : 8
+9tv2s : nombres de mots existants : 8
+9ty2k : nombres de mots existants : 8
+9ty2s : nombres de mots existants : 8
+9ty4s : nombres de mots existants : 8
+9tz2g : nombres de mots existants : 8
+9tz2w : nombres de mots existants : 8
+9vq1k : nombres de mots existants : 8
+9vq1s : nombres de mots existants : 8
+9vq2k : nombres de mots existants : 8
+9vq2s : nombres de mots existants : 8
+9vq3s : nombres de mots existants : 8
+9vq4s : nombres de mots existants : 8
+9vrqb : nombres de mots existants : 8
+9vrqe : nombres de mots existants : 8
+9vrqp : nombres de mots existants : 8
+9vrqs : nombres de mots existants : 8
+9vrqz : nombres de mots existants : 8
+9vrq7 : nombres de mots existants : 8
+9vrw7 : nombres de mots existants : 8
+9vr1b : nombres de mots existants : 8
+9vr1e : nombres de mots existants : 8
+9vr1g : nombres de mots existants : 8
+9vr1p : nombres de mots existants : 8
+9vr1q : nombres de mots existants : 8
+9vr1t : nombres de mots existants : 8
+9vr1v : nombres de mots existants : 8
+9vr1w : nombres de mots existants : 8
+9vr1z : nombres de mots existants : 8
+9vr2b : nombres de mots existants : 8
+9vr2e : nombres de mots existants : 8
+9vr2p : nombres de mots existants : 8
+9vr2q : nombres de mots existants : 8
+9vr2t : nombres de mots existants : 8
+9vr2v : nombres de mots existants : 8
+9vr2z : nombres de mots existants : 8
+9vr3s : nombres de mots existants : 8
+9vuw7 : nombres de mots existants : 8
+9vu2k : nombres de mots existants : 8
+9vu2s : nombres de mots existants : 8
+9vvp7 : nombres de mots existants : 8
+9vvt7 : nombres de mots existants : 8
+9vvv7 : nombres de mots existants : 8
+9vv2k : nombres de mots existants : 8
+9vv2s : nombres de mots existants : 8
+9vy2k : nombres de mots existants : 8
+9vy2s : nombres de mots existants : 8
+9vy4s : nombres de mots existants : 8
+9vzt7 : nombres de mots existants : 8
+9vz1k : nombres de mots existants : 8
+9vz1s : nombres de mots existants : 8
+9vz2b : nombres de mots existants : 8
+9vz2e : nombres de mots existants : 8
+9vz2p : nombres de mots existants : 8
+9vz2q : nombres de mots existants : 8
+9vz2t : nombres de mots existants : 8
+9vz2v : nombres de mots existants : 8
+9vz2z : nombres de mots existants : 8
+9vz3s : nombres de mots existants : 8
+9vz4s : nombres de mots existants : 8
+9wuq2 : nombres de mots existants : 8
+9wuv2 : nombres de mots existants : 8
+9wuw2 : nombres de mots existants : 8
+9wu2k : nombres de mots existants : 8
+9wu2s : nombres de mots existants : 8
+9wu3s : nombres de mots existants : 8
+9wwq2 : nombres de mots existants : 8
+9www2 : nombres de mots existants : 8
+9xq2k : nombres de mots existants : 8
+9xq2s : nombres de mots existants : 8
+9xr2k : nombres de mots existants : 8
+9xr2s : nombres de mots existants : 8
+9xs2k : nombres de mots existants : 8
+9xs2s : nombres de mots existants : 8
+9xs4s : nombres de mots existants : 8
+9xu2g : nombres de mots existants : 8
+9xu2w : nombres de mots existants : 8
+9xv2g : nombres de mots existants : 8
+9xv2w : nombres de mots existants : 8
+9xv4s : nombres de mots existants : 8
+9xy2k : nombres de mots existants : 8
+9xy2s : nombres de mots existants : 8
+9xy4s : nombres de mots existants : 8
+9xz2g : nombres de mots existants : 8
+9xz2w : nombres de mots existants : 8
+9xz4s : nombres de mots existants : 8
+9zq1k : nombres de mots existants : 8
+9zq1s : nombres de mots existants : 8
+9zq2k : nombres de mots existants : 8
+9zq2s : nombres de mots existants : 8
+9zq3s : nombres de mots existants : 8
+9zq4s : nombres de mots existants : 8
+9zrqa : nombres de mots existants : 8
+9zrqi : nombres de mots existants : 8
+9zrqk : nombres de mots existants : 8
+9zrqt : nombres de mots existants : 8
+9zrqv : nombres de mots existants : 8
+9zrqy : nombres de mots existants : 8
+9zrwa : nombres de mots existants : 8
+
+
+text from : ../msgsTests/1234-ring.txt ; number of keys : 3 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/1234-ring.txt ; number of keys : 63 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/1234-ring.txt ; number of keys : 2'808 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/1234-ring.txt ; number of keys : 87'000 ; time : 0 heures 0 minutes et 0 seconde
+text from : ../msgsTests/1234-ring.txt ; number of keys : 3'061'240 ; time : 0 heures 0 minutes et 15 seconde
+
+scores c3 : 
+1234 : nombres de mots existants : 23
+12m4 : nombres de mots existants : 13
+12h4 : nombres de mots existants : 13
+12s4 : nombres de mots existants : 13
+12o4 : nombres de mots existants : 13
+12n4 : nombres de mots existants : 13
+15h4 : nombres de mots existants : 9
+15s4 : nombres de mots existants : 9
+15m4 : nombres de mots existants : 9
+15o4 : nombres de mots existants : 9
+15n4 : nombres de mots existants : 9
+1334 : nombres de mots existants : 9
+13s4 : nombres de mots existants : 9
+13h4 : nombres de mots existants : 9
+13o4 : nombres de mots existants : 9
+13m4 : nombres de mots existants : 9
+13n4 : nombres de mots existants : 9
+1134 : nombres de mots existants : 8
+1534 : nombres de mots existants : 8
+15u4 : nombres de mots existants : 7
+9azt4 : nombres de mots existants : 7
+15j4 : nombres de mots existants : 7
+15d4 : nombres de mots existants : 7
+15v4 : nombres de mots existants : 7
+9au3s : nombres de mots existants : 7
+9azpe : nombres de mots existants : 7
+9ar3s : nombres de mots existants : 7
+15w4 : nombres de mots existants : 7
+15r4 : nombres de mots existants : 7
+02h4 : nombres de mots existants : 7
+02s4 : nombres de mots existants : 7
+14s4 : nombres de mots existants : 7
+02m4 : nombres de mots existants : 7
+7234 : nombres de mots existants : 7
+9azp4 : nombres de mots existants : 7
+02o4 : nombres de mots existants : 7
+14h4 : nombres de mots existants : 7
+02n4 : nombres de mots existants : 7
+14o4 : nombres de mots existants : 7
+14m4 : nombres de mots existants : 7
+14n4 : nombres de mots existants : 7
+1434 : nombres de mots existants : 7
+12d4 : nombres de mots existants : 6
+3au3e : nombres de mots existants : 6
+33g34 : nombres de mots existants : 6
+9ar1f : nombres de mots existants : 6
+3au3f : nombres de mots existants : 6
+12p4 : nombres de mots existants : 6
+3ar3v : nombres de mots existants : 6
+9ar3p : nombres de mots existants : 6
+12j4 : nombres de mots existants : 6
+9ar3w : nombres de mots existants : 6
+3azpf : nombres de mots existants : 6
+9arq4 : nombres de mots existants : 6
+9ar3q : nombres de mots existants : 6
+9au3e : nombres de mots existants : 6
+9ag3s : nombres de mots existants : 6
+3az3w : nombres de mots existants : 6
+9ao3s : nombres de mots existants : 6
+3ar3e : nombres de mots existants : 6
+3ar3f : nombres de mots existants : 6
+9fr3s : nombres de mots existants : 6
+9fzp2 : nombres de mots existants : 6
+9fzp4 : nombres de mots existants : 6
+12r4 : nombres de mots existants : 6
+11h4 : nombres de mots existants : 6
+11s4 : nombres de mots existants : 6
+11n4 : nombres de mots existants : 6
+9fzpb : nombres de mots existants : 6
+11o4 : nombres de mots existants : 6
+9azpf : nombres de mots existants : 6
+9az3s : nombres de mots existants : 6
+9ar3e : nombres de mots existants : 6
+7w3u : nombres de mots existants : 6
+11m4 : nombres de mots existants : 6
+0w5u : nombres de mots existants : 6
+1344 : nombres de mots existants : 6
+9az3q : nombres de mots existants : 5
+14g4 : nombres de mots existants : 5
+9ahp4 : nombres de mots existants : 5
+t234 : nombres de mots existants : 5
+9fzpr : nombres de mots existants : 5
+04vi : nombres de mots existants : 5
+04vo : nombres de mots existants : 5
+9ar3i : nombres de mots existants : 5
+13a4 : nombres de mots existants : 5
+9fr3w : nombres de mots existants : 5
+9ar3o : nombres de mots existants : 5
+13k4 : nombres de mots existants : 5
+1254 : nombres de mots existants : 5
+3az3k : nombres de mots existants : 5
+04vh : nombres de mots existants : 5
+9fu3s : nombres de mots existants : 5
+9ar3j : nombres de mots existants : 5
+9fr3p : nombres de mots existants : 5
+3az1v : nombres de mots existants : 5
+3az1w : nombres de mots existants : 5
+t42i : nombres de mots existants : 5
+t42o : nombres de mots existants : 5
+9azwf : nombres de mots existants : 5
+9auw4 : nombres de mots existants : 5
+3fr3a : nombres de mots existants : 5
+13i4 : nombres de mots existants : 5
+9auq4 : nombres de mots existants : 5
+3az3q : nombres de mots existants : 5
+t42h : nombres de mots existants : 5
+9frqa : nombres de mots existants : 5
+13w4 : nombres de mots existants : 5
+14c4 : nombres de mots existants : 5
+14w4 : nombres de mots existants : 5
+3az3z : nombres de mots existants : 5
+ufzp2 : nombres de mots existants : 5
+3azt4 : nombres de mots existants : 5
+9fr3q : nombres de mots existants : 5
+9fzpl : nombres de mots existants : 5
+9ar3l : nombres de mots existants : 5
+9arv4 : nombres de mots existants : 5
+6w3u : nombres de mots existants : 5
+6234 : nombres de mots existants : 5
+12rq : nombres de mots existants : 5
+9arw4 : nombres de mots existants : 5
+14d4 : nombres de mots existants : 5
+3az1e : nombres de mots existants : 5
+13e4 : nombres de mots existants : 5
+3azv4 : nombres de mots existants : 5
+14u4 : nombres de mots existants : 5
+ufzt2 : nombres de mots existants : 5
+13v4 : nombres de mots existants : 5
+r234 : nombres de mots existants : 5
+1304 : nombres de mots existants : 5
+752q : nombres de mots existants : 5
+13p4 : nombres de mots existants : 5
+3az3u : nombres de mots existants : 5
+3az1f : nombres de mots existants : 5
+9azw4 : nombres de mots existants : 5
+14j4 : nombres de mots existants : 5
+04vj : nombres de mots existants : 5
+9au3f : nombres de mots existants : 5
+9frp4 : nombres de mots existants : 5
+9aop4 : nombres de mots existants : 5
+9aup4 : nombres de mots existants : 5
+92gp4 : nombres de mots existants : 5
+3azp4 : nombres de mots existants : 5
+13x4 : nombres de mots existants : 5
+9agp4 : nombres de mots existants : 5
+9az3e : nombres de mots existants : 5
+3az3v : nombres de mots existants : 5
+3az3s : nombres de mots existants : 5
+13g4 : nombres de mots existants : 5
+9fr3b : nombres de mots existants : 5
+1144 : nombres de mots existants : 5
+72vu : nombres de mots existants : 5
+1224 : nombres de mots existants : 5
+14nq : nombres de mots existants : 5
+9fz3s : nombres de mots existants : 5
+9arp4 : nombres de mots existants : 5
+t42j : nombres de mots existants : 5
+04s4 : nombres de mots existants : 5
+13c4 : nombres de mots existants : 5
+1244 : nombres de mots existants : 5
+3az3e : nombres de mots existants : 5
+04h4 : nombres de mots existants : 5
+3az3f : nombres de mots existants : 5
+13d4 : nombres de mots existants : 5
+04o4 : nombres de mots existants : 5
+9ar3f : nombres de mots existants : 5
+13j4 : nombres de mots existants : 5
+04n4 : nombres de mots existants : 5
+04m4 : nombres de mots existants : 5
+14v4 : nombres de mots existants : 5
+9fzpa : nombres de mots existants : 5
+13r4 : nombres de mots existants : 5
+u5zp2 : nombres de mots existants : 4
+613q : nombres de mots existants : 4
+9f03b : nombres de mots existants : 4
+9fzpw : nombres de mots existants : 4
+02c4 : nombres de mots existants : 4
+153i : nombres de mots existants : 4
+153o : nombres de mots existants : 4
+9az1f : nombres de mots existants : 4
+732u : nombres de mots existants : 4
+04vu : nombres de mots existants : 4
+9frw4 : nombres de mots existants : 4
+7w24 : nombres de mots existants : 4
+13mh : nombres de mots existants : 4
+153h : nombres de mots existants : 4
+02j4 : nombres de mots existants : 4
+3az3g : nombres de mots existants : 4
+9ff3s : nombres de mots existants : 4
+9av3f : nombres de mots existants : 4
+3az3o : nombres de mots existants : 4
+9fz5a : nombres de mots existants : 4
+9fu3b : nombres de mots existants : 4
+r334 : nombres de mots existants : 4
+33gt4 : nombres de mots existants : 4
+9fr1a : nombres de mots existants : 4
+35gv4 : nombres de mots existants : 4
+133q : nombres de mots existants : 4
+9f03k : nombres de mots existants : 4
+14vt : nombres de mots existants : 4
+3az1s : nombres de mots existants : 4
+3fzpa : nombres de mots existants : 4
+9fr3c : nombres de mots existants : 4
+3fz1a : nombres de mots existants : 4
+t433 : nombres de mots existants : 4
+02p4 : nombres de mots existants : 4
+33gv4 : nombres de mots existants : 4
+3az3r : nombres de mots existants : 4
+9fmp4 : nombres de mots existants : 4
+94gp4 : nombres de mots existants : 4
+9agw4 : nombres de mots existants : 4
+92gw4 : nombres de mots existants : 4
+11p4 : nombres de mots existants : 4
+7w34 : nombres de mots existants : 4
+9fzpt : nombres de mots existants : 4
+14vj : nombres de mots existants : 4
+3az3j : nombres de mots existants : 4
+02d4 : nombres de mots existants : 4
+11j4 : nombres de mots existants : 4
+11f4 : nombres de mots existants : 4
+u5zt2 : nombres de mots existants : 4
+732q : nombres de mots existants : 4
+9f03p : nombres de mots existants : 4
+9fm3s : nombres de mots existants : 4
+9fzp3 : nombres de mots existants : 4
+132u : nombres de mots existants : 4
+3az3i : nombres de mots existants : 4
+9fzqa : nombres de mots existants : 4
+733u : nombres de mots existants : 4
+9fh3s : nombres de mots existants : 4
+9fzws : nombres de mots existants : 4
+1444 : nombres de mots existants : 4
+133u : nombres de mots existants : 4
+t23u : nombres de mots existants : 4
+14sq : nombres de mots existants : 4
+135q : nombres de mots existants : 4
+9fup4 : nombres de mots existants : 4
+33gp4 : nombres de mots existants : 4
+03s4 : nombres de mots existants : 4
+ufzv2 : nombres de mots existants : 4
+t43d : nombres de mots existants : 4
+11g4 : nombres de mots existants : 4
+14vi : nombres de mots existants : 4
+14vo : nombres de mots existants : 4
+9ogp4 : nombres de mots existants : 4
+152u : nombres de mots existants : 4
+9fr3l : nombres de mots existants : 4
+9fz3b : nombres de mots existants : 4
+14vh : nombres de mots existants : 4
+72rq : nombres de mots existants : 4
+9fzwa : nombres de mots existants : 4
+9fg3s : nombres de mots existants : 4
+t334 : nombres de mots existants : 4
+3az3l : nombres de mots existants : 4
+03h4 : nombres de mots existants : 4
+0w54 : nombres de mots existants : 4
+13mu : nombres de mots existants : 4
+02a4 : nombres de mots existants : 4
+9ag34 : nombres de mots existants : 4
+t43c : nombres de mots existants : 4
+14hq : nombres de mots existants : 4
+03o4 : nombres de mots existants : 4
+02v4 : nombres de mots existants : 4
+14oq : nombres de mots existants : 4
+3fz3a : nombres de mots existants : 4
+03n4 : nombres de mots existants : 4
+03m4 : nombres de mots existants : 4
+7w2u : nombres de mots existants : 4
+11v4 : nombres de mots existants : 4
+t43m : nombres de mots existants : 4
+9az3f : nombres de mots existants : 4
+9f03s : nombres de mots existants : 4
+143q : nombres de mots existants : 4
+04gq : nombres de mots existants : 4
+1354 : nombres de mots existants : 4
+14mq : nombres de mots existants : 4
+1524 : nombres de mots existants : 4
+0234 : nombres de mots existants : 4
+9fr3a : nombres de mots existants : 4
+733q : nombres de mots existants : 4
+743q : nombres de mots existants : 4
+1324 : nombres de mots existants : 4
+02r4 : nombres de mots existants : 4
+94gw4 : nombres de mots existants : 3
+3aop4 : nombres de mots existants : 3
+04c4 : nombres de mots existants : 3
+9f03o : nombres de mots existants : 3
+3am34 : nombres de mots existants : 3
+9f03w : nombres de mots existants : 3
+w534 : nombres de mots existants : 3
+753u : nombres de mots existants : 3
+93gt4 : nombres de mots existants : 3
+94g3s : nombres de mots existants : 3
+9ah34 : nombres de mots existants : 3
+04j4 : nombres de mots existants : 3
+9fz4a : nombres de mots existants : 3
+72v4 : nombres de mots existants : 3
+r5zv2 : nombres de mots existants : 3
+023q : nombres de mots existants : 3
+92r3f : nombres de mots existants : 3
+3azw4 : nombres de mots existants : 3
+13ou : nombres de mots existants : 3
+9a03s : nombres de mots existants : 3
+9fzw4 : nombres de mots existants : 3
+62vu : nombres de mots existants : 3
+1504 : nombres de mots existants : 3
+023u : nombres de mots existants : 3
+9f03q : nombres de mots existants : 3
+9fu4b : nombres de mots existants : 3
+73s4 : nombres de mots existants : 3
+03g4 : nombres de mots existants : 3
+t354 : nombres de mots existants : 3
+u534 : nombres de mots existants : 3
+9fr54 : nombres de mots existants : 3
+03v4 : nombres de mots existants : 3
+03a4 : nombres de mots existants : 3
+3as34 : nombres de mots existants : 3
+3ah34 : nombres de mots existants : 3
+3auv4 : nombres de mots existants : 3
+73m4 : nombres de mots existants : 3
+3asp4 : nombres de mots existants : 3
+04r4 : nombres de mots existants : 3
+w434 : nombres de mots existants : 3
+3fz3b : nombres de mots existants : 3
+9f03c : nombres de mots existants : 3
+04d4 : nombres de mots existants : 3
+9f01s : nombres de mots existants : 3
+9av34 : nombres de mots existants : 3
+13nu : nombres de mots existants : 3
+3au34 : nombres de mots existants : 3
+13gu : nombres de mots existants : 3
+rfzv2 : nombres de mots existants : 3
+13vu : nombres de mots existants : 3
+t43u : nombres de mots existants : 3
+1404 : nombres de mots existants : 3
+t134 : nombres de mots existants : 3
+6334 : nombres de mots existants : 3
+3ao34 : nombres de mots existants : 3
+u5zv2 : nombres de mots existants : 3
+9az34 : nombres de mots existants : 3
+9ao34 : nombres de mots existants : 3
+73h4 : nombres de mots existants : 3
+9f03l : nombres de mots existants : 3
+9fr34 : nombres de mots existants : 3
+95gp4 : nombres de mots existants : 3
+3arv4 : nombres de mots existants : 3
+3ag34 : nombres de mots existants : 3
+73o4 : nombres de mots existants : 3
+623q : nombres de mots existants : 3
+9au34 : nombres de mots existants : 3
+9fgp4 : nombres de mots existants : 3
+7w3m : nombres de mots existants : 3
+3az34 : nombres de mots existants : 3
+623u : nombres de mots existants : 3
+9f03a : nombres de mots existants : 3
+04g4 : nombres de mots existants : 3
+9fuqa : nombres de mots existants : 3
+9fu3a : nombres de mots existants : 3
+15rq : nombres de mots existants : 3
+7134 : nombres de mots existants : 3
+73n4 : nombres de mots existants : 3
+3ar34 : nombres de mots existants : 3
+7434 : nombres de mots existants : 3
+w424 : nombres de mots existants : 3
+93gp4 : nombres de mots existants : 3
+713q : nombres de mots existants : 3
+9fz3a : nombres de mots existants : 3
+t534 : nombres de mots existants : 3
+7534 : nombres de mots existants : 3
+9ar34 : nombres de mots existants : 3
+t43t : nombres de mots existants : 3
+03r4 : nombres de mots existants : 3
+t43j : nombres de mots existants : 3
+753q : nombres de mots existants : 3
+t424 : nombres de mots existants : 3
+t43i : nombres de mots existants : 3
+t43o : nombres de mots existants : 3
+t43h : nombres de mots existants : 3
+t434 : nombres de mots existants : 3
+04v4 : nombres de mots existants : 3
+3az14 : nombres de mots existants : 2
+7w2j : nombres de mots existants : 2
+t532 : nombres de mots existants : 2
+3a234 : nombres de mots existants : 2
+t43a : nombres de mots existants : 2
+13rj : nombres de mots existants : 2
+113q : nombres de mots existants : 2
+3ar14 : nombres de mots existants : 2
+93gw4 : nombres de mots existants : 2
+6134 : nombres de mots existants : 2
+13rh : nombres de mots existants : 2
+7w3t : nombres de mots existants : 2
+04 : nombres de mots existants : 2
+0404 : nombres de mots existants : 2
+13gq : nombres de mots existants : 2
+t444 : nombres de mots existants : 2
+75vu : nombres de mots existants : 2
+01m4 : nombres de mots existants : 2
+9a03f : nombres de mots existants : 2
+122u : nombres de mots existants : 2
+t53t : nombres de mots existants : 2
+144q : nombres de mots existants : 2
+9ar14 : nombres de mots existants : 2
+7w3j : nombres de mots existants : 2
+053q : nombres de mots existants : 2
+1154 : nombres de mots existants : 2
+722u : nombres de mots existants : 2
+723u : nombres de mots existants : 2
+7304 : nombres de mots existants : 2
+6434 : nombres de mots existants : 2
+t404 : nombres de mots existants : 2
+9fu4a : nombres de mots existants : 2
+9fzw3 : nombres de mots existants : 2
+134q : nombres de mots existants : 2
+93g3s : nombres de mots existants : 2
+u5zw2 : nombres de mots existants : 2
+7w3i : nombres de mots existants : 2
+7w3o : nombres de mots existants : 2
+114q : nombres de mots existants : 2
+0134 : nombres de mots existants : 2
+7w3h : nombres de mots existants : 2
+153u : nombres de mots existants : 2
+ufzw2 : nombres de mots existants : 2
+722q : nombres de mots existants : 2
+74v4 : nombres de mots existants : 2
+t53i : nombres de mots existants : 2
+t53o : nombres de mots existants : 2
+t53j : nombres de mots existants : 2
+t53h : nombres de mots existants : 2
+71v4 : nombres de mots existants : 2
+9f0p4 : nombres de mots existants : 2
+7524 : nombres de mots existants : 2
+124q : nombres de mots existants : 2
+01v4 : nombres de mots existants : 2
+153q : nombres de mots existants : 2
+142q : nombres de mots existants : 2
+643q : nombres de mots existants : 2
+1124 : nombres de mots existants : 2
+02vu : nombres de mots existants : 2
+02rq : nombres de mots existants : 2
+7224 : nombres de mots existants : 2
+043q : nombres de mots existants : 2
+14gq : nombres de mots existants : 2
+742q : nombres de mots existants : 2
+0534 : nombres de mots existants : 2
+7324 : nombres de mots existants : 2
+t53u : nombres de mots existants : 2
+723q : nombres de mots existants : 2
+7334 : nombres de mots existants : 2
+0434 : nombres de mots existants : 2
+1424 : nombres de mots existants : 2
+33g3s : nombres de mots existants : 1
+9f0w4 : nombres de mots existants : 1
+6w32 : nombres de mots existants : 1
+9fu32 : nombres de mots existants : 1
+9ar32 : nombres de mots existants : 1
+3a134 : nombres de mots existants : 1
+73a4 : nombres de mots existants : 1
+t4h4 : nombres de mots existants : 1
+05h4 : nombres de mots existants : 1
+05s4 : nombres de mots existants : 1
+9a0p4 : nombres de mots existants : 1
+9fuq3 : nombres de mots existants : 1
+9f032 : nombres de mots existants : 1
+0244 : nombres de mots existants : 1
+11mq : nombres de mots existants : 1
+05o4 : nombres de mots existants : 1
+t4m4 : nombres de mots existants : 1
+t4o4 : nombres de mots existants : 1
+05vu : nombres de mots existants : 1
+9fr32 : nombres de mots existants : 1
+04mq : nombres de mots existants : 1
+05m4 : nombres de mots existants : 1
+05n4 : nombres de mots existants : 1
+9az32 : nombres de mots existants : 1
+73rq : nombres de mots existants : 1
+t4n4 : nombres de mots existants : 1
+73r4 : nombres de mots existants : 1
+9a73s : nombres de mots existants : 1
+0424 : nombres de mots existants : 1
+05v4 : nombres de mots existants : 1
+9fz32 : nombres de mots existants : 1
+7124 : nombres de mots existants : 1
+0254 : nombres de mots existants : 1
+15vu : nombres de mots existants : 1
+73vu : nombres de mots existants : 1
+73v4 : nombres de mots existants : 1
+05r4 : nombres de mots existants : 1
+11gq : nombres de mots existants : 1
+7424 : nombres de mots existants : 1
+0334 : nombres de mots existants : 1
+9f054 : nombres de mots existants : 0
+9a734 : nombres de mots existants : 0
+9a034 : nombres de mots existants : 0
+9a73f : nombres de mots existants : 0
+9a73w : nombres de mots existants : 0
+9f034 : nombres de mots existants : 0
+7w33 : nombres de mots existants : 0
+0354 : nombres de mots existants : 0
+13rq : nombres de mots existants : 0
+
+
+text from : tests/10_Millions/crypted_rutaba-10_000_000.txt ; number of keys : 0 ; time : 0 heures 0 minutes et 0 seconde
+text from : tests/10_Millions/crypted_rutaba-10_000_000.txt ; number of keys : 8 ; time : 0 heures 0 minutes et 0 seconde
+text from : tests/10_Millions/crypted_rutaba-10_000_000.txt ; number of keys : 0 ; time : 0 heures 0 minutes et 0 seconde
+text from : tests/10_Millions/crypted_rutaba-10_000_000.txt ; number of keys : 6'048 ; time : 0 heures 0 minutes et 0 seconde
+text from : tests/10_Millions/crypted_rutaba-10_000_000.txt ; number of keys : 6'624 ; time : 0 heures 0 minutes et 0 seconde
+text from : tests/10_Millions/crypted_rutaba-10_000_000.txt ; number of keys : 12'188'880 ; time : 0 heures 1 minutes et 12 seconde
+
+scores c3 : 
+rutaO4 : nombres de mots existants : 12
+juzaba : nombres de mots existants : 12
+juiaba : nombres de mots existants : 12
+ru8ad2 : nombres de mots existants : 12
+ru9ab4 : nombres de mots existants : 11
+rutab4 : nombres de mots existants : 11
+jugaba : nombres de mots existants : 11
+rutab7 : nombres de mots existants : 11
+rutaO5 : nombres de mots existants : 11
+ru9ab7 : nombres de mots existants : 11
+vutaba : nombres de mots existants : 11
+rutab5 : nombres de mots existants : 10
+ru9ab3 : nombres de mots existants : 10
+rutMba : nombres de mots existants : 10
+vutab2 : nombres de mots existants : 10
+ru8ab2 : nombres de mots existants : 10
+ru8ab8 : nombres de mots existants : 10
+ru8ab7 : nombres de mots existants : 10
+ru8ab5 : nombres de mots existants : 10
+ruoab2 : nombres de mots existants : 10
+ru9ab0 : nombres de mots existants : 10
+rutab0 : nombres de mots existants : 10
+ru8ab4 : nombres de mots existants : 10
+luzaba : nombres de mots existants : 10
+ruiaba : nombres de mots existants : 10
+rutaO2 : nombres de mots existants : 10
+vutab4 : nombres de mots existants : 10
+ruoab7 : nombres de mots existants : 10
+wutaba : nombres de mots existants : 10
+ruzaba : nombres de mots existants : 10
+dutaba : nombres de mots existants : 9
+ru8ab6 : nombres de mots existants : 9
+juuaba : nombres de mots existants : 9
+vutab5 : nombres de mots existants : 9
+juhaba : nombres de mots existants : 9
+ruoab6 : nombres de mots existants : 9
+ruaaba : nombres de mots existants : 9
+ru8ab3 : nombres de mots existants : 9
+ruoab3 : nombres de mots existants : 9
+ruoab8 : nombres de mots existants : 9
+ru8ab0 : nombres de mots existants : 9
+lugaba : nombres de mots existants : 9
+vutab3 : nombres de mots existants : 9
+ruoab0 : nombres de mots existants : 9
+rurab4 : nombres de mots existants : 8
+r4haba : nombres de mots existants : 8
+wutab3 : nombres de mots existants : 8
+rukaba : nombres de mots existants : 8
+rurab2 : nombres de mots existants : 8
+rufad2 : nombres de mots existants : 8
+rugab7 : nombres de mots existants : 8
+ru8aO2 : nombres de mots existants : 8
+futaba : nombres de mots existants : 8
+rupaba : nombres de mots existants : 8
+wuaaba : nombres de mots existants : 8
+r4raba : nombres de mots existants : 8
+gutaba : nombres de mots existants : 8
+ouzaba : nombres de mots existants : 8
+rugaba : nombres de mots existants : 8
+ruuaba : nombres de mots existants : 8
+rurab7 : nombres de mots existants : 8
+quzaba : nombres de mots existants : 8
+vu9fba : nombres de mots existants : 8
+ruhaba : nombres de mots existants : 8
+rufab4 : nombres de mots existants : 8
+rufab2 : nombres de mots existants : 8
+ruraba : nombres de mots existants : 8
+rugab4 : nombres de mots existants : 8
+rugab2 : nombres de mots existants : 8
+wuzaba : nombres de mots existants : 8
+euzaba : nombres de mots existants : 8
+wuiaba : nombres de mots existants : 8
+ruzab2 : nombres de mots existants : 8
+rufab7 : nombres de mots existants : 8
+rusaba : nombres de mots existants : 8
+ruzab4 : nombres de mots existants : 8
+duzaba : nombres de mots existants : 8
+vuiaba : nombres de mots existants : 8
+ruzab7 : nombres de mots existants : 8
+ruoaba : nombres de mots existants : 7
+wutKba : nombres de mots existants : 7
+s4raba : nombres de mots existants : 7
+duz7ba : nombres de mots existants : 7
+rupab4 : nombres de mots existants : 7
+rufaO2 : nombres de mots existants : 7
+ruz0ba : nombres de mots existants : 7
+ruzJba : nombres de mots existants : 7
+rutad0 : nombres de mots existants : 7
+jucaba : nombres de mots existants : 7
+luuaba : nombres de mots existants : 7
+rurab6 : nombres de mots existants : 7
+quiaba : nombres de mots existants : 7
+euz7ba : nombres de mots existants : 7
+rugJb5 : nombres de mots existants : 7
+vutbba : nombres de mots existants : 7
+wuraba : nombres de mots existants : 7
+rusKba : nombres de mots existants : 7
+rurab3 : nombres de mots existants : 7
+r5zfba : nombres de mots existants : 7
+rugJb3 : nombres de mots existants : 7
+rug2Oa : nombres de mots existants : 7
+euwaba : nombres de mots existants : 7
+rurMba : nombres de mots existants : 7
+euz1ba : nombres de mots existants : 7
+ruzKba : nombres de mots existants : 7
+rurab8 : nombres de mots existants : 7
+ruzJb4 : nombres de mots existants : 7
+l0saba : nombres de mots existants : 7
+rugad2 : nombres de mots existants : 7
+ruz1ba : nombres de mots existants : 7
+ruzJb7 : nombres de mots existants : 7
+vutaHa : nombres de mots existants : 7
+rugaO2 : nombres de mots existants : 7
+vu9Jba : nombres de mots existants : 7
+v0haba : nombres de mots existants : 7
+sutaba : nombres de mots existants : 7
+vuraba : nombres de mots existants : 7
+vutada : nombres de mots existants : 7
+wutMba : nombres de mots existants : 7
+luraba : nombres de mots existants : 7
+rurab0 : nombres de mots existants : 7
+ruz7ba : nombres de mots existants : 7
+rufab5 : nombres de mots existants : 7
+rufaba : nombres de mots existants : 7
+rugKba : nombres de mots existants : 7
+vu9Kba : nombres de mots existants : 7
+vutKba : nombres de mots existants : 7
+wugaba : nombres de mots existants : 7
+rugfba : nombres de mots existants : 7
+dufaba : nombres de mots existants : 7
+rugab8 : nombres de mots existants : 7
+rugab5 : nombres de mots existants : 7
+ruzab6 : nombres de mots existants : 7
+rugab6 : nombres de mots existants : 7
+wuuaba : nombres de mots existants : 7
+rufab8 : nombres de mots existants : 7
+dugaba : nombres de mots existants : 7
+rufab3 : nombres de mots existants : 7
+wuhaba : nombres de mots existants : 7
+vutMba : nombres de mots existants : 7
+rugab0 : nombres de mots existants : 7
+rugab3 : nombres de mots existants : 7
+ruzab8 : nombres de mots existants : 7
+rufab0 : nombres de mots existants : 7
+ruzfba : nombres de mots existants : 7
+ruzab3 : nombres de mots existants : 7
+ruzab5 : nombres de mots existants : 7
+ruzab0 : nombres de mots existants : 7
+du8aHa : nombres de mots existants : 6
+w0iaba : nombres de mots existants : 6
+gutMba : nombres de mots existants : 6
+r4sab2 : nombres de mots existants : 6
+wutfba : nombres de mots existants : 6
+lugKba : nombres de mots existants : 6
+ruuab4 : nombres de mots existants : 6
+vutKda : nombres de mots existants : 6
+yuzaba : nombres de mots existants : 6
+w0saba : nombres de mots existants : 6
+wuuMba : nombres de mots existants : 6
+e0saba : nombres de mots existants : 6
+euzab7 : nombres de mots existants : 6
+vuifba : nombres de mots existants : 6
+quhaba : nombres de mots existants : 6
+eugab4 : nombres de mots existants : 6
+suzab7 : nombres de mots existants : 6
+vu9Jb3 : nombres de mots existants : 6
+zuzaba : nombres de mots existants : 6
+ouaaba : nombres de mots existants : 6
+rugac2 : nombres de mots existants : 6
+ruffba : nombres de mots existants : 6
+vugaba : nombres de mots existants : 6
+rupab5 : nombres de mots existants : 6
+lugMba : nombres de mots existants : 6
+r4zfba : nombres de mots existants : 6
+dupaba : nombres de mots existants : 6
+sugab4 : nombres de mots existants : 6
+eugab2 : nombres de mots existants : 6
+r4rfba : nombres de mots existants : 6
+du8aba : nombres de mots existants : 6
+eug1ba : nombres de mots existants : 6
+ruhab0 : nombres de mots existants : 6
+vutad2 : nombres de mots existants : 6
+vutJba : nombres de mots existants : 6
+vuoaba : nombres de mots existants : 6
+lugab3 : nombres de mots existants : 6
+suzab4 : nombres de mots existants : 6
+rurKba : nombres de mots existants : 6
+s0zaba : nombres de mots existants : 6
+vutgba : nombres de mots existants : 6
+ruzJb0 : nombres de mots existants : 6
+ouraba : nombres de mots existants : 6
+rufKba : nombres de mots existants : 6
+ruuMba : nombres de mots existants : 6
+duoaba : nombres de mots existants : 6
+wuiaHa : nombres de mots existants : 6
+r5gMba : nombres de mots existants : 6
+ruzJb3 : nombres de mots existants : 6
+puiaba : nombres de mots existants : 6
+vuaaba : nombres de mots existants : 6
+fuiaba : nombres de mots existants : 6
+vu8aba : nombres de mots existants : 6
+r4ofba : nombres de mots existants : 6
+ruiada : nombres de mots existants : 6
+vuwaba : nombres de mots existants : 6
+dugKba : nombres de mots existants : 6
+ruuab7 : nombres de mots existants : 6
+rutad2 : nombres de mots existants : 6
+s0raba : nombres de mots existants : 6
+ousaba : nombres de mots existants : 6
+zuraba : nombres de mots existants : 6
+r0zfba : nombres de mots existants : 6
+du9aba : nombres de mots existants : 6
+wufaba : nombres de mots existants : 6
+quraba : nombres de mots existants : 6
+r4rMba : nombres de mots existants : 6
+r4gfba : nombres de mots existants : 6
+ruzad2 : nombres de mots existants : 6
+lufaba : nombres de mots existants : 6
+guiaba : nombres de mots existants : 6
+rusab4 : nombres de mots existants : 6
+fuzaba : nombres de mots existants : 6
+euraba : nombres de mots existants : 6
+ruzbba : nombres de mots existants : 6
+puzaba : nombres de mots existants : 6
+ruzJb5 : nombres de mots existants : 6
+rusab2 : nombres de mots existants : 6
+r5saba : nombres de mots existants : 6
+ougaba : nombres de mots existants : 6
+vu9aba : nombres de mots existants : 6
+r4gMba : nombres de mots existants : 6
+eugaba : nombres de mots existants : 6
+ruzMba : nombres de mots existants : 6
+rugMba : nombres de mots existants : 6
+rusab7 : nombres de mots existants : 6
+r4saba : nombres de mots existants : 6
+vutfba : nombres de mots existants : 6
+vuhaba : nombres de mots existants : 6
+ruuab8 : nombres de mots existants : 5
+vu94ba : nombres de mots existants : 5
+euzab5 : nombres de mots existants : 5
+duvaba : nombres de mots existants : 5
+cugJb3 : nombres de mots existants : 5
+eufab7 : nombres de mots existants : 5
+rupMba : nombres de mots existants : 5
+v8tfba : nombres de mots existants : 5
+d0zaba : nombres de mots existants : 5
+suzab5 : nombres de mots existants : 5
+r49fba : nombres de mots existants : 5
+vutaca : nombres de mots existants : 5
+euzMba : nombres de mots existants : 5
+ruzaa2 : nombres de mots existants : 5
+dujaba : nombres de mots existants : 5
+ruiaaa : nombres de mots existants : 5
+duwaba : nombres de mots existants : 5
+r4sKba : nombres de mots existants : 5
+wu9Kba : nombres de mots existants : 5
+eugab6 : nombres de mots existants : 5
+du9ada : nombres de mots existants : 5
+duzaHa : nombres de mots existants : 5
+rutfOa : nombres de mots existants : 5
+s4saba : nombres de mots existants : 5
+euoaba : nombres de mots existants : 5
+euzJba : nombres de mots existants : 5
+muraba : nombres de mots existants : 5
+wuiada : nombres de mots existants : 5
+r9saba : nombres de mots existants : 5
+sugab6 : nombres de mots existants : 5
+r6saba : nombres de mots existants : 5
+duiada : nombres de mots existants : 5
+dufada : nombres de mots existants : 5
+vufaba : nombres de mots existants : 5
+d4saba : nombres de mots existants : 5
+zuhaba : nombres de mots existants : 5
+vutMda : nombres de mots existants : 5
+r4tfba : nombres de mots existants : 5
+r4oMba : nombres de mots existants : 5
+vutfda : nombres de mots existants : 5
+vugfba : nombres de mots existants : 5
+r4fMba : nombres de mots existants : 5
+ruzac2 : nombres de mots existants : 5
+ruiaOa : nombres de mots existants : 5
+wugab3 : nombres de mots existants : 5
+r8zfba : nombres de mots existants : 5
+ruhada : nombres de mots existants : 5
+g0saba : nombres de mots existants : 5
+r3saba : nombres de mots existants : 5
+ruuab0 : nombres de mots existants : 5
+wubaba : nombres de mots existants : 5
+r0sab7 : nombres de mots existants : 5
+v09fba : nombres de mots existants : 5
+vuiJba : nombres de mots existants : 5
+dugada : nombres de mots existants : 5
+v0iaba : nombres de mots existants : 5
+wu8aba : nombres de mots existants : 5
+r0sab2 : nombres de mots existants : 5
+r1gMba : nombres de mots existants : 5
+wug3ba : nombres de mots existants : 5
+r2saba : nombres de mots existants : 5
+r0saba : nombres de mots existants : 5
+dutada : nombres de mots existants : 5
+vusaba : nombres de mots existants : 5
+rusab5 : nombres de mots existants : 5
+qusaba : nombres de mots existants : 5
+suzab3 : nombres de mots existants : 5
+furaba : nombres de mots existants : 5
+wu9aba : nombres de mots existants : 5
+v0tfba : nombres de mots existants : 5
+wusaba : nombres de mots existants : 5
+puraba : nombres de mots existants : 5
+guraba : nombres de mots existants : 5
+du8ada : nombres de mots existants : 5
+eugMba : nombres de mots existants : 5
+duraba : nombres de mots existants : 5
+wucaba : nombres de mots existants : 5
+vubaba : nombres de mots existants : 5
+suiaba : nombres de mots existants : 5
+r8saba : nombres de mots existants : 5
+vucaba : nombres de mots existants : 5
+eusaba : nombres de mots existants : 5
+r1saba : nombres de mots existants : 5
+oufaba : nombres de mots existants : 5
+rusab6 : nombres de mots existants : 5
+lusaba : nombres de mots existants : 5
+eufaba : nombres de mots existants : 5
+guzaba : nombres de mots existants : 5
+rufMba : nombres de mots existants : 5
+sugab3 : nombres de mots existants : 5
+dugMba : nombres de mots existants : 5
+vuiaHa : nombres de mots existants : 5
+vuiada : nombres de mots existants : 5
+rusab3 : nombres de mots existants : 5
+vu93ba : nombres de mots existants : 5
+dusaba : nombres de mots existants : 5
+rusab0 : nombres de mots existants : 5
+rusab8 : nombres de mots existants : 5
+vuuaba : nombres de mots existants : 5
+suzaba : nombres de mots existants : 5
+wuzfba : nombres de mots existants : 4
+gug3ba : nombres de mots existants : 4
+wuzMba : nombres de mots existants : 4
+rugKOa : nombres de mots existants : 4
+pugaba : nombres de mots existants : 4
+ducaba : nombres de mots existants : 4
+dugaHa : nombres de mots existants : 4
+dugab3 : nombres de mots existants : 4
+quhada : nombres de mots existants : 4
+vu91ba : nombres de mots existants : 4
+vuc4ba : nombres de mots existants : 4
+vut1da : nombres de mots existants : 4
+puiada : nombres de mots existants : 4
+vut2Ha : nombres de mots existants : 4
+futada : nombres de mots existants : 4
+p0saba : nombres de mots existants : 4
+ruuad7 : nombres de mots existants : 4
+r4uMba : nombres de mots existants : 4
+zufaba : nombres de mots existants : 4
+rugabf : nombres de mots existants : 4
+vuo3ba : nombres de mots existants : 4
+dufMba : nombres de mots existants : 4
+vuhMba : nombres de mots existants : 4
+gutfba : nombres de mots existants : 4
+fuiada : nombres de mots existants : 4
+r0sab0 : nombres de mots existants : 4
+eufMba : nombres de mots existants : 4
+r0sab3 : nombres de mots existants : 4
+mufaba : nombres de mots existants : 4
+euzbba : nombres de mots existants : 4
+vugMba : nombres de mots existants : 4
+eugfba : nombres de mots existants : 4
+ruz2ca : nombres de mots existants : 4
+r1zMba : nombres de mots existants : 4
+gutada : nombres de mots existants : 4
+vuugba : nombres de mots existants : 4
+zugaba : nombres de mots existants : 4
+guz3ba : nombres de mots existants : 4
+duzMba : nombres de mots existants : 4
+d0gMba : nombres de mots existants : 4
+mugaba : nombres de mots existants : 4
+r0sab5 : nombres de mots existants : 4
+quiada : nombres de mots existants : 4
+r0sab8 : nombres de mots existants : 4
+suz3ba : nombres de mots existants : 4
+vuhKba : nombres de mots existants : 4
+euzfba : nombres de mots existants : 4
+ruzaca : nombres de mots existants : 4
+puhaba : nombres de mots existants : 4
+supaba : nombres de mots existants : 4
+eugKba : nombres de mots existants : 4
+vuufba : nombres de mots existants : 4
+ougfba : nombres de mots existants : 4
+fuhaba : nombres de mots existants : 4
+v0tMba : nombres de mots existants : 4
+vug3ba : nombres de mots existants : 4
+dugaca : nombres de mots existants : 4
+vugKba : nombres de mots existants : 4
+r4tMba : nombres de mots existants : 4
+sug1ba : nombres de mots existants : 4
+suz7ba : nombres de mots existants : 4
+guiada : nombres de mots existants : 4
+musaba : nombres de mots existants : 4
+ruuada : nombres de mots existants : 4
+vuuJba : nombres de mots existants : 4
+suhaba : nombres de mots existants : 4
+jugab3 : nombres de mots existants : 4
+wuz3ba : nombres de mots existants : 4
+guhaba : nombres de mots existants : 4
+d0saba : nombres de mots existants : 4
+s0saba : nombres de mots existants : 4
+vut2da : nombres de mots existants : 4
+suz1ba : nombres de mots existants : 4
+suaaba : nombres de mots existants : 4
+vuhada : nombres de mots existants : 4
+zusaba : nombres de mots existants : 4
+wugMba : nombres de mots existants : 4
+duzada : nombres de mots existants : 4
+wugKba : nombres de mots existants : 4
+pusaba : nombres de mots existants : 4
+suraba : nombres de mots existants : 4
+ruraaa : nombres de mots existants : 3
+sukaba : nombres de mots existants : 3
+vuhJba : nombres de mots existants : 3
+fuoaba : nombres de mots existants : 3
+rusaaa : nombres de mots existants : 3
+yusaba : nombres de mots existants : 3
+vuhfba : nombres de mots existants : 3
+lutada : nombres de mots existants : 3
+su8ada : nombres de mots existants : 3
+vui1ba : nombres de mots existants : 3
+suoaba : nombres de mots existants : 3
+ruuad0 : nombres de mots existants : 3
+vut2Oa : nombres de mots existants : 3
+dutaOa : nombres de mots existants : 3
+fuuaba : nombres de mots existants : 3
+guhada : nombres de mots existants : 3
+vut9ba : nombres de mots existants : 3
+vuh1ba : nombres de mots existants : 3
+ruuaOa : nombres de mots existants : 3
+z0saba : nombres de mots existants : 3
+duwada : nombres de mots existants : 3
+gugKba : nombres de mots existants : 3
+ruhaaa : nombres de mots existants : 3
+dugaaa : nombres de mots existants : 3
+guoaba : nombres de mots existants : 3
+luuada : nombres de mots existants : 3
+eu9aba : nombres de mots existants : 3
+zugfba : nombres de mots existants : 3
+duvada : nombres de mots existants : 3
+vuhaHa : nombres de mots existants : 3
+duuada : nombres de mots existants : 3
+vuu2da : nombres de mots existants : 3
+ruuad2 : nombres de mots existants : 3
+vuiaaa : nombres de mots existants : 3
+suhada : nombres de mots existants : 3
+gugaba : nombres de mots existants : 3
+vui4ba : nombres de mots existants : 3
+ruhaOa : nombres de mots existants : 3
+fugaba : nombres de mots existants : 3
+fusaba : nombres de mots existants : 3
+vut4ba : nombres de mots existants : 3
+gufaba : nombres de mots existants : 3
+sutada : nombres de mots existants : 3
+vuuMba : nombres de mots existants : 3
+duzaca : nombres de mots existants : 3
+vut3ba : nombres de mots existants : 3
+sufaba : nombres de mots existants : 3
+guuaba : nombres de mots existants : 3
+suiada : nombres de mots existants : 3
+vut1ba : nombres de mots existants : 3
+susaba : nombres de mots existants : 3
+gusaba : nombres de mots existants : 3
+sugaba : nombres de mots existants : 3
+sugada : nombres de mots existants : 2
+gugMba : nombres de mots existants : 2
+vuf3ba : nombres de mots existants : 2
+gu8aba : nombres de mots existants : 2
+gugfba : nombres de mots existants : 2
+euzaaa : nombres de mots existants : 2
+suiaaa : nombres de mots existants : 2
+su8aba : nombres de mots existants : 2
+gu9aba : nombres de mots existants : 2
+fu9aba : nombres de mots existants : 2
+dusaaa : nombres de mots existants : 2
+suzJba : nombres de mots existants : 2
+vuu4ba : nombres de mots existants : 2
+guzfba : nombres de mots existants : 2
+suzMba : nombres de mots existants : 2
+duraaa : nombres de mots existants : 2
+vuu3ba : nombres de mots existants : 2
+vuh4ba : nombres de mots existants : 2
+su9aba : nombres de mots existants : 2
+suzada : nombres de mots existants : 2
+vuu1ba : nombres de mots existants : 2
+sugMba : nombres de mots existants : 2
+vuuada : nombres de mots existants : 2
+duzaaa : nombres de mots existants : 2
+suraaa : nombres de mots existants : 1
+vuuaHa : nombres de mots existants : 1
+vuhaaa : nombres de mots existants : 1
+guuada : nombres de mots existants : 1
+suzaaa : nombres de mots existants : 0
+
+

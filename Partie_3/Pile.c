@@ -17,12 +17,13 @@ struct _Pile {
 
 // tailleMax la capacité de la pile
 Pile *pileCreate(int tailleMax) {
-    Pile *p = malloc(sizeof(Pile) + sizeof(void *) * tailleMax);
+    Pile *p = malloc(sizeof(Pile));
     pError((void *) p, "Erreur création pile", 3);
 
     p -> nbElem = 0;
     
-    p -> value = (void **)(p + 1);
+    p -> value = malloc(sizeof(void *) * tailleMax);
+    pError((void *) p -> value, "Erreur allocation tableau élément pile", 3);
     p -> nbElemMax = tailleMax;
 
     return p;
@@ -50,12 +51,13 @@ Pile *pilePop(Pile *p) {
     return p;
 }
 
-void pileDelete(Pile *p) {
-    pError((void *) p, "La pile n'existe pas ! (pileDelete)", 3);
-    fOnStack(p, fonctorDelete, NULL);
-    free((void *) p);
-    p = NULL;
+void pileDelete(Pile **p) {
+    pError((void *) *p, "La pile n'existe pas ! (pileDelete)", 3);
+    fOnStack(*p, fonctorDelete, NULL);
+    free((void *) *p);
+    *p = NULL;
 }
+
 
 bool pileEmpty(Pile *p) {
     pError((void *) p, "La pile n'existe pas ! (pileEmpty)", 3);
@@ -99,13 +101,11 @@ Pile *pileCopyINT(Pile *from) {
     pError((void *) to, "Erreur création clef", 3);
 
     to->nbElem = from -> nbElem;
-    int *elem = malloc(sizeof(int));
-    pError(elem, "Erreur allocation nouvel element pile copie", 3);
     for (unsigned int i = 1 ; i <= from -> nbElem ; ++i) {
-        *elem = *((int *) pileValueAt(from, i));
-        (to -> value)[i - 1] = (void *) elem;
-        elem = malloc(sizeof(int));
-        pError(elem, "Erreur allocation nouvel element pile copie", 3);
+        (to -> value)[i - 1] = malloc(sizeof(int));
+        pError((to -> value)[i - 1], "Erreur allocation nouvel element pile int copie", 3);
+
+        *((int *) (to -> value)[i - 1]) = *((int *) pileValueAt(from, i));
     }
 
     return to;
@@ -118,19 +118,30 @@ Pile *pileCopyCHAR(Pile *from) {
     pError((void *) to, "Erreur création clef", 3);
 
     to->nbElem = from -> nbElem;
-    char *elem = malloc(sizeof(char));
-    pError(elem, "Erreur allocation nouvel element pile", 3);
     for (unsigned int i = 1 ; i <= from -> nbElem ; ++i) {
-        *elem = *((char *) pileValueAt(from, i));
-        (to -> value)[i - 1] = elem;
+        (to -> value)[i - 1] = malloc(sizeof(char));
+        pError((to -> value)[i - 1], "Erreur allocation nouvel element pile char copie", 3);
+
+        *((char *) (to -> value)[i - 1]) = *((char *) pileValueAt(from, i));
     }
 
     return to;
 }
 
 void fOnStack(Pile *p, FunctorPile f, void *userData) {
-    for (unsigned int i = 1 ; i <= p -> nbElem ; ++i) {
-        f(pileValueAt(p, i), userData);
+    pError((void *) p, "Erreur fonctor : la pile est vide", 1);
+
+    if (p->nbElem == 0) {
+        return;
+    }
+
+    for (unsigned int i = 1; i <= p->nbElem; ++i) {
+        void *elem = pileValueAt(p, i);
+        if (!elem) {
+            fprintf(stderr, "Warning: Null element at index %u\n", i);
+            continue;
+        }
+        f(elem, userData);
     }
 }
 
@@ -139,6 +150,8 @@ void fOnStack(Pile *p, FunctorPile f, void *userData) {
 */
 void fonctorDelete(void *elem, void *userData) {
     (void) userData;
-    free(elem);
+    if (elem) {
+        free(elem);
+    }
 }
 

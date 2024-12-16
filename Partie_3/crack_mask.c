@@ -46,7 +46,7 @@ void crack_mask(const char* file_c1, const char* file_c2, const char* file_m1, c
     printf("Décryptage réussi : %s\nRésultat enregistré dans %s\n", M2, file_m2);
 
     // Écriture du résultat dans le fichier de sortie
-    ouvreEtEcritMsg((char*) file_m2, (char*) M2, len_c1);
+    ouvreEtEcritMsg((char*) file_m2, (char*) M2, len_c1, true);
 
     // Libération de la mémoire
     free(C1);

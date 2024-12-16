@@ -14,18 +14,18 @@ typedef struct dictionnary {
 bool argContainsHelp(int argc, char* argv[]);
 
 // si ptr est NULL alors perror(msg) exit(exitStatus)
-void pError(void *ptr, char *msg, int exitStatus);
+int pError(void *ptr, char *msg, int exitStatus);
 
 // retourne le contenu de file_in 
 // et stocke dans sizeMessage la taille du fichier
 char *ouvreEtLitFichier(char *file_in, off_t *sizeMessage);
 
 // ecrit dans le fichier file_in le texte text
-void ouvreEtEcritMsg(char *file_in, char *text, off_t len_text);
+void ouvreEtEcritMsg(char *file_in, char *text, off_t len_text, bool cut);
 
 uint32_t true_random(uint32_t value);
 
-void freeTabs(void **tabs, int nbElems);
+void freeTabs(void ***tabs, int nbElems);
 
 char *format_number_with_thousands_separator(unsigned long number);
 

@@ -39,8 +39,6 @@ struct struct_c3 {
 scores_keys *init_struct_score(int taille_tab, int lenKey);
 void destruct_struct_score(scores_keys **s_score);
 
-void traite_clefs_generee_c2(struct_c3 *s_c3, struct_c2 *s_c2);
-
 int nbMotsPresents(char **mots, int nbMots, dictionnary *dico);
 
 void test_text_word_splitter(dictionnary *dico);
@@ -87,6 +85,8 @@ int break_code_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen
     clear_table(&dicoHash);
 
     destroy_params(&fdScoreOut, &logFile);
+	
+	free(cryptedMsg);
     
     return 0;
 }
@@ -135,7 +135,7 @@ int break_code_all_exact_len(char *file_in, char *dict_file_in, char *score_out,
 
     printf("Nombre de clefs = %ld\n", nbKeys);
 
-    struct_c3 *s_c3 = init_struct_c3(cryptedMsg, tailleMsg, get_taille_tab_s_c2(s_c2), keyLen, dicoHash, -1);
+    struct_c3 *s_c3 = init_struct_c3(cryptedMsg, tailleMsg, get_taille_actuelle_tab_s_c2(s_c2), keyLen, dicoHash, -1);
 
     printf("Début de C3...\n");
     traite_clefs_generee_c2(s_c3, s_c2);
@@ -146,6 +146,9 @@ int break_code_all_exact_len(char *file_in, char *dict_file_in, char *score_out,
 
     destroy_params(&fdScoreOut, &logFile);
     destruct_stC2_C3(&sc2c3);
+	destruct_struct_c3(&s_c3);
+	free(cryptedMsg);
+	clear_table(&dicoHash);
 
     return 0;
 }
@@ -179,20 +182,18 @@ int break_code_all_max_len(char *file_in, char *dict_file_in, char *score_out, i
 
     struct_c2 *s_c2;
     stC2_C3 *sc2c3;
-    int tmpKeyLen;
-    unsigned long nbKeys;
+    unsigned long nbKeys = 0;
     unsigned long nbKeysTMP = 0;
 
-    for (int i = 0 ; i < keyLen ; ++i) {
-        tmpKeyLen = i + 1;
-
-        s_c2 = init_struct_c2(cryptedMsg, tailleMsg, TAILLE_TAB_SCORE, tmpKeyLen, stats, fdScoreOut);
+    for (int i = 1 ; i <= keyLen ; ++i) {
+        s_c2 = init_struct_c2(cryptedMsg, tailleMsg, TAILLE_TAB_SCORE, i, stats, fdScoreOut);
 
         sc2c3 = init_stC2_C3(s_c2, NULL);
 
         // true pour copier les structures
-        appelClefsFinales(file_in, tmpKeyLen, (void *) sc2c3, functorC2, logFileName, true, &nbKeys);
-        nbKeysTMP += nbKeys;
+        appelClefsFinales(file_in, i, (void *) sc2c3, functorC2, logFileName, true, &nbKeysTMP);
+		// ici il n'y a plus de threads
+        nbKeys += nbKeysTMP;
 
         printf("\n\n");
 
@@ -203,21 +204,31 @@ int break_code_all_max_len(char *file_in, char *dict_file_in, char *score_out, i
     printf("Début de C2...\n");
     printf("Fin de C2\n");
 
-    printf("Nombre de clefs total = %ld\n", nbKeysTMP);
+    printf("Nombre de clefs total = %ld\n", nbKeys);
 
-    struct_c3 *s_c3 = init_struct_c3(cryptedMsg, tailleMsg, get_taille_tab_s_c2(compiled_best), keyLen, dicoHash, -1);
+    struct_c3 *s_c3 = init_struct_c3(cryptedMsg, tailleMsg, get_taille_actuelle_tab_s_c2(compiled_best), keyLen, dicoHash, -1);
     //time_t deb = time(NULL);
     printf("Début de C3...\n");
     traite_clefs_generee_c2(s_c3, compiled_best);
-    printf("Fin de C3\n");
-    printf("Fin de C3 : meilleure clef = %s\n", get_meilleur_clef_c3(s_c3));
+	
+	if (get_meilleur_clef_c3(s_c3)) {
+		printf("Fin de C3 : meilleure clef = %s\n", get_meilleur_clef_c3(s_c3));
+	} else {
+		printf("Fin de C3 : n'a pas marché.\n");
+	}
+    
     //time_t fin = time(NULL);
 
     affiche_meilleures_clefs_c3(s_c3, cryptedMsg, tailleMsg, 10);
 
     ecritTab_c3(get_tab_nb_mots(s_c3), get_tab_tailleActuelle(s_c3), get_keys_c3(s_c3), logFile);
-
+	
+	destruct_struct_c2(&compiled_best);
+	destruct_struct_c3(&s_c3);
+	
     destroy_params(&fdScoreOut, &logFile);
+	free(cryptedMsg);
+	clear_table(&dicoHash);
 
     return 0;
 }
@@ -238,7 +249,7 @@ void traite_clefs_generee_c2(struct_c3 *s_c3, struct_c2 *s_c2) {
     char *uncrypted_msg;
     int indInsertion;
 
-    for (int i = 0 ; i < (s_c3 -> struct_score) -> tailleTab ; ++i) {
+    for (int i = 0 ; i < get_taille_actuelle_tab_s_c2(s_c2) ; ++i) {
         uncrypted_msg = encrypt_decrypt_xorMSG((s_c3 -> msgAndTaille) -> msg, (char *) get_keys_s_c2(s_c2)[i], (s_c3 -> msgAndTaille) -> lenMsg);
         traiteMsgClefC3(uncrypted_msg, s_c3 -> ptr_nb_mots_prez, s_c3 -> dico);
         free(uncrypted_msg);
@@ -342,7 +353,7 @@ struct_c3 *init_struct_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTa
 struct_c3 *copy_s_c3(struct_c3 *to_copy) {
     struct_c3 *copied = NULL;
     if (to_copy) {
-        copied = init_struct_c3((to_copy -> msgAndTaille) -> msg, (to_copy -> msgAndTaille) -> lenMsg, get_tailleTab(to_copy), to_copy -> len_key, to_copy -> dico, to_copy -> fdScoreOut);
+        copied = init_struct_c3((to_copy -> msgAndTaille) -> msg, (to_copy -> msgAndTaille) -> lenMsg, get_taille_tab_s_c3(to_copy), to_copy -> len_key, to_copy -> dico, to_copy -> fdScoreOut);
     }
     return copied;
 }
@@ -371,7 +382,7 @@ unsigned char **get_keys_c3(struct_c3 *s_c3) {
     return NULL;
 }
 
-int get_tailleTab(struct_c3 *s_c3) {
+int get_taille_tab_s_c3(struct_c3 *s_c3) {
     if (s_c3) {
         return (s_c3 -> struct_score) -> tailleTab;
     }
@@ -399,6 +410,10 @@ unsigned char *get_meilleur_clef_c3(struct_c3 *s_c3) {
     return NULL;
 }
 
+int get_len_key_c3(struct_c3 *s_c3) {
+    return s_c3 -> len_key;
+}
+
 //------------------------------------------------------------------------------------------------------------
 /*
     Fonctions pour gérer les scores de la structure struct_c3
@@ -414,10 +429,6 @@ void compile_structs_c3(struct_c3 *to, struct_c3 *from) {
         indInser = getIndexInsertionC3_struc(to);
 
         ajouteScoreC3(to, get_keys_c3(from)[i], indInser);
-
-        if (get_tab_tailleActuelle(to) < get_tailleTab(to)) {
-            *((to -> struct_score) -> tailleActuelle) += 1;
-        }
     }
 }
 
@@ -430,20 +441,20 @@ void compile_structs_c3(struct_c3 *to, struct_c3 *from) {
     tableau avec la clef key correspondante
 */
 void ajouteScoreC3(struct_c3 *s_c3, unsigned char *key, int ind) {
-    if (ind < get_tailleTab(s_c3)) {
+    if (ind < get_taille_tab_s_c3(s_c3) && ind >= 0) {
         for (int i = get_tab_tailleActuelle(s_c3) ; i > ind ; --i) {
             // décaler tout le tableau vers la droite
             // (copier tous les elements pour en inserer un nouveau)
-            if (i != get_tailleTab(s_c3)) {
+            if (i < get_taille_tab_s_c3(s_c3) && i != 0) {
                 get_tab_nb_mots(s_c3)[i] = get_tab_nb_mots(s_c3)[i - 1];
-                strcpy((char *) get_keys_c3(s_c3)[i], (const char *) get_keys_c3(s_c3)[i - 1]);
+				strcpy((char *) get_keys_c3(s_c3)[i], (char *) get_keys_c3(s_c3)[i - 1]);
             }
         }
         // insertion du nouvel element
         get_tab_nb_mots(s_c3)[ind] = *(s_c3 -> ptr_nb_mots_prez);
-        strcpy((char *) get_keys_c3(s_c3)[ind], (const char *) key);
-
-        if (*((s_c3 -> struct_score) -> tailleActuelle) != (s_c3 -> struct_score) -> tailleTab) {
+		strcpy((char *) get_keys_c3(s_c3)[ind], (char *) key);
+		
+        if (*((s_c3 -> struct_score) -> tailleActuelle) < (s_c3 -> struct_score) -> tailleTab) {
             *((s_c3 -> struct_score) -> tailleActuelle) += 1;
         }
     }
@@ -472,7 +483,7 @@ int getIndexInsertionValueC3(int *tab_score_c3, int tailleTab, int value) {
 */
 void affiche_meilleures_clefs_c3(struct_c3 *sc3, char *msgCrypte, off_t lenMsg, int nbClefsAffichee) {
     if (sc3) {
-        printf("Voici les scores et la traduction des %d meilleurss clefs\n", nbClefsAffichee);
+        printf("Voici les scores et la traduction des %d meilleures clefs (de même score)\n", nbClefsAffichee);
 
         char *msgUncrypted;
         int indScore = 0; // afficher le premier score
@@ -480,8 +491,8 @@ void affiche_meilleures_clefs_c3(struct_c3 *sc3, char *msgCrypte, off_t lenMsg, 
         int tailleActuelle = get_tab_tailleActuelle(sc3);
         double bestScore = get_tab_nb_mots(sc3)[0];
 
-        char *bestKeyCur = (char *) get_keys_c3(sc3)[indScore];
-        int bestScoreCur = get_tab_nb_mots(sc3)[indScore];
+        char *bestKeyCur = (char *) get_keys_c3(sc3)[0];
+        int bestScoreCur = get_tab_nb_mots(sc3)[0];
 
         while ((indScore < tailleActuelle) && indScore < nbClefsAffichee && bestScoreCur == bestScore) {
             msgUncrypted = encrypt_decrypt_xorMSG(msgCrypte, bestKeyCur, lenMsg);
@@ -569,7 +580,7 @@ int traiteMsgClefC3(char *msg, int *nbMotsPrez, dictionnary *dico) {
         *nbMotsPrez = nbMotsPresent;
     }
 
-    freeTabs((void **) mots, nbMots);
+    freeTabs((void ***) &mots, nbMots);
 
     return nbMotsPresent;
 }

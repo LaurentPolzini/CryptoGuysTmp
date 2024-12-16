@@ -29,7 +29,7 @@ main_partie1: main_partie1.o encrypt_decrypt_xor.o
 encrypt_decrypt_xor.o: encrypt_decrypt_xor.c chiffrement.h ../utilitaire/utiL.h
 	$(CC) $(CFLAGS) -c encrypt_decrypt_xor.c
 
-sym_crypt.o: sym_crypt.c chiffrement.h
+sym_crypt.o: sym_crypt.c chiffrement.h ../utilitaire/utiL.h
 	$(CC) $(CFLAGS) -c sym_crypt.c
 
 ../utilitaire/utiL.o: ../utilitaire/utiL.c ../utilitaire/utiL.h
