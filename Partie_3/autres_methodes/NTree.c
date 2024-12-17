@@ -10,6 +10,30 @@
 #include "../../utilitaire/utiL.h"
 
 /*
+caractères candidats :
+[1,2,3]
+[4,5]
+[6]
+    L'idée : (un peu nulle car trop de stockage)
+
+          1     2     3
+         / \   / \   / \
+        4   5 4   5 4   5
+        |   | |   | |   |
+        6   6 6   6 6   6
+une clef = une branche
+on a une pile pour la clef
+parcours : infixe : on empile les éléments parcouru
+quand on remonte : on dépile
+
+-> ca marche très bien mais pour les statistiques ce n'est pas possible.
+    => aller voir Tree.c pour voir l'amélioration
+*/
+
+
+
+
+/*
 Code erreurs:
     Erreurs liées aux mutex = 3
     Erreurs allocation mem = 1

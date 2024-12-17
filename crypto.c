@@ -6,6 +6,8 @@
 #include "./Partie_3/crackage.h"
 #include "./utilitaire/utiL.h"
 
+void appel_crackage(char *method, char *in, int len_key, char *dico, char *logName, char *scoresName, char *crypte2, char *clair1, char *out_clair2);
+
 void list_keys(void);
 void genkey(int longueur, char *key);
 void del_key(const char *key);
@@ -301,3 +303,29 @@ void afficher_aidePR(void) {
     printf("./crypto -c crack -m freq -i crypte.txt -d dictionnaire_langue_cible -l longueur_maximum_suspecté -g log_file -s scores_out (-g et -s pas obligatoires)\n");
     printf("./crypto -c crack -m mask -i crypte1.txt -r crypte2.txt -e clair1.txt -o clair2.txt\n");
 }
+
+
+/* 
+    method = freq / mask
+    in : crypté
+
+    scoresName : ou seront stocker les scores des clefs
+
+*/
+void appel_crackage(char *method, char *in, int len_key, char *dico, char *logName, char *scoresName, char *crypte2, char *clair1, char *out_clair2) {
+    if (strstr(method, "freq")) {
+        if (len_key == 0) {
+            fprintf(stderr, "Erreur : spécifiez une taille de clé avec --length (-l).\n");
+        }
+        pError(dico, "Le dictionnaire doit être entré !", 1);
+        break_code_all_max_len(in, dico, scoresName, len_key, logName);
+    } else {
+        pError(in, "Il manque le premier fichier crypté !", 1);
+        pError(crypte2, "Il manque le second fichier crypté !", 1);
+        pError(clair1, "Il manque le premier fichier en clair !", 1);
+        pError(out_clair2, "Il manque le fichier de sortie comportant le second message en clair", 1);
+        crack_mask(in, crypte2, clair1, out_clair2);
+    }
+}
+
+

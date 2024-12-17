@@ -10,9 +10,20 @@ else
 	LDFLAGS +=
 endif
 
-EXEC=break_code
-SRC= ../utilitaire/utiL.c ../Partie_1/encrypt_decrypt_xor.c $(wildcard *.c) 
-OBJ= $(SRC:.c=.o)
+SRC_UTILS=../utilitaire/utiL.c
+
+EXEC_BREAK_CODE=break_code
+EXEC_CRACK_MASK=crack_mask
+
+SRC_UTILS=../utilitaire/utiL.c
+SRC_ALL=$(wildcard *.c) $(SRC_UTILS)
+
+# Filtrer crack_mask.c pour break_code
+SRC_BREAK_CODE=../Partie_1/encrypt_decrypt_xor.c $(filter-out crack_mask.c, $(SRC_ALL))
+SRC_CRACK_MASK=crack_mask.c $(SRC_UTILS)
+
+OBJ_BREAK= $(SRC_BREAK_CODE:.c=.o)
+OBJ_MASK= $(SRC_CRACK_MASK:.c=.o)
 
 all:
 ifeq ($(DEBUG),yes)
@@ -20,11 +31,15 @@ ifeq ($(DEBUG),yes)
 else
 	@echo "Generating in release mode"
 endif
-	@$(MAKE) $(EXEC)
+	@$(MAKE) $(EXEC_BREAK_CODE)
+	@$(MAKE) $(EXEC_CRACK_MASK)
 
-$(EXEC): $(OBJ)
+$(EXEC_BREAK_CODE): $(OBJ_BREAK)
 	@$(CC) -o $@ $^ $(LDFLAGS)
 # @$(MAKE) -C ../Partie_1
+
+$(EXEC_CRACK_MASK): $(OBJ_MASK)
+	@$(CC) -o $@ $^ $(LDFLAGS)
 
 %.o: %.c
 	@$(CC) -o $@ -c $< $(CFLAGS)
@@ -34,15 +49,15 @@ $(EXEC): $(OBJ)
 asan: CFLAGS += -fsanitize=address -g
 asan: LDFLAGS += -fsanitize=address
 asan: CC=clang
-asan: $(EXEC)
+asan: $(EXEC_BREAK_CODE)
 
 clean:
-	@rm -rf $(OBJ) $(EXEC)
+	@rm -rf $(OBJ_BREAK) $(OBJ_MASK) $(EXEC_BREAK_CODE) $(EXEC_CRACK_MASK)
 
 .PHONY: clean mrproper
 
 mrproper: clean
-	@rm -rf $(EXEC)
+	@rm -rf $(EXEC_BREAK_CODE) $(EXEC_CRACK_MASK)
 
 
 # autres_methodes/c1_stockingKeys.o : autres_methodes/c1_stockingKeys.h break_code_c1.h ../utilitaire/utiL.h caracteresCandidatsIndexKey.h autres_methodes/Tree.h
@@ -59,7 +74,7 @@ break_code_c1.o : Pile.h crackage.h break_code_c1.h ../utilitaire/utiL.h ../Part
 break_code_c2.o : crackage.h ../utilitaire/utiL.h break_code_c1.h break_code_c2.h break_code_c2_c3.h mutex.h
 break_code_c3.o : crackage.h break_code_c3.h ../utilitaire/utiL.h break_code_c2_c3.h mutex.h
 break_code_c2_c3.o : break_code_c2_c3.h break_code_c1.h break_code_c2.h break_code_c3.h mutex.h
-crack_mask.o : ../Partie_1/chiffrement.h
+crack_mask.o : ../Partie_1/chiffrement.h crackage.h
 
 mutex.o : mutex.h
 tests_crackage.o : tests_crackage.h ../utilitaire/uthash.h ../utilitaire/utiL.h mutex.h

@@ -46,16 +46,18 @@ nbEtTailleSegment setNbAndTailleSegment(int tailleClef, unsigned char **carCand,
         if (curTailleCarCand > 1) {
             (infoSeg.nbSegment)[indSeg] = 2;
         }
+        *nbThreadsReel *= (infoSeg.nbSegment)[indSeg];
+        if (*nbThreadsReel > *nbThreadsMax) {
+            *nbThreadsReel = *nbThreadsMax;
+            (infoSeg.nbSegment)[indSeg] = 1;
+        }
         
         (infoSeg.tailleSegment)[indSeg] = (curTailleCarCand / (infoSeg.nbSegment)[indSeg]);
-        *nbThreadsReel *= (infoSeg.nbSegment)[indSeg++];
+        ++indSeg;
     }
     for (int i = indSeg ; i < tailleClef ; ++i) {
         (infoSeg.nbSegment)[i] = 1;
         (infoSeg.tailleSegment)[i] = strlen((const char *) carCand[i]);
-    }
-    if (*nbThreadsReel > *nbThreadsMax) {
-        *nbThreadsReel = *nbThreadsMax;
     }
 
     *nbLigne_non_traitee = tailleClef - indSeg;
@@ -119,7 +121,8 @@ void freeSPile(sPileIndCourFin **sPile) {
 sPileIndCourFin **initialisePilesIndiceThreads(int tailleClef, unsigned char **carCand, long *nbThreadsMax, long *nbThreadsReel) {
     int nbLigneNonTraitee = tailleClef; // uniquement pour la premiere pile
     nbEtTailleSegment nts = setNbAndTailleSegment(tailleClef, carCand, nbThreadsMax, nbThreadsReel, &nbLigneNonTraitee);
-    int nbLignesATraiter = nts.nbElem - 1 - nbLigneNonTraitee;
+    // nbLigneNonTraitee = tailleClef - combien de lignes ont été divisées
+    int nbLignesATraiter = tailleClef - nbLigneNonTraitee;
     // toutes les lignes non segmentées sont mises dans la pile 0
     // ensuite pour les lignes du haut (qu'il reste a traiter)
     // il faudra copier les piles deja initialiser puis ajouter
@@ -140,7 +143,7 @@ sPileIndCourFin **initialisePilesIndiceThreads(int tailleClef, unsigned char **c
     init_first_pile(piles[0], nts, nbLignesATraiter, carCand);
     
     int nbPileActuel = 1; // censé finir a nbThreads
-    for (int i = nbLignesATraiter ; i >= 0 ; --i) {
+    for (int i = nbLignesATraiter - 1 ; i >= 0 ; --i) {
         ajouteSegmentation(piles, &nbPileActuel, nts.nbSegment[i], nts.tailleSegment[i], carCand[i]);
     }
     
@@ -155,7 +158,7 @@ void init_first_pile(sPileIndCourFin *pile0, nbEtTailleSegment nts, int nbLignes
     int *origin;
     int lenCarCand;
 
-    for (int i = nts.nbElem - 1 ; i > nbLignesATraiter ; --i) {
+    for (int i = nts.nbElem - 1 ; i >= nbLignesATraiter ; --i) {
         lenCarCand = strlen((char *) carCand[i]);
         debut = malloc(sizeof(int));
         pError(debut, "Erreur allocation element pile", 2);
@@ -312,18 +315,24 @@ void ajouteSegmentation(sPileIndCourFin **piles, int *nbPileCur, int nbSeg, int 
     [0 -> 1]
     et on veut ajouter [4,5,6] donc 2 segments : [45] [6]
     on aura les piles
-    [0 -> 2]     [2 -> 3]
+    [0 -> 2]     [0 -> 2]
     [0 -> 1]     [0 -> 1]
     (pour l'intéret complet de cette fonction voir fonction ajouteSegmentation)
+    (petit spoil : le but c'est d'avoir: 
+    [0 -> 2]     [2 -> 3]
+    [0 -> 2]     [0 -> 2]
+    [0 -> 1]     [0 -> 1])
+
+    Permet juste la copie des piles
 */
 void initialisePilesSuivantes(sPileIndCourFin **piles, int nbPileCur, int nbSeg) {
     int ind;
     for (int i = 1 ; i < nbSeg ; ++i) {
         for (int j = 0 ; j < nbPileCur ; ++j) {
             ind = (i * nbPileCur) + j;
-            piles[ind] -> pileOrigin = pileCopyINT(piles[j] -> pileOrigin);
-            piles[ind] -> pileIndCour = pileCopyINT(piles[j] -> pileIndCour);
-            piles[ind] -> pileIndMax = pileCopyINT(piles[j] -> pileIndMax);
+            pileCopyINT(piles[ind] -> pileOrigin, piles[j] -> pileOrigin);
+            pileCopyINT(piles[ind] -> pileIndCour, piles[j] -> pileIndCour);
+            pileCopyINT(piles[ind] -> pileIndMax, piles[j] -> pileIndMax);
         }
     }
 }

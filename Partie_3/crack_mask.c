@@ -1,8 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <getopt.h>
-#include "../Partie_1/chiffrement.h"
 #include "../utilitaire/utiL.h"
+
 
 // Fonction pour réaliser l'attaque sur la réutilisation d'un masque jetable
 /*

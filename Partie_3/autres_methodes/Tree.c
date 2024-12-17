@@ -10,6 +10,21 @@
 #include "../break_code_c1.h"
 #include "../caracteresCandidatsIndexKey.h"
 
+/*
+    NTree.c ne peut pas fonctionner : 
+    pourquoi tout séparer si au final c'est pour stocker les memes choses ?
+    -> on ne divise pas les caractères candidats : 
+    un noeud = une ligne de caracteres candidats.
+
+    bon bah du coup l'amélioration immédiate qui suit
+    c'est pourquoi passer par un arbre alors qu'on a deja les 
+    caractères candidats
+    => amélioration suivante = technique actuelle
+    (l'idée en fait c'est d'avoir 3 tableaux : 
+    un pour l'indice d'origine, l'autre pour l'indice courant 
+    et un dernier tableau pour les indices de fin)
+*/
+
 unsigned char **clefFinalesTree(char *msgCode, unsigned long tailleMsgCode, int len_key, unsigned long *nbClefs) {
     unsigned char **carCandParIndice = caracteresCandidatsParIndice(msgCode, tailleMsgCode, len_key);
 

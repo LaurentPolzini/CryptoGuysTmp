@@ -11,7 +11,8 @@ else
 endif
 
 EXEC=crypto
-SRC= ./utilitaire/utiL.c $(wildcard *.c) $(wildcard ./Partie_1/*.c) $(wildcard ./Partie_2/*.c) ./Partie_2/Code_C/dh_prime.c $(wildcard ./Partie_3/*.c)
+SRC_ALL= $(wildcard ./Partie_1/*.c) $(wildcard ./Partie_3/*.c)
+SRC= ./utilitaire/utiL.c crypto.c $(filter-out ./Partie_1/sym_crypt.c ./Partie_3/break_code_main.c ./Partie_3/crack_mask_main.c, $(SRC_ALL))
 OBJ= $(SRC:.c=.o)
 
 all:
@@ -59,7 +60,7 @@ mrproper: clean
 ./Partie_3/break_code_c2.o : ./Partie_3/crackage.h ./utilitaire/utiL.h ./Partie_3/break_code_c1.h ./Partie_3/break_code_c2.h ./Partie_3/break_code_c2_c3.h ./Partie_3/mutex.h
 ./Partie_3/break_code_c3.o : ./Partie_3/crackage.h ./Partie_3/break_code_c3.h ./utilitaire/utiL.h ./Partie_3/break_code_c2_c3.h ./Partie_3/mutex.h
 ./Partie_3/break_code_c2_c3.o : ./Partie_3/break_code_c2_c3.h ./Partie_3/break_code_c1.h ./Partie_3/break_code_c2.h ./Partie_3/break_code_c3.h ./Partie_3/mutex.h
-./Partie_3/crack_mask.o : ./Partie_1/chiffrement.h
+./Partie_3/crack_mask.o : ./Partie_1/chiffrement.h ./Partie_3/crackage.h
 ./Partie_3/c1_stockingKeys.o : ./Partie_3/c1_stockingKeys.h ./Partie_3/break_code_c1.h ./utilitaire/utiL.h
 
 

@@ -65,7 +65,7 @@ int appel_serie_tests(void) {
 
     free(msgClair);
     free(msgCrypted);
-
+	
     test_file_name_msgClair = "../Source/msg2.txt";
     test_file_name = "tests/Source_crypted/Clef1-msg2.txt";
     unsigned char secondKey[6] = "Clef1";
@@ -77,7 +77,22 @@ int appel_serie_tests(void) {
 
     nbClefsTotal = 3500000;
     sommeCodeErr += appel_tests(test_file_name, msgCrypted, msgClair, tailleMsg, (char *) secondKey, taille_clef, dico_french, nbClefsTotal, stat_thFr);
-
+	
+	free(msgClair);
+    free(msgCrypted);
+	
+    if (sommeCodeErr == 0) {
+        printf("Tous les tests sont passés avec succès !!\n");
+    } else {
+        printf("Il y a un ou plusieurs tests qui ne sont pas passés.\n");
+    }
+	
+	if (pthread_mutex_destroy(&MUTEX_TEST) != 0) {
+        pError(NULL, "Erreur creation mutex", 1);
+    }
+	clear_table(&dico_english);
+	clear_table(&dico_french);
+	
     return sommeCodeErr;
 }
 
@@ -129,7 +144,7 @@ sstock_key *init_struct_stock_key(int tailleKey, int nbKeyMax) {
     stockage -> keys = malloc(sizeof(unsigned char *) * nbKeyMax);
     pError(stockage -> keys, "Erreur allocation mémoire", 1);
     for (int i = 0 ; i < nbKeyMax ; ++i) {
-        (stockage -> keys)[i] = malloc(sizeof(unsigned char) * tailleKey);
+        (stockage -> keys)[i] = malloc(sizeof(unsigned char) * (tailleKey + 1));
         pError((stockage -> keys)[i], "Erreur allocation mémoire", 1);
     }
 
@@ -143,18 +158,28 @@ sstock_key *init_struct_stock_key(int tailleKey, int nbKeyMax) {
 }
 
 void destroy_struct_stock_key(sstock_key **structStock) {
-    for (int i = 0 ; i < (*structStock) -> nbKeysMax ; ++i) {
-        free(((*structStock) -> keys)[i]);
+    if (!structStock || !(*structStock)) {
+        return;
     }
-    free((*structStock) -> keys);
-
-    free((*structStock) -> ind);
-
-    free((*structStock));
-
-    if (pthread_mutex_destroy(&MUTEX_TEST) != 0) {
-        pError(NULL, "Erreur creation mutex", 1);
+	
+    for (int i = 0; i < (*structStock)->nbKeysMax; ++i) {
+        if ((*structStock)->keys[i]) {
+            free((*structStock)->keys[i]);
+            (*structStock)->keys[i] = NULL;
+        }
     }
+
+    free((*structStock)->keys);
+    (*structStock)->keys = NULL;
+
+    free((*structStock)->ind);
+    (*structStock)->ind = NULL;
+
+    free((*structStock)->keyAddedUnique);
+    (*structStock)->keyAddedUnique = NULL;
+
+    free(*structStock);
+    *structStock = NULL;
 }
 
 int get_nb_keys_max_s_stockage(sstock_key *stock) {
@@ -197,13 +222,13 @@ int test_c1(char *test_file_name, int taille_clef, int nbClefsTotal) {
 
     if (get_keys_unique(sstock)) {
         printf("\nTest passé ! Toutes les clefs sont uniques.\n");
+        destroy_struct_stock_key(&sstock);
         return 0;
     } else {
         printf("\nLe test n'est pas passé ! Les clefs ne sont pas uniques.\n");
+        destroy_struct_stock_key(&sstock);
         return 1;
     }
-
-    destroy_struct_stock_key(&sstock);
 }
 
 bool key_unique(sstock_key *stockage, unsigned char *key) {
@@ -239,6 +264,7 @@ int test_c2(char *msg_crypted_file_name, char *msgCrypted, char *msgClair, off_t
     }
 
     destruct_stC2_C3(&sc2c3);
+	free(frequenceTexte);
 
     return retVal;
 }
@@ -327,6 +353,8 @@ int test_all(char *msg_crypted_file_name, char *msgCrypted, char *msgClair, off_
     }
 
     destruct_stC2_C3(&sc2c3);
+	free(frequenceTexte);
+	destruct_struct_c3(&s_c3);
 
     return retVal;
 }

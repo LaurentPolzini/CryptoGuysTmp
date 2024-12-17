@@ -1,13 +1,6 @@
 #ifndef __CRACKAGE_H__
 #define __CRACKAGE_H__
 
-/* 
-    method = freq / mask
-    in : crypté
-    out : 
-*/
-void appel_crackage(char *method, char *in, int len_key, char *dico, char *logName, char *scoresName, char *crypte2, char *clair1, char *out_clair2);
-
 int break_code_c1(char *file_in, int keyLength, char *logFile);
 
 int break_code_c2(char *file_in, float *stats, char *score_out, int keyLength, char *logFileName);

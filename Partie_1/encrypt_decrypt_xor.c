@@ -13,9 +13,57 @@
 #include "../utilitaire/uthash.h"
 #define BLOCK_SIZE 16
 
+char absolutMaxKeyLenPath[2048];
+char absolutKeysListsPath[2048];
+
+void setPaths(void) {
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        snprintf(absolutMaxKeyLenPath, sizeof(absolutMaxKeyLenPath), "%s/Partie_1/maxLenGeneratedKeys.txt", cwd);
+        snprintf(absolutKeysListsPath, sizeof(absolutKeysListsPath), "%s/keys.txt", cwd);
+    } else {
+        perror("getcwd() error");
+        exit(EXIT_FAILURE);
+    }
+}
+
 const char CHARSET_KEY[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
 char *gen_key_unique(int length, char *key);
+
+void appel_chiffrement(char* namefile_in, char* namefile_out, char* key, char* methode, char* v_init) {
+    printf("Debut du chiffrement ou déchiffrement du message :\n %s\n\n avec la clef %s\n", ouvreEtLitFichier(namefile_in, NULL), key);
+    if (strcmp(methode, "xor") == 0) {
+        pError(key, "La clef est vide !", 1);
+        // Chiffrement XOR
+        encrypt_decrypt_xor(namefile_in, key, namefile_out);
+    } else if (strcmp(methode, "mask-crypt") == 0) {
+        // Chiffrement avec masque (clef pas obligatoire)
+        encrypt_mask(namefile_in, key, namefile_out);
+    } else if (strcmp(methode, "mask-uncrypt") == 0) {
+        // dechiffrement du mask (clef obligatoire)
+        pError(key, "La clef est vide !", 1);
+        decrypt_mask(namefile_in, key, namefile_out);
+    } else if (strcmp(methode, "cbc-crypt") == 0) {
+        // Chiffrement CBC
+        if (!v_init) {
+            fprintf(stderr, "Erreur : le vecteur d'initialisation est requis pour cbc-crypt.\n");
+            exit(EXIT_FAILURE);
+        }
+        encrypt_cbc(namefile_in, "key.txt", namefile_out, v_init);
+    } else if (strcmp(methode, "cbc-uncrypt") == 0) {
+        // Déchiffrement CBC
+        if (!v_init) {
+            fprintf(stderr, "Erreur : le vecteur d'initialisation est requis pour cbc-uncrypt.\n");
+            exit(EXIT_FAILURE);
+        }
+        decrypt_cbc(namefile_in, "key.txt", namefile_out, v_init);
+    } else {
+        fprintf(stderr, "Erreur : méthode de chiffrement invalide.\n");
+        exit(EXIT_FAILURE);
+    }
+}
+
 
 // Chiffrer ou déchiffrer un message avec une clé
 char* encrypt_decrypt_xor(char* file_in, char* key, char* file_out) {
@@ -114,10 +162,8 @@ char* gen_key(int length, char *key, bool mask) {
 }
 
 char *gen_key_unique(int length, char *key) {
+    setPaths();
     dictionnary *dicoHash = NULL;
-    // put the generated keys into the hashmap
-    char *absolutMaxKeyLenPath = "./maxLenGeneratedKeys.txt";
-    char *absolutKeysListsPath = "../keys.txt";
 
     // the length of the longest key is needed for the hashmap
     off_t lenMsg;

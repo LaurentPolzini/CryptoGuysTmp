@@ -13,7 +13,6 @@
 void afficher_aideP1(void);
 void creer_fichier_cle(char *fileName, const char* key);
 
-/*
 int main(int argc, char* argv[]) {
     int opt;
     bool v_init_needed = false;
@@ -89,7 +88,7 @@ int main(int argc, char* argv[]) {
     if (key_filename) free(key);
     return 0;
 }
-*/
+
 
 void afficher_aideP1(void) {
     printf("Usage:\n");
@@ -119,35 +118,3 @@ void creer_fichier_cle(char *fileName, const char* key) {
     fclose(fichier);
 }
 
-void appel_chiffrement(char* namefile_in, char* namefile_out, char* key, char* methode, char* v_init) {
-    printf("Debut du chiffrement ou déchiffrement du message :\n %s\n\n avec la clef %s\n", ouvreEtLitFichier(namefile_in, NULL), key);
-    if (strcmp(methode, "xor") == 0) {
-        pError(key, "La clef est vide !", 1);
-        // Chiffrement XOR
-        encrypt_decrypt_xor(namefile_in, key, namefile_out);
-    } else if (strcmp(methode, "mask-crypt") == 0) {
-        // Chiffrement avec masque (clef pas obligatoire)
-        encrypt_mask(namefile_in, key, namefile_out);
-    } else if (strcmp(methode, "mask-uncrypt") == 0) {
-        // dechiffrement du mask (clef obligatoire)
-        pError(key, "La clef est vide !", 1);
-        decrypt_mask(namefile_in, key, namefile_out);
-    } else if (strcmp(methode, "cbc-crypt") == 0) {
-        // Chiffrement CBC
-        if (!v_init) {
-            fprintf(stderr, "Erreur : le vecteur d'initialisation est requis pour cbc-crypt.\n");
-            exit(EXIT_FAILURE);
-        }
-        encrypt_cbc(namefile_in, "key.txt", namefile_out, v_init);
-    } else if (strcmp(methode, "cbc-uncrypt") == 0) {
-        // Déchiffrement CBC
-        if (!v_init) {
-            fprintf(stderr, "Erreur : le vecteur d'initialisation est requis pour cbc-uncrypt.\n");
-            exit(EXIT_FAILURE);
-        }
-        decrypt_cbc(namefile_in, "key.txt", namefile_out, v_init);
-    } else {
-        fprintf(stderr, "Erreur : méthode de chiffrement invalide.\n");
-        exit(EXIT_FAILURE);
-    }
-}

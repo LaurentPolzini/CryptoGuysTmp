@@ -14,7 +14,7 @@ Pile *pileCreate(int tailleMax);
 
 // retourne le nombre d'element dans la file p
 // [512] est de taille 3
-int pileTaille(Pile *p);
+unsigned int pileTaille(Pile *p);
 
 // ajoute un element a la Pile
 // [51] -> [512]
@@ -37,8 +37,8 @@ void *pileValueAt(Pile *p, unsigned int valueAt);
 // copy la chaine contenue dans p a destination de dest
 void pileCopyValueCHAR(Pile *p, unsigned char **dest);
 
-Pile *pileCopyCHAR(Pile *from);
-Pile *pileCopyINT(Pile *from);
+void pileCopyCHAR(Pile *to, Pile *from);
+void pileCopyINT(Pile *to, Pile *from);
 
 Pile *modifyStackValueINT(Pile *p, unsigned int atIndex, int newValue);
 

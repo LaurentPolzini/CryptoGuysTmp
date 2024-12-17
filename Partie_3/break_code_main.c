@@ -33,6 +33,7 @@ void afficheManBreakCode(void);
         -l Le fichier de log
         -h affiche un manuel d'utilisation, annihile toutes autres options
 */
+
 int main(int argc, char *argv[]) {
     char *fileToCrack = NULL;
     char *method = NULL; // all or c1
@@ -44,6 +45,8 @@ int main(int argc, char *argv[]) {
 
     int opt;
     
+    // argContainsHelp evite par exemple de lancer les tests
+    // ./break_code -e -h
     if ( !argContainsHelp(argc, argv) ) {
         while ( (opt = getopt(argc, argv, ":i:m:k:d:l:s:t:e")) != -1 ) {
             switch (opt) {
@@ -82,12 +85,13 @@ int main(int argc, char *argv[]) {
                 
                 case 'e':
                     return appel_serie_tests();
+
                 case ':':
                     fprintf(stderr, "Option expected a value : %d\n", opt);
                     exit(2);
                 
                 default:
-                    fprintf(stderr, "Option n°%d invalide. Utilisez --help (-h) pour voir les commandes disponibles.\n", opt);
+                    fprintf(stderr, "Option n°%s invalide. Utilisez --help (-h) pour voir les commandes disponibles.\n", optarg);
                     return EXIT_FAILURE;
             }
         }
@@ -120,19 +124,6 @@ int main(int argc, char *argv[]) {
     }
     
     return 0;
-}
-
-void appel_crackage(char *method, char *in, int len_key, char *dico, char *logName, char *scoresName, char *crypte2, char *clair1, char *out_clair2) {
-    if (strstr(method, "freq")) {
-        pError(dico, "Le dictionnaire doit être entré !", 1);
-        break_code_all_max_len(in, dico, scoresName, len_key, logName);
-    } else {
-        pError(in, "Il manque le premier fichier crypté !", 1);
-        pError(crypte2, "Il manque le second fichier crypté !", 1);
-        pError(clair1, "Il manque le premier fichier en clair !", 1);
-        pError(out_clair2, "Il manque le fichier de sortie comportant le second message en clair", 1);
-        crack_mask(in, crypte2, clair1, out_clair2);
-    }
 }
 
 

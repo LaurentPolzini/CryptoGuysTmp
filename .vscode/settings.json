@@ -35,7 +35,8 @@
     "getopt.h": "c",
     "pthread.h": "c",
     "tests_crackage.h": "c",
-    "forward_list": "c"
+    "forward_list": "c",
+    "stdlib.h": "c"
   },
   "makefile.configureOnOpen": false,
   "C_Cpp_Runner.cCompilerPath": "gcc",

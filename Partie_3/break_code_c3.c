@@ -44,6 +44,40 @@ int nbMotsPresents(char **mots, int nbMots, dictionnary *dico);
 void test_text_word_splitter(dictionnary *dico);
 
 //-----------------------------------------------------------------
+/*
+    3 "mains" (break_code_c3, break_code_all_exact_len, break_code_all_max_len) : 
+    tous font la meme chose au début et a la fin -> compactage
+*/
+void init_params_mains_c3(char *score_out, int *fdScoreOut, char *logFileName, FILE **fileLog, dictionnary **dico,
+    char *dict_file_in, off_t *tailleMsg, char **msgCrypted, char *file_in, float **stats) {
+    init_params(score_out, fdScoreOut, logFileName, fileLog);
+
+    // Read words from the Scrabble dictionary and insert them into the hash table
+    read_and_insert_words(dict_file_in, dico, NULL);
+
+    *msgCrypted = ouvreEtLitFichier(file_in, tailleMsg);
+
+    if (stats) {
+        *stats = stat_thEn;
+        if (find_word(*dico, "abaisser")) {
+            *stats = stat_thFr;
+        }
+    }
+}
+
+void destroy_params_mains_c3(int *fdScoreOut, FILE **fileLog, char **cryptedMsg, dictionnary **dico, 
+    stC2_C3 **st_c2_c3) {
+
+    clear_table(dico);
+
+    destruct_stC2_C3(st_c2_c3);
+
+    destroy_params(fdScoreOut, fileLog);
+	
+	free(*cryptedMsg);
+}
+
+//-----------------------------------------------------------------
 
 /*
     juste c3 : sans passer par l'émondage c2
@@ -51,17 +85,14 @@ void test_text_word_splitter(dictionnary *dico);
 int break_code_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFileName) {
     int fdScoreOut = -1;
     FILE *logFile = NULL;
-
-    init_params(score_out, &fdScoreOut, logFileName, &logFile);
-
     dictionnary *dicoHash = NULL;
-
-    // Read words from the Scrabble dictionary and insert them into the hash table
-    read_and_insert_words(dict_file_in, &dicoHash, NULL);
-    
     off_t tailleMsg = 0;
-    char *cryptedMsg = ouvreEtLitFichier(file_in, &tailleMsg);
+    char *cryptedMsg = NULL;
 
+    init_params_mains_c3(score_out, &fdScoreOut, logFileName, &logFile, &dicoHash, dict_file_in,
+        &tailleMsg, &cryptedMsg, file_in, NULL);
+
+    
     printf("Attaque brutale avec dico : c1, c3 enchaînées...\n");
     printf("==>dico name = %s\n", dict_file_in);
     printf("Créé et initialisé\n");
@@ -80,13 +111,9 @@ int break_code_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen
     affiche_meilleures_clefs_c3(s_c3, cryptedMsg, tailleMsg, 10);
 
     ecritTab_c3(get_tab_nb_mots(s_c3), get_tab_tailleActuelle(s_c3), get_keys_c3(s_c3), logFile);
+    
 
-    destruct_stC2_C3(&stC2C3);
-    clear_table(&dicoHash);
-
-    destroy_params(&fdScoreOut, &logFile);
-	
-	free(cryptedMsg);
+    destroy_params_mains_c3(&fdScoreOut, &logFile, &cryptedMsg, &dicoHash, &stC2C3);
     
     return 0;
 }
@@ -97,27 +124,19 @@ int break_code_c3(char *file_in, char *dict_file_in, char *score_out, int keyLen
 int break_code_all_exact_len(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFileName) {
     int fdScoreOut = -1;
     FILE *logFile = NULL;
-
-    init_params(score_out, &fdScoreOut, logFileName, &logFile);
     dictionnary *dicoHash = NULL;
-
-    // Read words from the Scrabble dictionary and insert them into the hash table
-    read_and_insert_words(dict_file_in, &dicoHash, NULL);
-
     off_t tailleMsg = 0;
-    char *cryptedMsg = ouvreEtLitFichier(file_in, &tailleMsg);
+    char *cryptedMsg = NULL;
+    float *stats = NULL;
+
+    init_params_mains_c3(score_out, &fdScoreOut, logFileName, &logFile, &dicoHash, dict_file_in,
+        &tailleMsg, &cryptedMsg, file_in, &stats);
 
     printf("Attaque brutale avec dico : c1, c2, c3 enchaînées...\n");
     printf("==>dico name = %s\n", dict_file_in);
     printf("Créé et initialisé\n");
 
-    struct_c2 *s_c2;
-    float *stats = stat_thEn;
-    if (find_word(dicoHash, "abaisser")) {
-        stats = stat_thFr;
-    }
-
-    s_c2 = init_struct_c2(cryptedMsg, tailleMsg, TAILLE_TAB_SCORE, keyLen, stats, fdScoreOut);
+    struct_c2 *s_c2 = init_struct_c2(cryptedMsg, tailleMsg, TAILLE_TAB_SCORE, keyLen, stats, fdScoreOut);
 
     // NULL pour pas qu'il y ait de copies de c3
     stC2_C3 *sc2c3 = init_stC2_C3(s_c2, NULL);
@@ -135,6 +154,8 @@ int break_code_all_exact_len(char *file_in, char *dict_file_in, char *score_out,
 
     printf("Nombre de clefs = %ld\n", nbKeys);
 
+    // on remarquera que s_c3 ne fait pas partie de la structure sc2c3
+    // car sinon s_c3 sera copié par tous les threads alors qu'inutile 
     struct_c3 *s_c3 = init_struct_c3(cryptedMsg, tailleMsg, get_taille_actuelle_tab_s_c2(s_c2), keyLen, dicoHash, -1);
 
     printf("Début de C3...\n");
@@ -144,11 +165,9 @@ int break_code_all_exact_len(char *file_in, char *dict_file_in, char *score_out,
 
     ecritTab_c3(get_tab_nb_mots(s_c3), get_tab_tailleActuelle(s_c3), get_keys_c3(s_c3), logFile);
 
-    destroy_params(&fdScoreOut, &logFile);
-    destruct_stC2_C3(&sc2c3);
-	destruct_struct_c3(&s_c3);
-	free(cryptedMsg);
-	clear_table(&dicoHash);
+
+    destroy_params_mains_c3(&fdScoreOut, &logFile, &cryptedMsg, &dicoHash, &sc2c3);
+    destruct_struct_c3(&s_c3);
 
     return 0;
 }
@@ -159,20 +178,13 @@ int break_code_all_exact_len(char *file_in, char *dict_file_in, char *score_out,
 int break_code_all_max_len(char *file_in, char *dict_file_in, char *score_out, int keyLen, char *logFileName) {
     int fdScoreOut = -1;
     FILE *logFile = NULL;
-
-    init_params(score_out, &fdScoreOut, logFileName, &logFile);
     dictionnary *dicoHash = NULL;
-
-    // Read words from the Scrabble dictionary and insert them into the hash table
-    read_and_insert_words(dict_file_in, &dicoHash, NULL);
-
     off_t tailleMsg = 0;
-    char *cryptedMsg = ouvreEtLitFichier(file_in, &tailleMsg);
+    char *cryptedMsg = NULL;
+    float *stats = NULL;
 
-    float *stats = stat_thEn;
-    if (find_word(dicoHash, "abaisser")) {
-        stats = stat_thFr;
-    }
+    init_params_mains_c3(score_out, &fdScoreOut, logFileName, &logFile, &dicoHash, dict_file_in,
+        &tailleMsg, &cryptedMsg, file_in, &stats);
 
     printf("Attaque brutale avec dico : c1, c2, c3 enchaînées...\n");
     printf("==>dico name = %s\n", dict_file_in);
@@ -197,6 +209,8 @@ int break_code_all_max_len(char *file_in, char *dict_file_in, char *score_out, i
 
         printf("\n\n");
 
+        // on met dans compiled_best les meilleurs scores de s_c2
+        // on peut donc retrouver dans compiled_best des clefs de tailles variées
         compile_structs_c2(compiled_best, s_c2);
 
         destruct_stC2_C3(&sc2c3);
@@ -207,7 +221,6 @@ int break_code_all_max_len(char *file_in, char *dict_file_in, char *score_out, i
     printf("Nombre de clefs total = %ld\n", nbKeys);
 
     struct_c3 *s_c3 = init_struct_c3(cryptedMsg, tailleMsg, get_taille_actuelle_tab_s_c2(compiled_best), keyLen, dicoHash, -1);
-    //time_t deb = time(NULL);
     printf("Début de C3...\n");
     traite_clefs_generee_c2(s_c3, compiled_best);
 	
@@ -216,19 +229,16 @@ int break_code_all_max_len(char *file_in, char *dict_file_in, char *score_out, i
 	} else {
 		printf("Fin de C3 : n'a pas marché.\n");
 	}
-    
-    //time_t fin = time(NULL);
+
 
     affiche_meilleures_clefs_c3(s_c3, cryptedMsg, tailleMsg, 10);
 
     ecritTab_c3(get_tab_nb_mots(s_c3), get_tab_tailleActuelle(s_c3), get_keys_c3(s_c3), logFile);
 	
+
 	destruct_struct_c2(&compiled_best);
 	destruct_struct_c3(&s_c3);
-	
-    destroy_params(&fdScoreOut, &logFile);
-	free(cryptedMsg);
-	clear_table(&dicoHash);
+    destroy_params_mains_c3(&fdScoreOut, &logFile, &cryptedMsg, &dicoHash, &sc2c3);
 
     return 0;
 }

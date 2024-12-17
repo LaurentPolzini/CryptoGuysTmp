@@ -9,6 +9,23 @@
 #include "../caracteresCandidatsIndexKey.h"
 #include "Tree.h"
 
+/*
+Soient les caractères candidats : 
+[1,2,3]
+[4,5]
+[6]
+
+clefs = []
+premier passage en boucle : 
+clefs = [1,2,3]
+2ème passage : 
+clefs = [14, 15, 24, 25, 34, 35]
+dernier passage :
+clefs = [146, 156, 246, 256, 346, 356]
+
+a chaque fois : nouveau nombre de clefs = nbClefsActuel * tailleCaractereCandidat
+*/
+
 
 void appelClefsParCombo(char *file_in, int keyLength, char *logFile) {
     (void) logFile;

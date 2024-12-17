@@ -195,9 +195,13 @@ void clefsByThreads(char *msgCode, off_t tailleMsgCode, int len_key, unsigned lo
     // nombre de threads selon la machine
     long nbThreadsMax = sysconf(_SC_NPROCESSORS_CONF);
 
+    // ajuster selon les divisions des caractères candidats (initialisePilesIndiceThreads)
     long nbThreadReel = 1;
+    // les piles d'indices des caracteres candidats
+    // dont chaque thread va s'occuper
+    // une seule pile sPileIndCourFin possède
+    // 3 tableaux[len_key] de int : origin, current, fin
     sPileIndCourFin **piles = initialisePilesIndiceThreads(len_key, carCandParIndice, &nbThreadsMax, &nbThreadReel);
-    
     
     unsigned long *nbClefTraiteeByThreads[nbThreadReel];
     unsigned long nbTotalClefsTraitees = 0;
