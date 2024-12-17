@@ -322,15 +322,22 @@ scores_keys *init_struct_score(int taille_tab, int lenKey) {
 }
 
 void destruct_struct_score(scores_keys **s_score) {
-    for (int i = 0 ; i < (*s_score) -> tailleTab ; ++i) {
-        free((void *) ((*s_score) -> keys)[i]);
-    }
-    free((void *) (*s_score) -> tab_nb_mots_prez);
-    free((void *) (*s_score) -> keys);
-    
-    free((void *) (*s_score) -> tailleActuelle);
+    if (*s_score) {
+        for (int i = 0 ; i < (*s_score) -> tailleTab ; ++i) {
+            free((void *) ((*s_score) -> keys)[i]);
+            ((*s_score) -> keys)[i] = NULL;
+        }
+        free((void *) (*s_score) -> tab_nb_mots_prez);
+        (*s_score) -> tab_nb_mots_prez = NULL;
+        free((void *) (*s_score) -> keys);
+        (*s_score) -> keys = NULL;
+        
+        free((void *) (*s_score) -> tailleActuelle);
+        (*s_score) -> tailleActuelle = NULL;
 
-    free((void *) *s_score);
+        free((void *) *s_score);
+        *s_score = NULL;
+    }
 }
 
 struct_c3 *init_struct_c3(char *msgCrypted, off_t tailleMsgCrypted, int tailleTab, int keyLen, dictionnary *dicO, int fdScore) {
@@ -369,15 +376,19 @@ struct_c3 *copy_s_c3(struct_c3 *to_copy) {
 }
 
 void destruct_struct_c3(struct_c3 **s_c3) {
-    if (s_c3) {
+    if (*s_c3) {
         free(((*s_c3) -> msgAndTaille) -> msg);
+        (*s_c3) -> msgAndTaille -> msg = NULL;
         free((void *) ((*s_c3) -> msgAndTaille));
+        (*s_c3) -> msgAndTaille = NULL;
 
         destruct_struct_score(&((*s_c3) -> struct_score));
 
         free((void *) (*s_c3) -> ptr_nb_mots_prez);
+        (*s_c3) -> ptr_nb_mots_prez = NULL;
 
         free((void *) (*s_c3));
+        *s_c3 = NULL;
     }
 }
 

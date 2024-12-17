@@ -169,18 +169,26 @@ struct_c2 *init_struct_c2(char *msgCrypted, off_t tailleMsgCrypted, int tailleTa
 void destruct_struct_c2(struct_c2 **s_c2) {
     if (s_c2) {
         free(((*s_c2) -> msgAndTaille) -> msg);
+        (*s_c2) -> msgAndTaille -> msg = NULL;
         free((void *) ((*s_c2) -> msgAndTaille));
+        (*s_c2) -> msgAndTaille = NULL;
 
         for (int i = 0 ; i < (*s_c2) -> tailleScoreTab ; ++i) {
             free((void *) ((*s_c2) -> tab_keys_correspondantes)[i]);
+            ((*s_c2) -> tab_keys_correspondantes)[i] = NULL;
         }
         free((void *) (*s_c2) -> tab_meilleures_freq_lettres);
+        (*s_c2) -> tab_meilleures_freq_lettres = NULL;
         free((void *) (*s_c2) -> tab_keys_correspondantes);
+        (*s_c2) -> tab_keys_correspondantes = NULL;
 
         free((void *) (*s_c2) -> ptr_tailleActuelleTab);
+        (*s_c2) -> ptr_tailleActuelleTab = NULL;
         free((void *) (*s_c2) -> distance);
+        (*s_c2) -> distance = NULL;
 
         free((void *) (*s_c2));
+        *s_c2 = NULL;
     }
 }
 

@@ -1,17 +1,51 @@
 Attaque brutale avec dico : c1, c2, c3 enchaînées...
 ==>dico name = ../../Dicos/dicoFrSA.txt
 Créé et initialisé
+Début de C1...
+[0,2,]
+La génération des 2 clefs devrait prendre 0 heures 0 minutes et 0 secondes
+0% des 2 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                   100% des 2 clefs traitées !
+Fin de C1
+
+
+Début de C1...
+[0,2,]
+[h,i,n,o,0,1,2,3,4,6,7,]
+La génération des 22 clefs devrait prendre 0 heures 0 minutes et 0 secondes
+                                                                   0% des 22 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                    0% des 22 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                    0% des 22 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                    100% des 22 clefs traitées !
+Fin de C1
+
+
+Début de C1...
+[p,q,t,v,w,0,2,3,4,5,]
+[x,y,0,1,2,3,4,5,6,7,]
+[h,i,o,0,2,]
+La génération des 500 clefs devrait prendre 0 heures 0 minutes et 0 secondes
+                                                                    0% des 500 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                     0% des 500 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                     0% des 500 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                     0% des 500 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                     0% des 500 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                     0% des 500 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                     0% des 500 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                     100% des 500 clefs traitées !
+Fin de C1
+
+
+Début de C1...
 [0,1,2,6,7,]
 [b,d,e,f,g,h,i,j,k,l,n,o,p,q,r,s,t,u,v,w,x,y,z,0,1,2,3,4,6,7,]
 [a,c,d,e,f,g,h,i,j,k,m,n,o,p,q,r,s,t,u,v,w,x,y,z,0,2,3,4,5,]
 [h,i,m,n,o,0,1,2,3,4,5,6,7,]
-La génération devrait prendre 0 heures 0 minutes et 0 secondes
-0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes100% des 56'550 clefs traitées !
-Début de C1...
+La génération des 56'550 clefs devrait prendre 0 heures 0 minutes et 0 secondes
+                                                                     0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        100% des 56'550 clefs traitées !
 Fin de C1
+
+
 Début de C2...
 Fin de C2
-Nombre de clefs = 56550
+Nombre de clefs total = 57074
 Début de C3...
-Meilleur score = 60
 Fin de C3 : meilleure clef = 1234
+Voici les scores et la traduction des 10 meilleures clefs (de même score)
+
+Message : Le texte doit etre sans accent et ne comporter aucun caractere de controle. Cela ne va pas
+gener le programme de chiffrement et dechiffrement. Par contre, le programme de crack, face
+au chiffre d'un caractere de controle, va eliminer toutes les options pour la clef car il
+cherche une clef qui donne un caractere alphanumerique ou un espace ou de la ponctuation.
+
+décrypté avec la meilleure clef ("1234" : score 60)
+

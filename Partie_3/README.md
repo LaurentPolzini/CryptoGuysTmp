@@ -14,7 +14,7 @@ pour compiler : make
 make clean
 make proper
 make DEBUG=yes
-make clang (mais si vous avez valgrind utilisez le, clang marche pas pour les ressources pas free'd)
+make asan (mais si vous avez valgrind utilisez le, clang marche pas pour les ressources pas free'd)
 
 
 Pour chaque commandes, on supposera qu'on est dans le dossier Partie_3

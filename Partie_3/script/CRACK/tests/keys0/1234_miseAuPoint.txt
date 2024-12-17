@@ -1,8 +1,8 @@
+Début de C1...
 [0,1,2,6,7,]
 [b,d,e,f,g,h,i,j,k,l,n,o,p,q,r,s,t,u,v,w,x,y,z,0,1,2,3,4,6,7,]
 [a,c,d,e,f,g,h,i,j,k,m,n,o,p,q,r,s,t,u,v,w,x,y,z,0,2,3,4,5,]
 [h,i,m,n,o,0,1,2,3,4,5,6,7,]
-La génération devrait prendre 0 heures 0 minutes et 0 secondes
-0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes100% des 56'550 clefs traitées !
-Début de C1...
+La génération des 56'550 clefs devrait prendre 0 heures 0 minutes et 0 secondes
+0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 56'550 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        100% des 56'550 clefs traitées !
 Fin de C1

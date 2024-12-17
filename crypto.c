@@ -51,10 +51,11 @@ int main(int argc, char *argv[]) {
         {"quit", no_argument, 0, 'q'},           // Quitter le logiciel
         {0, 0, 0, 0}
     };
-
-    //printf("Entrez votre commande !\n");
-    //while (1) {
-        /*
+    /*
+    ne marche pas je ne sais pas pourquoi
+    printf("Entrez votre commande !\n");
+    while (1) {
+        
         char input[512];
         if (!fgets(input, sizeof(input), stdin)) {
             fprintf(stderr, "Erreur de lecture.\n");
@@ -78,7 +79,7 @@ int main(int argc, char *argv[]) {
         // reset getopt
         optind = 1;
         optreset = 1;
-        */
+    */
         // Traitement des options avec getopt_long
         while ((opt = getopt_long(argc, argv, "c:i:o:k:l:m:v:g:d:s:r:e:f:hq", long_options, NULL)) != -1) {
             switch (opt) {
@@ -167,7 +168,7 @@ int main(int argc, char *argv[]) {
             fprintf(stderr, "Commande inconnue : %s\n", commande);
             afficher_aidePR();
         }
-
+    
     return 0;
 }
 

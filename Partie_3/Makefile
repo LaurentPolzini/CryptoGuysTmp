@@ -19,8 +19,8 @@ SRC_UTILS=../utilitaire/utiL.c
 SRC_ALL=$(wildcard *.c) $(SRC_UTILS)
 
 # Filtrer crack_mask.c pour break_code
-SRC_BREAK_CODE=../Partie_1/encrypt_decrypt_xor.c $(filter-out crack_mask.c, $(SRC_ALL))
-SRC_CRACK_MASK=crack_mask.c $(SRC_UTILS)
+SRC_BREAK_CODE=../Partie_1/encrypt_decrypt_xor.c $(filter-out crack_mask_main.c, $(SRC_ALL))
+SRC_CRACK_MASK=crack_mask.c crack_mask_main.c $(SRC_UTILS)
 
 OBJ_BREAK= $(SRC_BREAK_CODE:.c=.o)
 OBJ_MASK= $(SRC_CRACK_MASK:.c=.o)
@@ -80,3 +80,4 @@ mutex.o : mutex.h
 tests_crackage.o : tests_crackage.h ../utilitaire/uthash.h ../utilitaire/utiL.h mutex.h
 
 break_code_main.o : break_code_c1.h break_code_c2.h break_code_c3.h ../utilitaire/utiL.h ../Partie_1/chiffrement.h tests_crackage.h
+crack_mask_main.o : crackage.h

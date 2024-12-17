@@ -1,17 +1,34 @@
 Attaque brutale avec dico : c1, c2, c3 enchaînées...
 ==>dico name = ../../Dicos/dicoFrSA.txt
 Créé et initialisé
+Début de C1...
+[2,5,]
+La génération des 2 clefs devrait prendre 0 heures 0 minutes et 0 secondes
+0% des 2 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                   100% des 2 clefs traitées !
+Fin de C1
+
+
+Début de C1...
+[x,y,0,2,3,5,]
+[1,2,4,5,]
+La génération des 24 clefs devrait prendre 0 heures 0 minutes et 0 secondes
+                                                                   0% des 24 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                    0% des 24 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                    0% des 24 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                    100% des 24 clefs traitées !
+Fin de C1
+
+
+Début de C1...
+[0,1,2,3,4,5,6,7,]
+[q,r,s,t,u,0,2,4,5,]
+[a,b,d,e,f,h,i,j,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,5,]
+La génération des 1'728 clefs devrait prendre 0 heures 0 minutes et 0 secondes
+                                                                    0% des 1'728 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                       0% des 1'728 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                       0% des 1'728 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                       0% des 1'728 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                       0% des 1'728 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                       0% des 1'728 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                       0% des 1'728 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                       100% des 1'728 clefs traitées !
+Fin de C1
+
+
+Début de C1...
 [x,y,0,1,2,3,4,5,6,7,8,9,]
 [a,b,d,f,g,h,i,k,l,n,o,p,q,r,s,t,u,v,w,x,y,z,1,2,3,4,5,]
 [a,b,c,d,e,f,g,h,i,j,m,n,o,p,q,r,s,t,u,v,w,x,y,z,0,2,3,5,]
 [0,1,2,4,5,6,7,]
-La génération devrait prendre 0 heures 0 minutes et 0 secondes
-0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes100% des 63'504 clefs traitées !
-Début de C1...
-Fin de C1
-Début de C2...
-Fin de C2
-Nombre de clefs = 63504
-Début de C3...
-Meilleur score = 30
-Fin de C3 : meilleure clef = 1234
+La génération des 63'504 clefs devrait prendre 0 heures 0 minutes et 0 secondes
+                                                                       0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        0% des 63'504 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                        100% des 63'504 clefs traitées !

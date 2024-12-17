@@ -45,14 +45,17 @@ stC2_C3 *init_stC2_C3(struct_c2 *sc2, struct_c3 *sc3) {
 }
 
 void destruct_stC2_C3(stC2_C3 **s_c2c3) {
-    if ((*s_c2c3) -> s_c2) {
-        destruct_struct_c2(&((*s_c2c3) -> s_c2));
-    }
-    if ((*s_c2c3) -> s_c3) {
-        destruct_struct_c3(&((*s_c2c3) -> s_c3));
-    }
+    if (*s_c2c3) {
+        if ((*s_c2c3) -> s_c2) {
+            destruct_struct_c2(&((*s_c2c3) -> s_c2));
+        }
+        if ((*s_c2c3) -> s_c3) {
+            destruct_struct_c3(&((*s_c2c3) -> s_c3));
+        }
 
-    free((void *) *s_c2c3);
+        free((void *) *s_c2c3);
+        *s_c2c3 = NULL;
+    }
 }
 
 stC2_C3 *copySC2C3(stC2_C3 *toCopy) {

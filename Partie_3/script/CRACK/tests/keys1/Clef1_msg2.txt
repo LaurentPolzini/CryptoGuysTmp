@@ -1,18 +1,56 @@
 Attaque brutale avec dico : c1, c2, c3 enchaînées...
 ==>dico name = ../../Dicos/dicoFrSA.txt
 Créé et initialisé
+Début de C1...
+[]
+Il n'y a pas de clef : sortie du programme.
+Fin de C1
+
+
+Début de C1...
+[]
+[h,j,]
+Il n'y a pas de clef : sortie du programme.
+Fin de C1
+
+
+Début de C1...
+[h,o,]
+[]
+[h,j,]
+Il n'y a pas de clef : sortie du programme.
+Fin de C1
+
+
+Début de C1...
+[a,b,c,d,e,g,h,i,j,k,l,o,q,r,s,t,u,y,]
+[a,b,c,d,e,g,h,j,l,m,p,q,r,s,u,w,x,y,z,]
+[]
+[h,j,]
+Il n'y a pas de clef : sortie du programme.
+Fin de C1
+
+
+Début de C1...
 [h,i,j,n,o,A,B,C,D,E,F,G,I,J,K,L,N,Q,T,V,W,X,Z,]
 [a,b,c,d,e,g,h,i,j,k,l,m,n,o,q,r,s,t,x,y,]
 [a,c,d,e,f,g,h,j,k,l,m,p,r,s,u,v,z,0,1,2,3,5,6,7,8,9,]
 [a,e,f,g,0,2,3,4,6,8,]
 [a,b,c,d,e,f,g,h,i,j,k,l,m,o,p,q,r,s,t,u,v,w,x,y,z,0,1,2,7,]
-La génération devrait prendre 0 heures 0 minutes et 4 secondes
-0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 3 secondes0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 3 secondes0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 2 secondes0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 2 secondes0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 1 secondes0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 1 secondes0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes100% des 3'468'400 clefs traitées !
-Début de C1...
+La génération des 3'468'400 clefs devrait prendre 0 heures 0 minutes et 4 secondes
+0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 3 secondes                                                                           0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 3 secondes                                                                           0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 2 secondes                                                                           0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 2 secondes                                                                           0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 1 secondes                                                                           0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 1 secondes                                                                           0% des 3'468'400 clefs traitées. Il reste 0 heures 0 minutes et 0 secondes                                                                           100% des 3'468'400 clefs traitées !
 Fin de C1
+
+
 Début de C2...
 Fin de C2
-Nombre de clefs = 3468400
+Nombre de clefs total = 3468400
 Début de C3...
-Meilleur score = 30
 Fin de C3 : meilleure clef = Clef1
+Voici les scores et la traduction des 10 meilleures clefs (de même score)
+
+Message : Ceci est un texte sans accent. La gestion de l'unicode est plus difficile. Pour le crack,
+comme c'est statistique il faut un texte le plus long possible (loi des grands nombres).
+
+décrypté avec la meilleure clef ("Clef1" : score 30)
+
